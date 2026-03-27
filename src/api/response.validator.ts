@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { z, ZodType } from 'zod';
-import { allure } from 'allure-jest';
+import { allure } from '../utils/allure'
 
 export default class ResponseValidator {
 
