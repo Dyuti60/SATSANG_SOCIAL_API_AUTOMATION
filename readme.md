@@ -7,7 +7,7 @@ This framework is designed for:
 * ✅ Functional API testing
 * ✅ Negative testing
 * ✅ Schema validation
-* ✅ Bulk data testing
+* ✅ Bulk data creation
 * ✅ Clean and maintainable architecture
 
 ---
@@ -330,6 +330,238 @@ tests\\bulkData\\file.spec.ts
 * 📊 Advanced reporting & analytics
 
 ---
+## 🚀 Git Workflow for Automation Project
+
+### 🌳 Branch Strategy
+
+* `main` → Stable branch (production-ready test suite)
+* `automation` → Integration branch (latest combined work)
+* `automation/<feature>` → Feature branches (individual tester work)
+
+---
+
+## 👨‍💻 Tester Workflow (Independent Branching)
+
+Each tester works on their own feature branch to avoid conflicts.
+
+### 🔹 Step 1: Sync with Integration Branch
+
+```bash
+git checkout automation
+git pull origin automation
+```
+
+---
+
+### 🔹 Step 2: Create Your Feature Branch
+
+```bash
+git checkout -b automation/<feature-name>
+```
+
+**Examples:**
+
+* automation/login-api-tests
+* automation/socket-validation
+* automation/regression-suite
+
+---
+
+### 🔹 Step 3: Work on Your Changes
+
+* Add API tests (Axios)
+* Add flows (login.flow.ts, etc.)
+* Update services
+* Add test data / fixtures
+
+---
+
+### 🔹 Step 4: Commit Changes
+
+```bash
+git add .
+git commit -m "Add login API positive and negative scenarios"
+```
+
+---
+
+### 🔹 Step 5: Push Your Branch
+
+```bash
+git push -u origin automation/<feature-name>
+```
+
+---
+
+### 🔹 Step 6: Create Pull Request (PR)
+
+* Base branch → `automation`
+* Compare → `automation/<feature-name>`
+
+---
+
+## 🔄 Keeping Your Branch Updated (Important)
+
+If other testers have merged changes into `automation`, your branch may become outdated.
+
+### ✅ Recommended Approach (Rebase Workflow)
+
+#### Step 1: Fetch latest changes
+
+```bash
+git fetch origin
+```
+
+---
+
+#### Step 2: Stash local changes (if any)
+
+```bash
+git stash
+```
+
+---
+
+#### Step 3: Rebase your branch onto latest automation
+
+```bash
+git checkout automation/<feature-name>
+git rebase origin/automation
+```
+
+---
+
+#### Step 4: Resolve conflicts (if any)
+
+```bash
+git status
+```
+
+* Fix conflicts manually
+* Then:
+
+```bash
+git add .
+git rebase --continue
+```
+
+---
+
+#### Step 5: Restore stashed changes
+
+```bash
+git stash pop
+```
+
+---
+
+#### Step 6: Push updated branch
+
+```bash
+git push --force-with-lease
+```
+
+---
+
+### ⚡ Shortcut (Recommended)
+
+```bash
+git rebase origin/automation --autostash
+```
+
+---
+
+## 🧪 Integration Phase (`automation` branch)
+
+Once PR is merged into `automation`:
+
+* Run full regression suite
+* Validate:
+
+  * API flows
+  * Socket workflows
+  * Hooks & services
+* Fix integration issues if any
+
+---
+
+## 🚀 Release to Stable (`main` branch)
+
+When `automation` is stable:
+
+* Create PR:
+
+  * Base → `main`
+  * Compare → `automation`
+
+---
+
+## ⚠️ Hotfix Workflow
+
+If issue found in `main`:
+
+```bash
+git checkout main
+git pull origin main
+git checkout -b hotfix/<issue-name>
+```
+
+* Fix issue
+* PR → `main`
+* Also merge into `automation`
+
+---
+
+## 🔄 Sync `main` Back to `automation`
+
+```bash
+git checkout automation
+git merge main
+git push
+```
+
+---
+
+## 🏷 Tagging Releases
+
+```bash
+git checkout main
+git tag -a v1.0 -m "Stable automation suite"
+git push origin v1.0
+```
+
+---
+
+## ✅ Best Practices
+
+* One feature = one branch
+* Keep commits small and meaningful
+* Always sync with `automation` before PR
+* Avoid hardcoded data
+* Do not commit `.env` files
+* Ensure tests are independent
+* Keep `main` always stable
+
+---
+
+## ❌ Avoid
+
+* Working directly on `automation`
+* Using `git pull` (creates unnecessary merge commits)
+* Force pushing without `--force-with-lease`
+* Large, unreviewable PRs
+
+---
+
+## 🔥 Summary Workflow
+
+```text
+automation/<feature> → automation → main
+       (dev)         (integration)   (stable)
+```
+
+---
+
 
 # 👨‍💻 Author
 
