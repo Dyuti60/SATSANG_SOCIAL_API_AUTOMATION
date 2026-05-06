@@ -1,14 +1,15 @@
 // src/setup/globalSetup.ts
-
-import Log from "../utils/logger";
 import { ENV } from "../helper/env/env.config";
-import { PgSsoClient } from "../../src/db/client/pg.sso.client";
-import { PgSocialClient } from "../../src/db/client/pg.social.client";
+import Log from "../utils/logger";
+import dotenv from 'dotenv'
 
 
 export default async function globalSetup() {
+  dotenv.config()
   Log.info("🚀 GLOBAL SETUP STARTED");
   Log.info(`🌍 Environment: ${ENV.SYS_ENV || "local"}`);
+  Log.info(`DB HOST from env: ${process.env.PG_HOST_SOCIAL}`);
+
 
   /**
    * 1️⃣ Validate critical environment variables
@@ -19,14 +20,5 @@ export default async function globalSetup() {
     Log.info(`🌍 BASE_API_URL_SSO: ${ENV.BASE_API_URL_SSO}`);
   }
 
-//   const ssodata = await PgSsoClient.query("SELECT 1");
-//   if (!ssodata) {
-//     throw new Error("❌ SSO Db connection not healthy");
-//   }
-
-//   const socialdata = await PgSocialClient.query("SELECT 1");
-//   if (!socialdata) {
-//     throw new Error("❌ Social Db connection not healthy");
-//   }
   Log.info("✅ GLOBAL SETUP COMPLETED");
 }

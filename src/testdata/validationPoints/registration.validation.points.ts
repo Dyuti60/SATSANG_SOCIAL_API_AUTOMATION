@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker"
-import { RegistrationFactory } from "testdata/factory/registration.factory"
+import { RegistrationFactory } from "../../testdata/factory/registration.factory"
 
 type userPayload = ReturnType<typeof RegistrationFactory.registerPayload>
 
@@ -129,7 +129,7 @@ export const invalidRegisterUserCases: InvalidUserCases[] = [
     },
     {
     description:'older date of birth',
-    overrides: {dob:'1950-09-28'},
+    overrides: {dob:'1850-09-28'},
     expectedStatus: 400,
     expectedMessage: ""
     },

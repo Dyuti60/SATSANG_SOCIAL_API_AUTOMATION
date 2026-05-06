@@ -1,4 +1,3 @@
-
 import { jwtDecode } from 'jwt-decode';
 
 type JwtPayload = {
@@ -8,7 +7,7 @@ type JwtPayload = {
   familyCode: string,
   memberCode: string,
   firstName: string,
-  middleName:string,
+  middleName: string,
   lastName: string,
   iat: number,
   exp: number
@@ -23,21 +22,23 @@ type DecodedResponse = {
 };
 
 export function getMemDetailsFromJwt(token: string): DecodedResponse {
-  const decoded = jwtDecode<JwtPayload>(token);
+  let decoded: JwtPayload;
 
-  const memId =
-    decoded.memuuid
+  try {
+    decoded = jwtDecode<JwtPayload>(token);
+  } catch {
+    throw new Error(`Invalid JWT token`);
+  }
 
-  if (!memId) {
+  if (!decoded.memuuid) {
     throw new Error(`memId not found in JWT payload. Payload: ${JSON.stringify(decoded)}`);
   }
 
-  const memberDetail:any={}
-  memberDetail['memuuid']=decoded.memuuid
-  memberDetail['familyCode']=decoded.familyCode
-  memberDetail['memberCode']=decoded.familyCode
-  memberDetail['firstName']=decoded.firstName
-  memberDetail['lastName']=decoded.lastName
-
-  return memberDetail;
+  return {
+    memuuid: decoded.memuuid,
+    familyCode: decoded.familyCode,
+    memberCode: decoded.memberCode,
+    firstName: decoded.firstName,
+    lastName: decoded.lastName
+  };
 }
