@@ -17,6 +17,7 @@ export class RequestBuilder {
 
     if (TestContext.ssoSession) {
       headers["Sso-Session"] = TestContext.ssoSession;
+      // headers["sso-session"] = TestContext.ssoSession;
     }
 
     if (TestContext.accessToken) {
