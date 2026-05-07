@@ -8,7 +8,7 @@ import { ENV } from "../../../src/helper/env/env.config";
 jest.setTimeout(300000)
 describe(`Bulk POST /user/friendRequest/reject api endpoint`,()=>{
     test('Validate valid login and reject received friend requests', async()=>{
-        const TOTAL = 10;
+        const TOTAL = 5;
         let count = 0
         // const {accessToken} = await TestContext.flows.loginFlow.loginFlow(ENV.LOGIN_CONTACT_NUMBER);
         // const {memuuid} = getMemDetailsFromJwt(accessToken)

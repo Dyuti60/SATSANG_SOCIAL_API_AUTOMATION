@@ -1,6 +1,6 @@
-import { TestContext } from "src/context/test.context"
+import { TestContext } from "../../src/context/test.context"
 import ResponseValidator from "../../src/api/response.validator"
-import { getRandomJpegFile, getRandomMp4File } from "utils/mediaPicker"
+import { getRandomJpegFile, getRandomMp4File } from "../../src/utils/mediaPicker"
 
 
 describe('Validate POST /media/updateStatus',()=>{

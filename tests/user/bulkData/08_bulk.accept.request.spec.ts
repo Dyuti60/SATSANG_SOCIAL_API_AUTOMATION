@@ -6,7 +6,7 @@ import { wait } from "../../../src/utils/wait";
 jest.setTimeout(300000)
 describe(`Bulk POST /user/friendRequest/accept api endpoint`,()=>{
     test('Validate valid friend requests accept bulk by logged in user', async()=>{
-        const TOTAL = 10;
+        const TOTAL = 40;
         let count = 0
 
         while(count<TOTAL){

@@ -32,9 +32,7 @@ export class FeedFlow{
             mediaIds: mediaIds
         })
         const response = await this.service.feedService.createPost(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createPostWithMyNewStoryMedia(files: string[]){
@@ -72,19 +70,19 @@ export class FeedFlow{
 
 
     async createPostWithMyExistingMinioLoadedPostMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const {postMediaId, postUrl} = await TestContext.services.feedRepo.getMyRandomMinioPostMedia(memuuid)
         const payload = FeedFactory.buildPostPayload({
             mediaIds: [postMediaId]
         })
         const response = await this.service.feedService.createPost(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createPostWithMyPostMedia(type:'public'|'deleted'|'hidden'|'fof visibility'|'friends visibility'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         let postId, userId, caption, postMediaId
         if(type=='public'){
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyRandomPublicPost(memuuid))
@@ -106,13 +104,13 @@ export class FeedFlow{
             mediaIds: [postMediaId]
         })
         const response = await this.service.feedService.createPost(payload)
-        return {
-            response
-        }
+        return response
+
     }
 
     async createPostWithMyExistingMinioLoadedChatMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const {chatMediaId, chatUrl} = await TestContext.services.feedRepo.getMyRandomMinioChatMedia(memuuid)
         const payload = FeedFactory.buildPostPayload({
             mediaIds: [chatMediaId]
@@ -124,7 +122,8 @@ export class FeedFlow{
     }
 
     async createPostWithMyAlreadyPostedChatMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomChatMedia(memuuid)
         const payload = FeedFactory.buildPostPayload({
             mediaIds: [data?.mediaId]
@@ -136,73 +135,66 @@ export class FeedFlow{
     }
 
     async createPostWithMyExistingMinioLoadedStoryMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const {storyMediaId, storyUrl} = await TestContext.services.feedRepo.getMyRandomMinioStoryMedia(memuuid)
         const payload = FeedFactory.buildPostPayload({
             mediaIds: [storyMediaId]
         })
         const response = await this.service.feedService.createPost(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createPostWithMyAlreadyPostedStoryMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const {storyId, storyMediaId} = await TestContext.services.feedRepo.getMyRandomStoryMedia(memuuid)
         const payload = FeedFactory.buildPostPayload({
             mediaIds: [storyMediaId]
         })
         const response = await this.service.feedService.createPost(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createPostWithMyExistingMinioLoadedProfileMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const {profileMediaId, profileUrl} = await TestContext.services.feedRepo.getMyRandomMinioProfileMedia(memuuid)
         const payload = FeedFactory.buildPostPayload({
             mediaIds: [profileMediaId]
         })
         const response = await this.service.feedService.createPost(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createPostWithMyAlreadyPostedProfileMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const {mediaId} = await TestContext.services.feedRepo.getMyRandomProfileMediaId(memuuid)
         const payload = FeedFactory.buildPostPayload({
             mediaIds: [mediaId]
         })
         const response = await this.service.feedService.createPost(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createPostWithMyCaptionOnly(){
         const payload = FeedFactory.buildPostPayload()
         const response = await this.service.feedService.createPost(payload)
-        return {
-            response
-        }
+        return response
     }
 
 ///////////////////////////////////////////// OTHERS MEDIA : My Friends///////////////////////////////////////
 
     async createPostWithFriendsExistingMinioLoadedPostMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const {postUrl, postMediaId} = await TestContext.services.feedRepo.getMyFriendsMinioLoadedPostMedia(memuuid)
         const payload = FeedFactory.buildPostPayload({
             mediaIds: [postMediaId]
         })
         const response = await this.service.feedService.createPost(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createPostWithFriendsPostedPostMedia(){
@@ -212,16 +204,15 @@ export class FeedFlow{
             mediaIds: [postMediaId]
         })
         const response = await this.service.feedService.createPost(payload)
-        return {
-            response
-        }
+        return response
     }
 
 ////////////////////////////////////////////REACT TO A POST///////////////////////////////////////////////////
 
 
     async reactToMyPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         let postId, userId, caption, postMediaId
         if(type=='public'){
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyRandomPublicPost(memuuid))
@@ -247,7 +238,8 @@ export class FeedFlow{
         }
     }
     async reactToMyFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         let postId, userId, caption, postMediaId
         if(type=='public'){
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyFriendsRandomPublicPost(memuuid))
@@ -274,7 +266,8 @@ export class FeedFlow{
     }
 
     async reactToMyFriendsOfFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         let postId, userId, caption, postMediaId
         if(type=='public'){
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomPublicPost(memuuid))
@@ -300,7 +293,8 @@ export class FeedFlow{
         }
     }
     async reactToNonFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         let postId, userId, caption, postMediaId
         if(type=='public'){
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyNonFriendsRandomPublicPost(memuuid))
@@ -328,7 +322,8 @@ export class FeedFlow{
 
 //////////////////////////////////////Add A Single Comment//////////////////////////////////////////////////
     async addCommentToMyFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         let postId, userId, caption, postMediaId
         if(type=='public'){
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyFriendsRandomPublicPost(memuuid))
@@ -354,7 +349,8 @@ export class FeedFlow{
         }
     }
     async addCommentToMyFriendsOfFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         let postId, userId, caption, postMediaId
         if(type=='public'){
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomPublicPost(memuuid))
@@ -380,7 +376,8 @@ export class FeedFlow{
         }
     }
     async addCommentToOtherNonFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         let postId, userId, caption, postMediaId
         if(type=='public'){
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyNonFriendsRandomPublicPost(memuuid))
@@ -406,7 +403,8 @@ export class FeedFlow{
         }
     }
     async addCommentToMyPosts(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         let postId, userId, caption, postMediaId
         if(type=='public'){
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyFriendsRandomPublicPost(memuuid))
@@ -434,7 +432,8 @@ export class FeedFlow{
 
 ///////////////////////////////////////////////REPLY TO MY COMMENT///////////////////////////////////
     async replyMyCommentOnMyFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -448,7 +447,8 @@ export class FeedFlow{
     }
 
     async replyMyCommentOnMyFriendsOfFriendsPublicPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnFriendsOfFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -462,7 +462,8 @@ export class FeedFlow{
     }
 
     async replyMyCommentOfMyNonFriendsPublicPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnNonFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -476,7 +477,8 @@ export class FeedFlow{
     }
 
     async replyMyCommentToMyPosts(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnMyPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -492,7 +494,8 @@ export class FeedFlow{
 
 ///////////////////////////////////////////////REPLY TO My Friends COMMENT///////////////////////////////////
     async replyOthersCommentOnMyFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getOthersRandomCommentMadeOnMyFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -506,7 +509,8 @@ export class FeedFlow{
     }
 
     async replyOthersCommentOnMyFriendsOfFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getOthersRandomCommentMadeOnMyFriendsOfFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -520,7 +524,8 @@ export class FeedFlow{
     }
 
     async replyOthersCommentOnMyNonFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getOthersRandomCommentMadeOnMyNonFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -534,7 +539,8 @@ export class FeedFlow{
     }
 
     async replyOthersCommentToMyPosts(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getOthersRandomCommentMadeOnMyPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -550,7 +556,8 @@ export class FeedFlow{
 
     ///////////////////////////////////////////////// UPDATE My COMMENT ////////////////////////////////////    
     async updateMyCommentOnMyFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -564,7 +571,8 @@ export class FeedFlow{
     }
 
     async updateMyCommentOnMyFriendsOfFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnFriendsOfFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -578,7 +586,8 @@ export class FeedFlow{
     }
 
     async updateMyCommentOnMyNonFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnNonFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -592,7 +601,8 @@ export class FeedFlow{
     }
 
     async updateMyCommentOnMyPosts(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnMyPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -609,7 +619,8 @@ export class FeedFlow{
 
     ///////////////////////////////////////////////// UPDATE My Friends COMMENT ////////////////////////////////////    
     async updateOthersCommentOnMyFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getOthersRandomCommentMadeOnMyFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -623,7 +634,8 @@ export class FeedFlow{
     }
 
     async updateOthersCommentOnMyFriendsOfFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getOthersRandomCommentMadeOnMyFriendsOfFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -637,7 +649,8 @@ export class FeedFlow{
     }
 
     async updateOthersCommentOnMyNonFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getOthersRandomCommentMadeOnMyNonFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -651,7 +664,8 @@ export class FeedFlow{
     }
 
     async updateOthersCommentOnMyPosts(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getOthersRandomCommentMadeOnMyPost(memuuid, type)
 
         const payload = FeedFactory.buildPostCommentPayload({
@@ -669,7 +683,8 @@ export class FeedFlow{
 
     ///////////////////////////////////////////////// React To My COMMENT ////////////////////////////////////    
     async reactToMyCommentOnMyFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnMyPost(memuuid, type)
 
         const payload = FeedFactory.buildReactOnCommentPayload({
@@ -683,7 +698,8 @@ export class FeedFlow{
     }
 
     async reactToMyCommentOnMyFriendsOfFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnFriendsOfFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildReactOnCommentPayload({
@@ -697,7 +713,8 @@ export class FeedFlow{
     }
 
     async reactToMyCommentOnMyNonFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnNonFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildReactOnCommentPayload({
@@ -711,7 +728,8 @@ export class FeedFlow{
     }
 
     async reactToMyCommentOnMyPosts(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnMyPost(memuuid, type)
 
         const payload = FeedFactory.buildReactOnCommentPayload({
@@ -728,7 +746,8 @@ export class FeedFlow{
 
     ///////////////////////////////////////////////// React To Others Comment ////////////////////////////////////    
     async reactToOthersCommentOnMyFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getOthersRandomCommentMadeOnMyFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildReactOnCommentPayload({
@@ -742,7 +761,8 @@ export class FeedFlow{
     }
 
     async reactToOthersCommentOnMyFriendsOfFriendsPublicPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getOthersRandomCommentMadeOnMyFriendsOfFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildReactOnCommentPayload({
@@ -757,7 +777,8 @@ export class FeedFlow{
 
 
     async reactToOthersCommentOnMyNonFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getOthersRandomCommentMadeOnMyNonFriendsPost(memuuid, type)
 
         const payload = FeedFactory.buildReactOnCommentPayload({
@@ -772,7 +793,8 @@ export class FeedFlow{
     }
 
     async reactToOthersCommentOnMyPublicPosts(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getOthersRandomCommentMadeOnMyPost(memuuid, type)
 
         const payload = FeedFactory.buildReactOnCommentPayload({

@@ -8,7 +8,7 @@ import { ENV } from "../../../src/helper/env/env.config";
 jest.setTimeout(300000)
 describe(`Bulk POST /user/friendRequest/send api endpoint`,()=>{
     test('Validate valid login and send friend requests', async()=>{
-        const TOTAL = 40;
+        const TOTAL = 50;
         let count = 0
 
         // const {accessToken} = await TestContext.flows.loginFlow.loginFlow(ENV.LOGIN_CONTACT_NUMBER);
