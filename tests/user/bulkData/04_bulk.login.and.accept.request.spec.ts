@@ -8,7 +8,7 @@ import { wait } from "../../../src/utils/wait";
 jest.setTimeout(300000)
 describe(`Bulk POST /user/friendRequest/accept api endpoint`,()=>{
     test('Validate valid login and accepting received friend requests', async()=>{
-        const TOTAL = 10;
+        const TOTAL = 30;
         let count = 0
 
         // const {accessToken} = await TestContext.flows.loginFlow.loginFlow(ENV.LOGIN_CONTACT_NUMBER);

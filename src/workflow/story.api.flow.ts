@@ -13,8 +13,9 @@ export class StoryFlow{
     ){}
 
     async loginUserFlow(contactNumber:string){
+        TestContext.activeUser='current'
         const {response, accessToken, stateToken} = await this.loginFlow.loginFlow(contactNumber)
-        TestContext.accessToken = accessToken
+        
     }
 
     async storyMediaUpload(files:string[]){
@@ -33,9 +34,7 @@ export class StoryFlow{
             mediaId: mediaIds[0]
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createStoryWithMyNewPostMedia(files: string[]){
@@ -44,9 +43,7 @@ export class StoryFlow{
             mediaId: mediaIds[0]
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createStoryWithMyNewChatMedia(files: string[]){
@@ -66,182 +63,166 @@ export class StoryFlow{
             mediaId: mediaIds[0]
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createStoryWithMyPresentStoryMedia(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryPayload({
             mediaId: storyMediaId
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createStoryWithMyExistingMinioLoadedOnlyStoryMedia(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyUrl} = await TestContext.services.storyRepo.myMinioLoadedOnlyStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyUrl} = await TestContext.services.storyRepo.myMinioLoadedOnlyStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryPayload({
             mediaId: storyMediaId
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createStoryWithMyExpiredStoryMedia(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyExpiredStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyExpiredStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryPayload({
             mediaId: storyMediaId
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createStoryWithMyDeletedStoryMedia(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentDeletedStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentDeletedStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryPayload({
             mediaId: storyMediaId
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createStoryWithMyExpiredDeletedStoryMedia(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyExpiredDeletedStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyExpiredDeletedStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryPayload({
             mediaId: storyMediaId
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
 ///////////////////////////////// With My Friends Story Media ////////////////////////////
 
     async createStoryWithFriendsPresentStoryMedia(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {friendId, storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsPresentStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {friendId, storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsPresentStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryPayload({
             mediaId: storyMediaId
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createStoryWithFriendsExistingMinioLoadedOnlyStoryMedia(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {friendId, storyMediaId} = await TestContext.services.storyRepo.myFriendsMinioLoadedOnlyStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {friendId, storyMediaId} = await TestContext.services.storyRepo.myFriendsMinioLoadedOnlyStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryPayload({
             mediaId: storyMediaId
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createStoryWithFriendsExpiredStoryMedia(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {friendId, storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsExpiredStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {friendId, storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsExpiredStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryPayload({
             mediaId: storyMediaId
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 ///////////////////////////////// With My Friends Friend Story Media ////////////////////////////
 
-    async createStoryWithFriendsFriendNewStoryMedia(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {friendId, storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendOfFriendPresentStoryMediaId(data.memuuid)
+    async createStoryWithFriendsFriendPresentStoryMedia(){
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {friendId, storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendOfFriendPresentStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryPayload({
             mediaId: storyMediaId
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createStoryWithFriendsFriendExistingMinioLoadedOnlyStoryMedia(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {friendId, storyMediaId} = await TestContext.services.storyRepo.myFriendsOfFriendMinioLoadedOnlyStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {friendId, storyMediaId} = await TestContext.services.storyRepo.myFriendsOfFriendMinioLoadedOnlyStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryPayload({
             mediaId: storyMediaId
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createStoryWithFriendsFriendExpiredStoryMedia(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {friendId, storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsOfFriendExpiredStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {friendId, storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsOfFriendExpiredStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryPayload({
             mediaId: storyMediaId
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
 ///////////////////////////////// With My Non Friend Story Media ////////////////////////////
 
-    async createStoryWithNonFriendsNewStoryMedia(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {friendId, storyMediaId, storyId} = await TestContext.services.storyRepo.nonFriendsPresentStoryId(data.memuuid)
+    async createStoryWithNonFriendsPresentStoryMedia(){
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {friendId, storyMediaId, storyId} = await TestContext.services.storyRepo.nonFriendsPresentStoryId(memuuid)
         const payload = StoryFactory.buildStoryPayload({
             mediaId: storyMediaId
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
     async createStoryWithNonFriendsExistingMinioLoadedOnlyStoryMedia(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {friendId, storyMediaId} = await TestContext.services.storyRepo.nonFriendsMinioLoadedStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {friendId, storyMediaId} = await TestContext.services.storyRepo.nonFriendsMinioLoadedStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryPayload({
             mediaId: storyMediaId
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
-    async createStoryWithNonFriendsAlreadyPostedStoryMedia(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {friendId, storyMediaId, storyId} = await TestContext.services.storyRepo.nonFriendsExpiredStoryId(data.memuuid)
+    async createStoryWithNonFriendsExpiredStoryMedia(){
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {friendId, storyMediaId, storyId} = await TestContext.services.storyRepo.nonFriendsExpiredStoryId(memuuid)
         const payload = StoryFactory.buildStoryPayload({
             mediaId: storyMediaId
         })
         const response = await this.service.storyService.createStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
 
@@ -255,8 +236,9 @@ export class StoryFlow{
         }else if(reactionType=='unlike'){
             status=3
         }
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
             statusId: status
@@ -276,8 +258,9 @@ export class StoryFlow{
         }else if(reactionType=='unlike'){
             status=3
         }
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsPresentStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsPresentStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
             statusId: status
@@ -297,8 +280,9 @@ export class StoryFlow{
         }else if(reactionType=='unlike'){
             status=3
         }
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendOfFriendPresentStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendOfFriendPresentStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
             statusId: status
@@ -318,8 +302,9 @@ export class StoryFlow{
         }else if(reactionType=='unlike'){
             status=3
         }
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.nonFriendsPresentStoryId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.nonFriendsPresentStoryId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
             statusId: status
@@ -339,8 +324,9 @@ export class StoryFlow{
         }else if(reactionType=='unlike'){
             status=3
         }
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsExpiredStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsExpiredStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
             statusId: status
@@ -360,8 +346,9 @@ export class StoryFlow{
         }else if(reactionType=='unlike'){
             status=3
         }
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsExpiredStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsExpiredStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
             statusId: status
@@ -382,8 +369,9 @@ export class StoryFlow{
         }else if(reactionType=='unlike'){
             status=3
         }
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsOfFriendExpiredStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsOfFriendExpiredStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
             statusId: status
@@ -403,8 +391,9 @@ export class StoryFlow{
         }else if(reactionType=='unlike'){
             status=3
         }
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.nonFriendsExpiredStoryId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.nonFriendsExpiredStoryId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
             statusId: status
@@ -424,8 +413,9 @@ export class StoryFlow{
         }else if(reactionType=='unlike'){
             status=3
         }
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentDeletedStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentDeletedStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
             statusId: status
@@ -445,8 +435,9 @@ export class StoryFlow{
         }else if(reactionType=='unlike'){
             status=3
         }
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsPresentDeletedStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsPresentDeletedStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
             statusId: status
@@ -466,8 +457,9 @@ export class StoryFlow{
         }else if(reactionType=='unlike'){
             status=3
         }
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.nonFriendsPresentDeletedStoryId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.nonFriendsPresentDeletedStoryId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
             statusId: status
@@ -480,8 +472,9 @@ export class StoryFlow{
 
 /////////////////////////////// Delete STORY ///////////////////////////////
     async deleteMyPresentStory(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentStoryMediaId(memuuid)
         const payload = StoryFactory.buildDeletStoryPayload({
             storyId: storyId
         })
@@ -491,8 +484,9 @@ export class StoryFlow{
         }
     }
     async deleteMyFriendsPresentStory(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsPresentStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsPresentStoryMediaId(memuuid)
         const payload = StoryFactory.buildDeletStoryPayload({
             storyId: storyId
         })
@@ -502,8 +496,9 @@ export class StoryFlow{
         }
     }
     async deleteMyFriendsFriendPresentStory(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendOfFriendPresentStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendOfFriendPresentStoryMediaId(memuuid)
         const payload = StoryFactory.buildDeletStoryPayload({
             storyId: storyId
         })
@@ -513,8 +508,9 @@ export class StoryFlow{
         }
     }
     async deleteMyDeletedStory(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentDeletedStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentDeletedStoryMediaId(memuuid)
         const payload = StoryFactory.buildDeletStoryPayload({
             storyId: storyId
         })
@@ -524,8 +520,9 @@ export class StoryFlow{
         }
     }
     async deleteMyExpiredStory(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyExpiredStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyExpiredStoryMediaId(memuuid)
         const payload = StoryFactory.buildDeletStoryPayload({
             storyId: storyId
         })
@@ -536,8 +533,9 @@ export class StoryFlow{
     }
 /////////////////////////////// GET STORY Reaction///////////////////////////////
     async fetchMyPresentStoryReactions(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentStoryMediaId(memuuid)
         const payload = StoryFactory.buildFetchStoryReactionPayload({
             storyId: storyId
         })
@@ -547,8 +545,9 @@ export class StoryFlow{
         }
     }
     async fetchMyFriendsPresentStoryReactions(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsPresentStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsPresentStoryMediaId(memuuid)
         const payload = StoryFactory.buildFetchStoryReactionPayload({
             storyId: storyId
         })
@@ -558,8 +557,9 @@ export class StoryFlow{
         }
     }
     async fetchMyFriendsFriendPresentStoryReactions(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendOfFriendPresentStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendOfFriendPresentStoryMediaId(memuuid)
         const payload = StoryFactory.buildFetchStoryReactionPayload({
             storyId: storyId
         })
@@ -569,8 +569,9 @@ export class StoryFlow{
         }
     }
     async fetchMyDeletedStoryReactions(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentDeletedStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentDeletedStoryMediaId(memuuid)
         const payload = StoryFactory.buildFetchStoryReactionPayload({
             storyId: storyId
         })
@@ -580,8 +581,9 @@ export class StoryFlow{
         }
     }
     async fetchMyExpiredStoryReactions(){
-        const data = getMemDetailsFromJwt(TestContext.accessToken)
-        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyExpiredStoryMediaId(data.memuuid)
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyExpiredStoryMediaId(memuuid)
         const payload = StoryFactory.buildFetchStoryReactionPayload({
             storyId: storyId
         })

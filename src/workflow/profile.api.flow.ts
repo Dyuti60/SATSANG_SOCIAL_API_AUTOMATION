@@ -21,93 +21,99 @@ export class ProfileFlow{
 
     async profileNewMediaUpload(files:string[]){
         const {response, mediaIds} = await this.mediaFlow.verifyUploadStatus('profile',files)
-        return {
-            mediaId: response.response?.data?.data[0]?.mediaId
-        }
+        return response
     }
 
     // Throwing error in uploadProfile endpoint
 
     async uploadProfileWithMyPresentProfileMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
         const {username, profileMediaId, profileUrl} = await TestContext.services.profileRepo.getMyPresentProfileMediaId(memuuid)
-        const uploadProfilePicPayload = {
-            ...ProfileFactory.uploadProfileMedia,
-            ...{mediaId: profileMediaId}
-        }
-        const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+        // const uploadProfilePicPayload = {
+        //     ...ProfileFactory.uploadProfileMedia,
+        //     ...{mediaId: profileMediaId}
+        // }
+        // const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
         return {
-            response
+            mediaId: profileMediaId
         }
     }
 
     async uploadProfileWithMyExistingProfileMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
         const {mediaId} = await TestContext.services.profileRepo.getMyExistingRandomProfileMediaId(memuuid)
-        const uploadProfilePicPayload = {
-            ...ProfileFactory.uploadProfileMedia,
-            mediaId
-        }
-        const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+        // const uploadProfilePicPayload = {
+        //     ...ProfileFactory.uploadProfileMedia,
+        //     mediaId
+        // }
+        // const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
         return {
-            response
+            mediaId: mediaId
         }
     }
 
     async uploadProfileWithMyFriendsPresentProfileMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
         const {mediaId, friendId} = await TestContext.services.profileRepo.getMyRandomFriendsPresentProfileMediaId(memuuid)
-        const uploadProfilePicPayload = {
-            ...ProfileFactory.uploadProfileMedia,
-            mediaId
-        }
-        const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+        // const uploadProfilePicPayload = {
+        //     ...ProfileFactory.uploadProfileMedia,
+        //     mediaId
+        // }
+        // const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
         return {
-            response
+            mediaId: mediaId
         }
     }
 
     async uploadProfileWithMyFriendsExistingProfileMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const {mediaId, friendId} = await TestContext.services.profileRepo.getMyRandomFriendsExistingProfileMediaId(memuuid)
-        const uploadProfilePicPayload = {
-            ...ProfileFactory.uploadProfileMedia,
-            mediaId
-        }
-        const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+        // const uploadProfilePicPayload = {
+        //     ...ProfileFactory.uploadProfileMedia,
+        //     mediaId
+        // }
+        // const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
         return {
-            response
+            mediaId: mediaId
         }
     }
 
     async uploadProfileWithMyFriendsOfFriendsPresentProfileMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
         const {mediaId, friendId} = await TestContext.services.profileRepo.getMyRandomFriendOfFriendsPresentProfileMediaId(memuuid)
-        const uploadProfilePicPayload = {
-            ...ProfileFactory.uploadProfileMedia,
-            mediaId
-        }
-        const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+        // const uploadProfilePicPayload = {
+        //     ...ProfileFactory.uploadProfileMedia,
+        //     mediaId
+        // }
+        // const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
         return {
-            response
+            mediaId: mediaId
         }
     }
 
     async uploadProfileWithMyFriendsOfFriendsExistingProfileMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
         const {mediaId, friendId} = await TestContext.services.profileRepo.getMyRandomFriendOfFriendsExistingProfileMediaId(memuuid)
-        const uploadProfilePicPayload = {
-            ...ProfileFactory.uploadProfileMedia,
-            mediaId
-        }
-        const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+        // const uploadProfilePicPayload = {
+        //     ...ProfileFactory.uploadProfileMedia,
+        //     mediaId
+        // }
+        // const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+
         return {
-            response
+            mediaId:mediaId
         }
     }
 
     async uploadProfileWithNonFriendPresentProfileMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const {mediaId, friendId} = await TestContext.services.profileRepo.getMyNonFriendsPresentProfileMediaId(memuuid)
         const uploadProfilePicPayload = {
             ...ProfileFactory.uploadProfileMedia,
@@ -115,20 +121,21 @@ export class ProfileFlow{
         }
         const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
         return {
-            response
+            mediaId: mediaId
         }
     }
 
     async uploadProfileWithNonFriendExistingProfileMedia(){
-        const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const {mediaId, friendId} = await TestContext.services.profileRepo.getMyNonFriendsExistingProfileMediaId(memuuid)
-        const uploadProfilePicPayload = {
-            ...ProfileFactory.uploadProfileMedia,
-            mediaId
-        }
-        const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+        // const uploadProfilePicPayload = {
+        //     ...ProfileFactory.uploadProfileMedia,
+        //     mediaId
+        // }
+        // const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
         return {
-            response
+            mediaId: mediaId
         }
     }
 
@@ -165,12 +172,166 @@ export class ProfileFlow{
         }
     }
 
-    async uploadNonUploadedProfileMedia(){
+/////////////////////////////////////////////////////////
+///////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
 
-    }
 
+    // async loginUserFlow(contactNumber:string){
+    //     TestContext.activeUser='current'
+    //     const {response, accessToken, stateToken} = await this.loginFlow.loginFlow(contactNumber)
+        
+    // }
 
+    // async profileNewMediaUpload(files:string[]){
+    //     const {response, mediaIds} = await this.mediaFlow.verifyUploadStatus('profile',files)
+    //     return {
+    //         mediaId: response.response?.data?.data[0]?.mediaId
+    //     }
+    // }
 
+    // // Throwing error in uploadProfile endpoint
+
+    // async uploadProfileWithMyPresentProfileMedia(){
+    //     const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+    //     const {username, profileMediaId, profileUrl} = await TestContext.services.profileRepo.getMyPresentProfileMediaId(memuuid)
+    //     const uploadProfilePicPayload = {
+    //         ...ProfileFactory.uploadProfileMedia,
+    //         ...{mediaId: profileMediaId}
+    //     }
+    //     const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+    //     return {
+    //         response
+    //     }
+    // }
+
+    // async uploadProfileWithMyExistingProfileMedia(){
+    //     const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+    //     const {mediaId} = await TestContext.services.profileRepo.getMyExistingRandomProfileMediaId(memuuid)
+    //     const uploadProfilePicPayload = {
+    //         ...ProfileFactory.uploadProfileMedia,
+    //         mediaId
+    //     }
+    //     const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+    //     return {
+    //         response
+    //     }
+    // }
+
+    // async uploadProfileWithMyFriendsPresentProfileMedia(){
+    //     const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+    //     const {mediaId, friendId} = await TestContext.services.profileRepo.getMyRandomFriendsPresentProfileMediaId(memuuid)
+    //     const uploadProfilePicPayload = {
+    //         ...ProfileFactory.uploadProfileMedia,
+    //         mediaId
+    //     }
+    //     const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+    //     return {
+    //         response
+    //     }
+    // }
+
+    // async uploadProfileWithMyFriendsExistingProfileMedia(){
+    //     const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+    //     const {mediaId, friendId} = await TestContext.services.profileRepo.getMyRandomFriendsExistingProfileMediaId(memuuid)
+    //     const uploadProfilePicPayload = {
+    //         ...ProfileFactory.uploadProfileMedia,
+    //         mediaId
+    //     }
+    //     const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+    //     return {
+    //         response
+    //     }
+    // }
+
+    // async uploadProfileWithMyFriendsOfFriendsPresentProfileMedia(){
+    //     const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+    //     const {mediaId, friendId} = await TestContext.services.profileRepo.getMyRandomFriendOfFriendsPresentProfileMediaId(memuuid)
+    //     const uploadProfilePicPayload = {
+    //         ...ProfileFactory.uploadProfileMedia,
+    //         mediaId
+    //     }
+    //     const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+    //     return {
+    //         response
+    //     }
+    // }
+
+    // async uploadProfileWithMyFriendsOfFriendsExistingProfileMedia(){
+    //     const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+    //     const {mediaId, friendId} = await TestContext.services.profileRepo.getMyRandomFriendOfFriendsExistingProfileMediaId(memuuid)
+    //     const uploadProfilePicPayload = {
+    //         ...ProfileFactory.uploadProfileMedia,
+    //         mediaId
+    //     }
+    //     const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+    //     return {
+    //         response
+    //     }
+    // }
+
+    // async uploadProfileWithNonFriendPresentProfileMedia(){
+    //     const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+    //     const {mediaId, friendId} = await TestContext.services.profileRepo.getMyNonFriendsPresentProfileMediaId(memuuid)
+    //     const uploadProfilePicPayload = {
+    //         ...ProfileFactory.uploadProfileMedia,
+    //         mediaId
+    //     }
+    //     const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+    //     return {
+    //         response
+    //     }
+    // }
+
+    // async uploadProfileWithNonFriendExistingProfileMedia(){
+    //     const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+    //     const {mediaId, friendId} = await TestContext.services.profileRepo.getMyNonFriendsExistingProfileMediaId(memuuid)
+    //     const uploadProfilePicPayload = {
+    //         ...ProfileFactory.uploadProfileMedia,
+    //         mediaId
+    //     }
+    //     const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+    //     return {
+    //         response
+    //     }
+    // }
+
+    // async uploadProfileWithMyPostMedia(files:string[]){
+    //     const {mediaIds} = await this.mediaFlow.verifyUploadStatus('post',files)
+    //     const uploadProfilePicPayload = {
+    //         ...{mediaId:mediaIds[0]}
+    //     }
+    //     const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+    //     return {
+    //         response
+    //     }
+    // }
+
+    // async uploadProfileWithMyChatMedia(files:string[]){
+    //     const {mediaIds} = await this.mediaFlow.verifyUploadStatus('chat',files)
+    //     const uploadProfilePicPayload = {
+    //         ...{mediaId:mediaIds[0]}
+    //     }
+    //     const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+    //     return {
+    //         response
+    //     }
+    // }
+
+    // async uploadProfileWithMyStoryMedia(files:string[]){
+    //     const {mediaIds} = await this.mediaFlow.verifyUploadStatus('story',files)
+    //     const uploadProfilePicPayload = {
+    //         ...{mediaId:mediaIds[0]}
+    //     }
+    //     const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+    //     return {
+    //         response
+    //     }
+    // }
+
+    // async uploadNonUploadedProfileMedia(){
+
+    // }
 
 
 }
