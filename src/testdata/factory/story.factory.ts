@@ -2,17 +2,23 @@ import { faker } from '@faker-js/faker';
 
 type StoryPayloadOptions = {
   mediaId?: string;
-  mediaType?: number;
   visibilityType?: number;
   caption?: string;
   thumbnailMediaId?: string;
   viewerIds?: string[]
 }
 
+type BulkStoryPayloadOptions = {
+  mediaIds?: string[];
+  visibilityType?: number;
+  caption?: string;
+  thumbnailMediaIds?: string;
+  viewerIds?: string[];
+};
+
 type reactStoryPayloadOptions = {
-    statusId?: number,
-    storyId?: string,
-    reaction?: string
+    hasReacted?: boolean;
+    storyId?: string;
 }
 
 type storyReactionViewsOptions = {
@@ -28,8 +34,7 @@ export class StoryFactory {
     static buildStoryPayload(options: StoryPayloadOptions={}){
         const payload = {
             mediaId: options.mediaId ?? '',
-            mediaType: options.mediaType ?? faker.helpers.arrayElements([1,2]),
-            visibilityType: options.visibilityType ?? faker.helpers.arrayElements([1,2,3]),
+            visibilityType: options.visibilityType ?? 1,
             caption: options.caption ?? faker.lorem.words(10),
             thumbnailMediaId: options.thumbnailMediaId ?? '',
             viewerIds: options.viewerIds ?? []
@@ -38,13 +43,34 @@ export class StoryFactory {
         return payload
     }
 
+
+    /**
+     * BULK STORY CREATE PAYLOAD
+     */
+    static buildBulkStoryPayload(options: BulkStoryPayloadOptions={}) {
+        const payload = {
+        stories: options.mediaIds?.map((mediaId, index) => ({
+            mediaId,
+            visibilityType: options.visibilityType ?? 1,
+            caption:
+            options.caption ??
+            faker.lorem.words(10),
+
+            thumbnailMediaId:
+            options.mediaIds?.[index] ?? '',
+
+            viewerIds: options.viewerIds ?? []
+        }))
+        };
+
+        return payload;
+    }
+    
     static buildStoryReactionPayload(options: reactStoryPayloadOptions={}){
         const payload = {
-            statusId: options.statusId ?? 1,
-            storyId: options.storyId ?? '',
-            reaction: options.reaction ?? '❤️'
+            hasReacted: options.hasReacted ?? false,
+            storyId: options.storyId ?? ''
         }
-        
         return payload
     }
 
