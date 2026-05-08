@@ -19,10 +19,23 @@ export class StoryServices {
         }
     }
 
-    async fetchStories(){
+    async bulkCreateStories(payload: any){
+        const requestPayload = new RequestBuilder()
+            .setUrl(`${story.POST_CREATE_STORY}`)
+            .setMethod('POST')
+            .setBody(payload)
+            .build()
+        const response = await this.socialApi.request(requestPayload)
+        return {
+            response
+        }
+    }
+
+    async fetchStories(payload:any){
         const requestPayload = new RequestBuilder()
             .setUrl(`${story.GET_STORIES}`)
             .setMethod('GET')
+            .setParams(payload)
             .build()
         const response = await this.socialApi.request(requestPayload)
         return {

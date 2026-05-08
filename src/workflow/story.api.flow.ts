@@ -25,7 +25,24 @@ export class StoryFlow{
         }
     }
 
+async createBulkStoryWithNewMedia(files: string[]) {
 
+    // Upload all files first
+    const { mediaIds } = await this.storyMediaUpload(files);
+
+    // Build bulk payload
+    const payload = StoryFactory.buildBulkStoryPayload({
+        mediaIds
+    });
+
+    // Call bulk create API
+    const response = await this.service.storyService.bulkCreateStories(payload);
+
+    return {
+        response,
+        payload
+    };
+}
 //////////////////////////////////////// MY MEDIA /////////////////////////////////////
 
     async createStoryWithMyNewStoryMedia(files: string[]){
@@ -227,43 +244,39 @@ export class StoryFlow{
 
 
 /////////////////////////////// REACT TO STORY ///////////////////////////////
-    async reactToMyPresentStory(reactionType:'view'|'like'|'unlike'){
+    async reactToMyPresentStory(reactionType:'like'|'unlike'){
         let status;
-        if(reactionType=='view'){
-            status=1
-        }else if(reactionType=='like'){
-            status=2
+
+        if(reactionType=='like'){
+            status=true
         }else if(reactionType=='unlike'){
-            status=3
+            status=false
         }
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
         const memuuid = TestContext.initialMemuuid
         const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
-            statusId: status
+            hasReacted: status
         })
         const response = await this.service.storyService.viewOrReactToStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
-    async reactToMyFriendsPresentStory(reactionType:'view'|'like'|'unlike'){
+    async reactToMyFriendsPresentStory(reactionType:'like'|'unlike'){
         let status;
-        if(reactionType=='view'){
-            status=1
-        }else if(reactionType=='like'){
-            status=2
+
+        if(reactionType=='like'){
+            status=true
         }else if(reactionType=='unlike'){
-            status=3
+            status=false
         }
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
         const memuuid = TestContext.initialMemuuid
         const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsPresentStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
-            statusId: status
+            hasReacted: status
         })
         const response = await this.service.storyService.viewOrReactToStory(payload)
         return {
@@ -271,21 +284,20 @@ export class StoryFlow{
         }
     }
 
-    async reactToMyFriendsOfFriendsPresentStory(reactionType:'view'|'like'|'unlike'){
+    async reactToMyFriendsOfFriendsPresentStory(reactionType:'like'|'unlike'){
         let status;
-        if(reactionType=='view'){
-            status=1
-        }else if(reactionType=='like'){
-            status=2
+
+        if(reactionType=='like'){
+            status=true
         }else if(reactionType=='unlike'){
-            status=3
+            status=false
         }
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
         const memuuid = TestContext.initialMemuuid
         const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendOfFriendPresentStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
-            statusId: status
+            hasReacted: status
         })
         const response = await this.service.storyService.viewOrReactToStory(payload)
         return {
@@ -293,21 +305,20 @@ export class StoryFlow{
         }
     }
 
-    async reactToNonFriendsPresentStory(reactionType:'view'|'like'|'unlike'){
+    async reactToNonFriendsPresentStory(reactionType:'like'|'unlike'){
         let status;
-        if(reactionType=='view'){
-            status=1
-        }else if(reactionType=='like'){
-            status=2
+
+        if(reactionType=='like'){
+            status=true
         }else if(reactionType=='unlike'){
-            status=3
+            status=false
         }
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
         const memuuid = TestContext.initialMemuuid
         const {storyMediaId, storyId} = await TestContext.services.storyRepo.nonFriendsPresentStoryId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
-            statusId: status
+            hasReacted: status
         })
         const response = await this.service.storyService.viewOrReactToStory(payload)
         return {
@@ -315,21 +326,20 @@ export class StoryFlow{
         }
 
     }
-    async reactToMyExpiredStory(reactionType:'view'|'like'|'unlike'){
+    async reactToMyExpiredStory(reactionType:'like'|'unlike'){
         let status;
-        if(reactionType=='view'){
-            status=1
-        }else if(reactionType=='like'){
-            status=2
+
+        if(reactionType=='like'){
+            status=true
         }else if(reactionType=='unlike'){
-            status=3
+            status=false
         }
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
         const memuuid = TestContext.initialMemuuid
         const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsExpiredStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
-            statusId: status
+            hasReacted: status
         })
         const response = await this.service.storyService.viewOrReactToStory(payload)
         return {
@@ -337,21 +347,20 @@ export class StoryFlow{
         }
     }
 
-    async reactToMyFriendsExpiredStory(reactionType:'view'|'like'|'unlike'){
+    async reactToMyFriendsExpiredStory(reactionType:'like'|'unlike'){
         let status;
-        if(reactionType=='view'){
-            status=1
-        }else if(reactionType=='like'){
-            status=2
+
+        if(reactionType=='like'){
+            status=true
         }else if(reactionType=='unlike'){
-            status=3
+            status=false
         }
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
         const memuuid = TestContext.initialMemuuid
         const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsExpiredStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
-            statusId: status
+            hasReacted: status
         })
         const response = await this.service.storyService.viewOrReactToStory(payload)
         return {
@@ -360,21 +369,20 @@ export class StoryFlow{
 
     }
 
-    async reactToMyFriendsOfFriendsExpiredStory(reactionType:'view'|'like'|'unlike'){
+    async reactToMyFriendsOfFriendsExpiredStory(reactionType:'like'|'unlike'){
         let status;
-        if(reactionType=='view'){
-            status=1
-        }else if(reactionType=='like'){
-            status=2
+
+        if(reactionType=='like'){
+            status=true
         }else if(reactionType=='unlike'){
-            status=3
+            status=false
         }
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
         const memuuid = TestContext.initialMemuuid
         const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsOfFriendExpiredStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
-            statusId: status
+            hasReacted: status
         })
         const response = await this.service.storyService.viewOrReactToStory(payload)
         return {
@@ -382,21 +390,20 @@ export class StoryFlow{
         }
     }
 
-    async reactToNonFriendsExpiredStory(reactionType:'view'|'like'|'unlike'){
+    async reactToNonFriendsExpiredStory(reactionType:'like'|'unlike'){
         let status;
-        if(reactionType=='view'){
-            status=1
-        }else if(reactionType=='like'){
-            status=2
+
+        if(reactionType=='like'){
+            status=true
         }else if(reactionType=='unlike'){
-            status=3
+            status=false
         }
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
         const memuuid = TestContext.initialMemuuid
         const {storyMediaId, storyId} = await TestContext.services.storyRepo.nonFriendsExpiredStoryId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
-            statusId: status
+            hasReacted: status
         })
         const response = await this.service.storyService.viewOrReactToStory(payload)
         return {
@@ -404,21 +411,20 @@ export class StoryFlow{
         }
     }
 
-    async reactToMyDeletedStory(reactionType:'view'|'like'|'unlike'){
+    async reactToMyDeletedStory(reactionType:'like'|'unlike'){
         let status;
-        if(reactionType=='view'){
-            status=1
-        }else if(reactionType=='like'){
-            status=2
+
+        if(reactionType=='like'){
+            status=true
         }else if(reactionType=='unlike'){
-            status=3
+            status=false
         }
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
         const memuuid = TestContext.initialMemuuid
         const {storyMediaId, storyId} = await TestContext.services.storyRepo.getMyPresentDeletedStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
-            statusId: status
+            hasReacted: status
         })
         const response = await this.service.storyService.viewOrReactToStory(payload)
         return {
@@ -426,21 +432,20 @@ export class StoryFlow{
         }
     }
     
-    async reactToMyFriendsPresentDeletedStory(reactionType:'view'|'like'|'unlike'){
+    async reactToMyFriendsPresentDeletedStory(reactionType:'like'|'unlike'){
         let status;
-        if(reactionType=='view'){
-            status=1
-        }else if(reactionType=='like'){
-            status=2
+
+        if(reactionType=='like'){
+            status=true
         }else if(reactionType=='unlike'){
-            status=3
+            status=false
         }
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
         const memuuid = TestContext.initialMemuuid
         const {storyMediaId, storyId} = await TestContext.services.storyRepo.myFriendsPresentDeletedStoryMediaId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
-            statusId: status
+            hasReacted: status
         })
         const response = await this.service.storyService.viewOrReactToStory(payload)
         return {
@@ -448,21 +453,20 @@ export class StoryFlow{
         }
     }
 
-    async reactToNonFriendsPresentDeletedStory(reactionType:'view'|'like'|'unlike'){
+    async reactToNonFriendsPresentDeletedStory(reactionType:'like'|'unlike'){
         let status;
-        if(reactionType=='view'){
-            status=1
-        }else if(reactionType=='like'){
-            status=2
+
+        if(reactionType=='like'){
+            status=true
         }else if(reactionType=='unlike'){
-            status=3
+            status=false
         }
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
         const memuuid = TestContext.initialMemuuid
         const {storyMediaId, storyId} = await TestContext.services.storyRepo.nonFriendsPresentDeletedStoryId(memuuid)
         const payload = StoryFactory.buildStoryReactionPayload({
             storyId: storyId,
-            statusId: status
+            hasReacted: status
         })
         const response = await this.service.storyService.viewOrReactToStory(payload)
         return {
@@ -479,9 +483,7 @@ export class StoryFlow{
             storyId: storyId
         })
         const response = await this.service.storyService.deleteStory(payload)
-        return {
-            response
-        }
+        return response
     }
     async deleteMyFriendsPresentStory(){
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
@@ -491,9 +493,7 @@ export class StoryFlow{
             storyId: storyId
         })
         const response = await this.service.storyService.deleteStory(payload)
-        return {
-            response
-        }
+        return response
     }
     async deleteMyFriendsFriendPresentStory(){
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
@@ -503,9 +503,7 @@ export class StoryFlow{
             storyId: storyId
         })
         const response = await this.service.storyService.deleteStory(payload)
-        return {
-            response
-        }
+        return response
     }
     async deleteMyDeletedStory(){
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
@@ -515,9 +513,7 @@ export class StoryFlow{
             storyId: storyId
         })
         const response = await this.service.storyService.deleteStory(payload)
-        return {
-            response
-        }
+        return response
     }
     async deleteMyExpiredStory(){
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
@@ -527,9 +523,7 @@ export class StoryFlow{
             storyId: storyId
         })
         const response = await this.service.storyService.deleteStory(payload)
-        return {
-            response
-        }
+        return response
     }
 /////////////////////////////// GET STORY Reaction///////////////////////////////
     async fetchMyPresentStoryReactions(){
@@ -540,9 +534,7 @@ export class StoryFlow{
             storyId: storyId
         })
         const response = await this.service.storyService.getAllReactionsOrViewsForStory(payload)
-        return {
-            response
-        }
+        return response
     }
     async fetchMyFriendsPresentStoryReactions(){
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
@@ -552,9 +544,7 @@ export class StoryFlow{
             storyId: storyId
         })
         const response = await this.service.storyService.getAllReactionsOrViewsForStory(payload)
-        return {
-            response
-        }
+        return response
     }
     async fetchMyFriendsFriendPresentStoryReactions(){
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
@@ -564,9 +554,17 @@ export class StoryFlow{
             storyId: storyId
         })
         const response = await this.service.storyService.getAllReactionsOrViewsForStory(payload)
-        return {
-            response
-        }
+        return response
+    }
+    async fetchNonFriendsPresentStoryReactions(){
+        // const data = getMemDetailsFromJwt(TestContext.accessToken)
+        const memuuid = TestContext.initialMemuuid
+        const {storyMediaId, storyId} = await TestContext.services.storyRepo.nonFriendsPresentDeletedStoryId(memuuid)
+        const payload = StoryFactory.buildFetchStoryReactionPayload({
+            storyId: storyId
+        })
+        const response = await this.service.storyService.getAllReactionsOrViewsForStory(payload)
+        return response
     }
     async fetchMyDeletedStoryReactions(){
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
@@ -576,9 +574,7 @@ export class StoryFlow{
             storyId: storyId
         })
         const response = await this.service.storyService.getAllReactionsOrViewsForStory(payload)
-        return {
-            response
-        }
+        return response
     }
     async fetchMyExpiredStoryReactions(){
         // const data = getMemDetailsFromJwt(TestContext.accessToken)
@@ -588,9 +584,7 @@ export class StoryFlow{
             storyId: storyId
         })
         const response = await this.service.storyService.getAllReactionsOrViewsForStory(payload)
-        return {
-            response
-        }
+        return response
     }
 
 }

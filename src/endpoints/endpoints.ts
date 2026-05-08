@@ -73,6 +73,7 @@ export const feed = {
 
 export const story = {
     POST_CREATE_STORY: '/stories/create',
+    POST_BULK_STORIES: '/stories/bulk-create',
     GET_STORIES: '/stories',
     POST_REACTTO_STORY: '/stories/react',
     DELETE_STORY: '/stories/',
