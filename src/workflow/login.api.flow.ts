@@ -1,12 +1,19 @@
+import { ENV } from "../helper/env/env.config";
 import { LoginFactory } from "../testdata/factory/login.factory";
 import { TestContext } from "../../src/context/test.context";
 import { ServiceContainer } from "../../src/services/service.container";
-import { DataGenerator } from "../utils/data.generator";
+import { wait } from "../utils/wait";
+import { getMemDetailsFromJwt } from "../../src/helper/auth/jwt.decode";
+
 
 export class LoginFlow{
     constructor(private service: ServiceContainer){}
 
-    async loginFlow(contactNumber:string){
+    async loginFlow(
+        contactNumber: string,
+        userId: string='',
+        type: 'initial user' | 'current user' = 'initial user'
+    ){
         // const codeVerifier = DataGenerator.generateRandomString()
         // const codeChallenge = DataGenerator.generateCodeChallenge(codeVerifier)
 
@@ -15,6 +22,7 @@ export class LoginFlow{
             contactNo:contactNumber
         }
         const signInContactResponse = await this.service.loginService.signInContact(signInContactPayload)
+        await wait(1000)
 
         const verifyOtpPayload = {
             ...LoginFactory.verifyOtpPayload(),
@@ -23,16 +31,22 @@ export class LoginFlow{
         const verifyOtpResponse = await this.service.loginService.verifyOtp(verifyOtpPayload)
 
         if(verifyOtpResponse.members.length>0 && verifyOtpResponse.stateToken){
-            let memUUID=''
+            let memUUID:any
             if(verifyOtpResponse.members[0]?.fullName=='DYUTISUNDAR DUTTA'){
                 memUUID = verifyOtpResponse.members[0].memuuid
             }else if(verifyOtpResponse.members[1]?.fullName=='DYUTISUNDAR DUTTA'){
                 memUUID = verifyOtpResponse.members[1].memuuid
-            }else{
+            }else if(userId==''){
                 memUUID = verifyOtpResponse.members[0].memuuid
+            }else{
+                memUUID=userId
             }
-
-            TestContext.stateToken = verifyOtpResponse.stateToken
+            if(type == 'current user'){
+                TestContext.currentStateToken = verifyOtpResponse.stateToken
+            }else if (type == 'initial user'){
+                TestContext.initialStateToken = verifyOtpResponse.stateToken
+            }
+            
 
             const createSessionPayload = {
                 ...LoginFactory.createSessionPayload(),
@@ -40,11 +54,19 @@ export class LoginFlow{
             }
             const createSessionResponse = await this.service.loginService.createSession(createSessionPayload)
             
-            TestContext.ssoSession=createSessionResponse.ssoSession
+            if(type == 'current user'){
+                TestContext.currentSsoSession = createSessionResponse.ssoSession
+            }else if (type == 'initial user'){
+                TestContext.initialSsoSession = createSessionResponse.ssoSession
+            }
         }
 
         if(verifyOtpResponse.ssoSession){
-            TestContext.ssoSession=verifyOtpResponse.ssoSession
+            if(type == 'current user'){
+                TestContext.currentSsoSession = verifyOtpResponse.ssoSession
+            }else if (type == 'initial user'){
+                TestContext.initialSsoSession = verifyOtpResponse.ssoSession
+            }
         }
 
         const authorizeSessionPayload = {
@@ -58,9 +80,24 @@ export class LoginFlow{
         }
         const loginResponse = await this.service.loginService.loginUser(loginPayload)
         if(loginResponse.accessToken){
-            TestContext.accessToken=loginResponse.accessToken
+            if(type == 'current user'){
+                TestContext.currentAccessToken = loginResponse.accessToken
+                const memberDetails = getMemDetailsFromJwt(TestContext.currentAccessToken)
+                TestContext.currentMemuuid = memberDetails.memuuid
+                TestContext.currentFamilyCode = memberDetails.familyCode
+                TestContext.currentMemberCode = memberDetails.memberCode
+                TestContext.currentFirstName = memberDetails.firstName
+                TestContext.currentLastName = memberDetails.lastName
+            }else if (type == 'initial user'){
+                TestContext.initialAccessToken = loginResponse.accessToken
+                const memberDetails = getMemDetailsFromJwt(TestContext.initialAccessToken)
+                TestContext.initialMemuuid = memberDetails.memuuid
+                TestContext.initialFamilyCode = memberDetails.familyCode
+                TestContext.initialMemberCode = memberDetails.memberCode
+                TestContext.initialFirstName = memberDetails.firstName
+                TestContext.initialLastName = memberDetails.lastName
+            }
         }
-
         return loginResponse
     }
 }

@@ -1,4 +1,4 @@
-import { user } from "endpoints/endpoints";
+import { user } from "../endpoints/endpoints";
 import ApiService from '../api/api.service';
 import { RequestBuilder } from '../api/request.builder';
 
@@ -21,7 +21,7 @@ export class UserServices{
         }
     }
 
-    async updateUserLocation(payload: Record<string,any>){
+    async updateUserLocation(payload:any){
         const requestPayload = new RequestBuilder()
             .setUrl(user.PATCH_USER_LOCATION)
             .setMethod('PATCH')
@@ -34,10 +34,11 @@ export class UserServices{
         }
     }
 
-    async getAllFriends(){
+    async getAllFriends(payload?: any){
         const requestPayload = new RequestBuilder()
             .setUrl(user.GET_ALL_FRIENDS)
-            .setMethod('GET')
+            .setMethod('POST')
+            .setBody(payload)
             .build()
 
         const response = await this.socialApi.request(requestPayload)
@@ -71,7 +72,7 @@ export class UserServices{
         }
     }
 
-    async acceptFriendRequest(payload: Record<string,any>){
+    async acceptFriendRequest(payload: any){
         const requestPayload = new RequestBuilder()
             .setUrl(user.POST_ACCEPT_FRIEND_REQUEST)
             .setMethod('POST')
@@ -84,7 +85,7 @@ export class UserServices{
         }
     }
 
-    async rejectFriendRequest(payload: Record<string,any>){
+    async rejectFriendRequest(payload: any){
         const requestPayload = new RequestBuilder()
             .setUrl(user.POST_REJECT_FRIEND_REQUEST)
             .setMethod('POST')
@@ -97,7 +98,7 @@ export class UserServices{
         }
     }
 
-    async cancelFriendRequest(payload: Record<string,any>){
+    async cancelFriendRequest(payload:any){
         const requestPayload = new RequestBuilder()
             .setUrl(user.POST_CANCEL_FRIEND_REQUEST)
             .setMethod('POST')
@@ -111,11 +112,10 @@ export class UserServices{
     }
 
 
-    async allPendingRequests(payload: Record<string,any>){
+    async allPendingRequests(){
         const requestPayload = new RequestBuilder()
             .setUrl(user.GET_ALLPENDING_REQUESTS)
             .setMethod('GET')
-            .setBody(payload)
             .build()
 
         const response = await this.socialApi.request(requestPayload)
@@ -136,10 +136,11 @@ export class UserServices{
         }
     }
 
-    async searchUserByName(){
+    async searchUserByName(payload:any){
         const requestPayload = new RequestBuilder()
             .setUrl(user.POST_SEARCH_USER_BY_NAME)
             .setMethod('POST')
+            .setBody(payload)
             .build()
 
         const response = await this.socialApi.request(requestPayload)
@@ -172,10 +173,51 @@ export class UserServices{
         }
     }
 
-    async deleteFriend(){
+    async deleteFriend(payload:any){
         const requestPayload = new RequestBuilder()
             .setUrl(user.DEL_FRIEND_FROM_LIST)
             .setMethod('DELETE')
+            .setBody(payload)
+            .build()
+
+        const response = await this.socialApi.request(requestPayload)
+        return {
+            response
+        }
+    }
+
+    async getProfile(payload?:any){
+        console.log(`sfmmId in service file: ${JSON.stringify(payload)}`)
+        const requestPayload = new RequestBuilder()
+            .setUrl(user.GET_PROFILE)
+            .setMethod('GET')
+            .setParams(payload)
+            .build()
+
+        const response = await this.socialApi.request(requestPayload)
+        return {
+            response
+        }
+    }
+
+    async updateProfile(payload:any){
+        const requestPayload = new RequestBuilder()
+            .setUrl(user.GET_PROFILE)
+            .setMethod('PATCH')
+            .setBody(payload)
+            .build()
+
+        const response = await this.socialApi.request(requestPayload)
+        return {
+            response
+        }
+    }
+
+    async nearBySatsangee(payload:any={}){
+        const requestPayload = new RequestBuilder()
+            .setUrl(user.POST_NEARBY_SATSANGEES)
+            .setMethod('POST')
+            .setBody(payload)
             .build()
 
         const response = await this.socialApi.request(requestPayload)

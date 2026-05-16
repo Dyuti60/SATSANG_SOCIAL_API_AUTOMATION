@@ -16,7 +16,7 @@ export class RegistrationFactory{
 
     static registerPayload(overrides?: RegisterOverrides): RegisterOverrides{
         return {
-            username: faker.name.firstName(),
+            username: faker.name.firstName()+faker.lorem.word()+faker.name.prefix(),
             bio: faker.lorem.paragraph(),
             gender: faker.helpers.arrayElement(['male','female','other']),
             dob: faker.date.birthdate().toISOString().split('T')[0],
