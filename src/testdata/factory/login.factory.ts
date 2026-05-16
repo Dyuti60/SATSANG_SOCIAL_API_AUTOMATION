@@ -10,7 +10,7 @@ export class LoginFactory {
     static verifyOtpPayload(){
         return {
             id: 16756,
-            otp: "375899",
+            otp: faker.datatype.number({ min: 100000, max: 999999 }).toString(),
             appId: 11,
             codeChallenge: "decf9847ad0b98b8fb6d63b91e036c14"
         }
