@@ -135,10 +135,11 @@ export class FeedServices {
         }
     }
 
-    async getBookmarkedPosts(){
+    async getBookmarkedPosts(payload:any){
         const requestPayload = new RequestBuilder()
             .setUrl(`${feed.GET_BOOKMARKED_POSTS}`)
             .setMethod('GET')
+            .setParams(payload)
             .build()
         const response = await this.socialApi.request(requestPayload)
         return {
@@ -146,10 +147,11 @@ export class FeedServices {
         }
     }
 
-    async getPostsInProfile(){
+    async getPostsInProfile(payload:any={}){
         const requestPayload = new RequestBuilder()
             .setUrl(`${feed.GET_POSTS_IN_PROFILE}`)
             .setMethod('GET')
+            .setParams(payload)
             .build()
         const response = await this.socialApi.request(requestPayload)
         return {

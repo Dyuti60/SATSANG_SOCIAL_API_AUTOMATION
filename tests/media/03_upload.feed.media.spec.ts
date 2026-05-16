@@ -156,16 +156,6 @@ describe('Validate POST /feed/post',()=>{
 
     })
 
-    describe('Miscellaneous Validation Cases Based On Create Post Payload',()=>{
-
-    })
-
-
-
-
-
-
-
 })
 
 // 

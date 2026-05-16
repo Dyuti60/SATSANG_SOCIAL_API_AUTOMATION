@@ -1,5 +1,6 @@
 import { PgSocialClient } from "../client/pg.social.client";
 import { CassandraQuery, toUUID, dedupeByKeys } from '../client/cassandra.client';
+import { TestContext } from "src/context/test.context";
 
 export class FeedRepo {
     async getMyRandomPublicPost(userId:string){
@@ -1294,4 +1295,972 @@ export class FeedRepo {
         };
     }
 
+
+
+    // BOOKMARK REPO
+
+    // 1. Bookmark ready post
+    async getMyFriendsRandomPublicBookmarkReadyPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomFriendIdWithAcceptedStatusOtherThanLoggedIn(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 204
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 204
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsRandomBookmarkReadyHiddenPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomFriendIdWithAcceptedStatusOtherThanLoggedIn(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 201
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 201
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsRandomBookmarkReadyDeletedPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomFriendIdWithAcceptedStatusOtherThanLoggedIn(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 200
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 200
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsRandomBookmarkReadyPostWithFriendsVisibility(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomFriendIdWithAcceptedStatusOtherThanLoggedIn(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 202 
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 202
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsRandomBookmarkReadyPostWithFriendsOfFriendsVisibility(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomFriendIdWithAcceptedStatusOtherThanLoggedIn(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 203
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 203
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+
+
+
+    async getMyFriendsOfFriendsRandomBookmarkReadyPublicPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getValidFriendsOfFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 204
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 204
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsOfFriendsRandomBookmarkReadyHiddenPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getValidFriendsOfFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 201
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 201
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsOfFriendsRandomBookmarkReadyDeletedPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getValidFriendsOfFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 200
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 200
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsOfFriendsRandomBookmarkReadyPostWithFriendsVisibility(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getValidFriendsOfFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 202
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 202
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsOfFriendsRandomBookmarkReadyPostWithFriendsOfFriendVisibility(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getValidFriendsOfFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 203
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 203
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+
+    async getMyNonFriendsRandomBookmarkReadyPublicPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomNonSocialFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 204
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 204
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyNonFriendsRandomBookmarkReadyHiddenPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomNonSocialFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 201
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 201
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyNonFriendsRandomBookmarkReadyDeletedPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomNonSocialFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 200
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 200
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyNonFriendsRandomBookmarkReadyPostWithFriendsVisibility(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomNonSocialFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 202
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 202
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyNonFriendsRandomBookmarkReadyPostWithFriendsOfFriendVisibility(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomNonSocialFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 203
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 203
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+
+    async getMyRandomBookmarkReadyPublicPost(bookmarkedByUserId:string){
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 204
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 204
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[bookmarkedByUserId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyRandomBookmarkReadyHiddenPost(bookmarkedByUserId:string){
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 201
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 201
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[bookmarkedByUserId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyRandomBookmarkReadyDeletedPost(bookmarkedByUserId:string){
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 200
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 200
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[bookmarkedByUserId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyRandomBookmarkReadyPostWithFriendsVisibility(bookmarkedByUserId:string){
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 202
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 202
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[bookmarkedByUserId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyRandomBookmarkReadyPostWithFriendsOfFriendsVisibility(bookmarkedByUserId:string){
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid, x.statusid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id as statusId  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where sspb.sspb_id is null and ssp.ssp_ssc_id = 203
+        ssp.ssp_sfmm_id =$1
+        union
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  from satsang_social.satsang_social_posts ssp 
+        left join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 451
+        and ssp.ssp_ssc_id = 203
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[bookmarkedByUserId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+
+
+    // 2. Remove Bookmark Ready Post
+    async getMyFriendsRandomRemoveBookmarkPublicReadyPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomFriendIdWithAcceptedStatusOtherThanLoggedIn(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 204
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsRandomRemoveBookmarkReadyHiddenPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomFriendIdWithAcceptedStatusOtherThanLoggedIn(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 201
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsRandomRemoveBookmarkReadyDeletedPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomFriendIdWithAcceptedStatusOtherThanLoggedIn(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 200
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsRandomRemoveBookmarkReadyPostWithFriendsVisibility(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomFriendIdWithAcceptedStatusOtherThanLoggedIn(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 202
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsRandomRemoveBookmarkReadyPostWithFriendsOfFriendsVisibility(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomFriendIdWithAcceptedStatusOtherThanLoggedIn(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 203
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+
+
+
+    async getMyFriendsOfFriendsRandomRemoveBookmarkReadyPublicPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getValidFriendsOfFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 204
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsOfFriendsRandomRemoveBookmarkReadyHiddenPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getValidFriendsOfFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 201
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsOfFriendsRandomRemoveBookmarkReadyDeletedPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getValidFriendsOfFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 200
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsOfFriendsRandomRemoveBookmarkReadyPostWithFriendsVisibility(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getValidFriendsOfFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 202
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyFriendsOfFriendsRandomRemoveBookmarkReadyPostWithFriendsOfFriendVisibility(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getValidFriendsOfFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 203
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+
+    async getMyNonFriendsRandomRemoveBookmarkReadyPublicPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomNonSocialFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 204
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyNonFriendsRandomRemoveBookmarkReadyHiddenPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomNonSocialFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 201
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyNonFriendsRandomRemoveBookmarkReadyDeletedPost(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomNonSocialFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 200
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyNonFriendsRandomRemoveBookmarkReadyPostWithFriendsVisibility(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomNonSocialFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 202
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyNonFriendsRandomRemoveBookmarkReadyPostWithFriendsOfFriendVisibility(bookmarkedByUserId:string){
+        const myFriendId = await TestContext.services.userRepo.getRandomNonSocialFriendId(bookmarkedByUserId)
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 203
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[myFriendId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+
+    async getMyRandomBookmarkRemoveReadyPublicPost(bookmarkedByUserId:string){
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 204
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[bookmarkedByUserId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyRandomBookmarkRemoveReadyHiddenPost(bookmarkedByUserId:string){
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 201
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[bookmarkedByUserId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyRandomBookmarkRemoveReadyDeletedPost(bookmarkedByUserId:string){
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 200
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[bookmarkedByUserId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyRandomBookmarkRemoveReadyPostWithFriendsVisibility(bookmarkedByUserId:string){
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 202
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[bookmarkedByUserId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
+    async getMyRandomBookmarkRemoveReadyPostWithFriendsOfFriendsVisibility(bookmarkedByUserId:string){
+        const query = `
+        select x.postid, x.postedbyuserid, x.bookmarkedbyuserid from (
+        select ssp.ssp_id as postId, ssp.ssp_sfmm_id as postedByUserId ,
+        sspb.sspb_ssup_id as bookmarkedByUserId, sspb.sspb_ssc_id  
+        from satsang_social.satsang_social_posts ssp 
+        inner join satsang_social.satsang_social_post_bookmarks sspb 
+        on ssp.ssp_id =sspb.sspb_ssp_id
+        where ssp.ssp_sfmm_id =$1 and ssp.ssp_ssc_id = 203
+        and sspb.sspb_ssup_id =$1 and sspb.sspb_ssc_id = 450
+        )x
+        order by Random()
+        limit 1
+        `
+        const result = await PgSocialClient.query(query,[bookmarkedByUserId])
+        return {
+            postId: result.rows[0]?.postid,
+            postedByUserId: result.rows[0]?.postedbyuserid,
+            bookmarkedByUserId: result.rows[0]?.bookmarkedbyuserid
+        }
+    }
 }
