@@ -1,5 +1,5 @@
-import { ENV } from '../../helper/env/env.config';
 import { Pool } from 'pg';
+import { ENV } from '../../helper/env/env.config';
 import Log from '../../utils/logger';
 
 export const PgSsoClient = new Pool({

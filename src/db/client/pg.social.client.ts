@@ -1,7 +1,6 @@
-import { ENV } from '../../helper/env/env.config';
 import { Pool } from 'pg';
+import { ENV } from '../../helper/env/env.config';
 import Log from '../../utils/logger';
-
 export const  PgSocialClient = new Pool({
         host: ENV.PG_HOST_SOCIAL,
         port: Number(ENV.PG_PORT_SOCIAL),

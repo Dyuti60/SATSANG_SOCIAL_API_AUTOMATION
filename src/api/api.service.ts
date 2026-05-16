@@ -90,13 +90,11 @@ export default class ApiService {
           'application/json'
         )
 
-        return error.response as AxiosResponse
+        return error.response
       }
 
       Log.error(`[${requestId}] API ERROR → ${error.message}`)
-      throw new Error(
-        `API failed without response: ${error.message}`
-      )
+      throw error
     }
   }
 }
