@@ -593,6 +593,40 @@ export class UserRepo {
     }
   }
 
+  async getValidFriendsOfFriendId(particularUserId:string){
+    const query = `
+            with myFriends as(
+                select distinct 
+                case when ssf.ssf_sfmm1_id = $1 then ssf.ssf_sfmm2_id
+                when ssf.ssf_sfmm2_id = $1 then ssf.ssf_sfmm1_id
+                end as friendId
+                from satsang_social.satsang_social_friends ssf 
+                where ssf.ssf_sfmm1_id = $1
+                or ssf.ssf_sfmm2_id = $1
+                ),
+            friends_of_friends as (
+                select distinct x.fof_id 
+                from(
+                    select 
+                    case when ssf.ssf_sfmm1_id = mf.friendId then ssf.ssf_sfmm2_id else ssf.ssf_sfmm1_id end as fof_id
+                    from satsang_social.satsang_social_friends ssf 
+                    join myFriends mf
+                    on (ssf.ssf_sfmm1_id = mf.friendId or ssf.ssf_sfmm2_id = mf.friendId) and ssf.ssf_ssc_id =25
+                )x
+                where fof_id not in 
+                (select * from myFriends) and fof_id != $1
+                )
+                
+            select fof_id from friends_of_friends fof
+            order by random()
+            limit 1
+    `
+    const result = await PgSocialClient.query(query, [particularUserId]);
+    return {
+      friendId: result.rows[0]?.fof_id
+    }
+  }
+
 
 
 }
