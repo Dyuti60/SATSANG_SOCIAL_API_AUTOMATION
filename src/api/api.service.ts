@@ -14,9 +14,22 @@ function safeJson(data: any) {
 function maskHeaders(headers: any = {}) {
   const clone = { ...headers };
 
-  if (clone.Authorization) clone.Authorization = "****";
-  if (clone['state-token']) clone['state-token'] = "****";
-  if (clone['Sso-Session']) clone['Sso-Session'] = "****";
+  const maskValue = (value: string) => {
+    if (!value || value.length <= 10) return value;
+    return `****${value.slice(-10)}`;
+  };
+
+  if (clone.Authorization) {
+    clone.Authorization = maskValue(clone.Authorization);
+  }
+
+  if (clone['state-token']) {
+    clone['state-token'] = maskValue(clone['state-token']);
+  }
+
+  if (clone['Sso-Session']) {
+    clone['Sso-Session'] = maskValue(clone['Sso-Session']);
+  }
 
   return clone;
 }

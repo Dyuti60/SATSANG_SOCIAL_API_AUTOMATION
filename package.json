@@ -18,6 +18,10 @@
     "test:bulk-rejectRequest": "jest tests/user/bulkData/09_bulk.reject.request.spec.ts",
     "test:bulk-register":"jest tests/user/bulkData/01_bulk.registration.spec.ts",
     "test:bulk-userData": "jest tests/user/bulkData --runInBand --detectOpenHandles",
+    "test:bulk-placeMedia":"jest tests/media/bulkData/00_bulk.place.media.status.spec.ts",
+    "test:bulk-uploadProfile":"jest tests/media/bulkData/01_bulk.upload.profile.media.spec.ts",
+    "test:bulk-uploadStory":"jest tests/media/bulkData/02_bulk.upload.story.media.spec.ts",
+    "test:bulk-uploadPost":"jest tests/media/bulkData/03_bulk.upload.feed.media.spec.ts",
     "allure:generate": "npx allure generate allure-results --clean -o allure-report",
     "allure:open": "npx allure open allure-report"
   },
