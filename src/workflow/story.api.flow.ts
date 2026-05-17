@@ -36,7 +36,7 @@ async createBulkStoryWithNewMedia(files: string[]) {
     });
 
     // Call bulk create API
-    const response = await this.service.storyService.bulkCreateStories(payload);
+    const {response} = await this.service.storyService.bulkCreateStories(payload);
 
     return {
         response,

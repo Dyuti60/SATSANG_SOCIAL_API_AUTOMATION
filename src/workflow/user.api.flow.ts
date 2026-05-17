@@ -4,6 +4,7 @@ import { TestContext } from "../../src/context/test.context";
 import { UserFactory } from "../testdata/factory/user.factory";
 import { getMemDetailsFromJwt } from "../helper/auth/jwt.decode";
 import { faker } from "@faker-js/faker";
+import Log from "../../src/utils/logger";
 
 export class UserFlow{
     constructor(
@@ -23,6 +24,9 @@ export class UserFlow{
 
     async getParticularUserDetails(particularUserId:string){
         const {sfmmID, contactNumber, fullName} = await TestContext.services.ssoRepo.getSSOMemberDetailsBySFMMDID(particularUserId)
+        Log.info(`Current Logged In User- SFMMID: ${sfmmID}`)
+        Log.info(`Current Logged In User- ContactNumber: ${contactNumber}`)
+        Log.info(`Current Logged In User- FullName: ${fullName}`)
         return {
             sfmm_id: sfmmID,
             contact_number: contactNumber,

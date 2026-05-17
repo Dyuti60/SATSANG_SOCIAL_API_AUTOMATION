@@ -5,3 +5,4 @@
 .env
 package-lock.json
 /src/testdata/resources/
+/src/testdata/resources_old

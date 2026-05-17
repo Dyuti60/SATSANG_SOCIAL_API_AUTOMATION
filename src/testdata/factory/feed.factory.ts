@@ -36,12 +36,12 @@ export class FeedFactory {
         const payload = {
             caption: options.caption ?? faker.lorem.words(10),
             locationId: options.locationId ?? 101,
-            visibilityId: options.visibility ?? faker.helpers.arrayElements([201,202,203]),
-            mediaids: options.mediaIds ?? [],
-            shareEnable: options.shareEnable ?? faker.helpers.arrayElements([true, false])
+            visibility: options.visibility ?? faker.helpers.arrayElement([201,202,203]),
+            mediaIds: options.mediaIds ?? [],
+            shareEnable: options.shareEnable ?? faker.helpers.arrayElement([true, false])
         }
         
-        if((!payload.caption || payload.caption.trim()==="") && payload.mediaids.length==0){
+        if((!payload.caption || payload.caption.trim()==="") && payload.mediaIds.length==0){
             throw new Error('Either caption or mediaIds must be provided')
         }
         return payload
@@ -50,7 +50,7 @@ export class FeedFactory {
     static buildPostReactionPayload(options: postReactionOptions = {}){
         const payload = {
             postId: options.postId ?? '',
-            reactionType: options.reactionType ?? faker.helpers.arrayElements([500,501])
+            reactionType: options.reactionType ?? faker.helpers.arrayElement([500,501])
         }
         return payload
     }
@@ -86,7 +86,7 @@ static buildPostCommentPayload(options: placePostCommentOptions = {}) {
         const payload = {
             postId: options.postId ?? '',
             commentId: options.commentId ?? '',
-            reactionType: options.reactionType ?? faker.helpers.arrayElements([700,701]) 
+            reactionType: options.reactionType ?? faker.helpers.arrayElement([700,701]) 
         }
         return payload
     }

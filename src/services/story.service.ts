@@ -21,7 +21,7 @@ export class StoryServices {
 
     async bulkCreateStories(payload: any){
         const requestPayload = new RequestBuilder()
-            .setUrl(`${story.POST_CREATE_STORY}`)
+            .setUrl(`${story.POST_BULK_STORIES}`)
             .setMethod('POST')
             .setBody(payload)
             .build()

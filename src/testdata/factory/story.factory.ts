@@ -36,7 +36,7 @@ export class StoryFactory {
             mediaId: options.mediaId ?? '',
             visibilityType: options.visibilityType ?? 1,
             caption: options.caption ?? faker.lorem.words(10),
-            thumbnailMediaId: options.thumbnailMediaId ?? '',
+            thumbnailMediaId: options.thumbnailMediaId ?? options.mediaId,
             viewerIds: options.viewerIds ?? []
         }
         

@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 export function getRandomJpegFile(): string {
-  const dirPath = path.resolve(__dirname, '../../testdata/resources');
+  const dirPath = path.resolve(__dirname, '../../src/testdata/resources');
 
   const files = fs.readdirSync(dirPath);
 
@@ -21,7 +21,7 @@ export function getRandomJpegFile(): string {
 }
 
 export function getRandomMp4File(): string {
-  const dirPath = path.resolve(__dirname, '../../testdata/resources');
+  const dirPath = path.resolve(__dirname, '../../src/testdata/resources');
 
   const files = fs.readdirSync(dirPath);
 

@@ -4,6 +4,7 @@ import { TestContext } from "../../src/context/test.context";
 import { ServiceContainer } from "../../src/services/service.container";
 import { wait } from "../utils/wait";
 import { getMemDetailsFromJwt } from "../../src/helper/auth/jwt.decode";
+import Log from "../../src/utils/logger";
 
 
 export class LoginFlow{
@@ -88,6 +89,13 @@ export class LoginFlow{
                 TestContext.currentMemberCode = memberDetails.memberCode
                 TestContext.currentFirstName = memberDetails.firstName
                 TestContext.currentLastName = memberDetails.lastName
+                Log.info(`
+                        Current Memuuid:${TestContext.currentMemuuid},
+                        Current FamilyCode: ${TestContext.currentFamilyCode},
+                        Current MemberCode: ${TestContext.currentMemberCode},
+                        Current FirstName: ${TestContext.currentFirstName},
+                        Current LastName: ${TestContext.currentLastName},
+                    `)
             }else if (type == 'initial user'){
                 TestContext.initialAccessToken = loginResponse.accessToken
                 const memberDetails = getMemDetailsFromJwt(TestContext.initialAccessToken)
@@ -96,6 +104,13 @@ export class LoginFlow{
                 TestContext.initialMemberCode = memberDetails.memberCode
                 TestContext.initialFirstName = memberDetails.firstName
                 TestContext.initialLastName = memberDetails.lastName
+                Log.info(`
+                        Initial Memuuid:${TestContext.initialMemuuid},
+                        Initial FamilyCode: ${TestContext.initialFamilyCode},
+                        Initial MemberCode: ${TestContext.initialMemberCode},
+                        Initial FirstName: ${TestContext.initialFirstName},
+                        Initial LastName: ${TestContext.initialLastName},
+                    `)
             }
         }
         return loginResponse

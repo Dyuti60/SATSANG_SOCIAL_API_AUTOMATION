@@ -1,6 +1,6 @@
 import { PgSocialClient } from "../client/pg.social.client";
 import { CassandraQuery, toUUID, dedupeByKeys } from '../client/cassandra.client';
-import { TestContext } from "src/context/test.context";
+import { TestContext } from "../../../src/context/test.context";
 
 export class FeedRepo {
     async getMyRandomPublicPost(userId:string){
