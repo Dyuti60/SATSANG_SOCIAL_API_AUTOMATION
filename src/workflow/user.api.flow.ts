@@ -21,6 +21,15 @@ export class UserFlow{
         await this.loginUserFlow(contact_number)
     }
 
+    async getParticularUserDetails(particularUserId:string){
+        const {sfmmID, contactNumber, fullName} = await TestContext.services.ssoRepo.getSSOMemberDetailsBySFMMDID(particularUserId)
+        return {
+            sfmm_id: sfmmID,
+            contact_number: contactNumber,
+            full_name: fullName
+        }
+    }
+
     async getValidRegionFlow(){
         await this.getRandomRegisteredUserLogInToSatsangSocial()
         const {regionId, region, completeRegion} = await this.service.userRepo.getRandomRegion()
@@ -557,6 +566,30 @@ export class UserFlow{
     }
   }
 
+
+  async getRandomFriendOfParticularUser(){
+    const memuuid = TestContext.initialMemuuid
+    const {friendId} = await TestContext.services.userRepo.getRandomFriendIdWithAcceptedStatusOtherThanLoggedIn(memuuid)
+    return {
+        friendId
+    }
+  }
+
+  async getRandomFriendsOfFriendOfParticularUser(){
+    const memuuid = TestContext.initialMemuuid
+    const {friendId} = await TestContext.services.userRepo.getValidFriendsOfFriendId(memuuid)
+    return {
+        friendId
+    }
+  }
+
+  async getRandomNonFriendOfParticularUser(){
+    const memuuid = TestContext.initialMemuuid
+    const friendId = await TestContext.services.userRepo.getRandomNonSocialFriendId(memuuid)
+    return {
+        friendId
+    }
+  }
 
     
 

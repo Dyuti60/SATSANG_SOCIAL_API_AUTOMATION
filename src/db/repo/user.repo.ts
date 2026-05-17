@@ -22,6 +22,7 @@ export class UserRepo {
         }
     }
 
+
     async getRandomRegion(){
         const result = await PgSocialClient.query(
             `
