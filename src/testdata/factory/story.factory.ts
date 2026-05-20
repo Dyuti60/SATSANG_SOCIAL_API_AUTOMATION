@@ -34,7 +34,7 @@ export class StoryFactory {
     static buildStoryPayload(options: StoryPayloadOptions={}){
         const payload = {
             mediaId: options.mediaId ?? '',
-            visibilityType: options.visibilityType ?? 1,
+            visibility: options.visibilityType ?? 'ALL_FRIENDS',
             caption: options.caption ?? faker.lorem.words(10),
             thumbnailMediaId: options.thumbnailMediaId ?? options.mediaId,
             viewerIds: options.viewerIds ?? []
@@ -51,7 +51,7 @@ export class StoryFactory {
         const payload = {
         stories: options.mediaIds?.map((mediaId, index) => ({
             mediaId,
-            visibilityType: options.visibilityType ?? 1,
+            visibility: options.visibilityType ?? 'ALL_FRIENDS',
             caption:
             options.caption ??
             faker.lorem.words(10),

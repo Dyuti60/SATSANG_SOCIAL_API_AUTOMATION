@@ -10,37 +10,37 @@ describe('Validate POST /stories/create',()=>{
             const filePath = getRandomJpegFile()
             const {response} = await TestContext.flows.storyFlow.createStoryWithMyNewStoryMedia([filePath])
             await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
 
         test('Validate Creating My Story - Current Story Media',async()=>{
             const {response} = await TestContext.flows.storyFlow.createStoryWithMyPresentStoryMedia()
             await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
     
         test('Validate Creating My Story - Expired Story Media',async()=>{
             const {response} = await TestContext.flows.storyFlow.createStoryWithMyExpiredStoryMedia()
             await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
 
         test('Validate Creating My Story - Deleted Story Media',async()=>{
             const {response} = await TestContext.flows.storyFlow.createStoryWithMyDeletedStoryMedia()
             await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
 
         test('Validate Creating My Story - Expired And Deleted Story Media',async()=>{
             const {response} = await TestContext.flows.storyFlow.createStoryWithMyExpiredDeletedStoryMedia()
             await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
 
         test('Validate Creating My Story - Only Minio Loaded Media',async()=>{
             const {response} = await TestContext.flows.storyFlow.createStoryWithMyExistingMinioLoadedOnlyStoryMedia()
             await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
     })
 
@@ -50,7 +50,7 @@ describe('Validate POST /stories/create',()=>{
             const filePath = getRandomMp4File()
             const {response} = await TestContext.flows.storyFlow.createStoryWithMyNewStoryMedia([filePath])
             await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
 
     })
@@ -61,14 +61,14 @@ describe('Validate POST /stories/create',()=>{
             const filePath = getRandomJpegFile()
             const {response} = await TestContext.flows.storyFlow.createStoryWithMyNewPostMedia([filePath])
             await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
 
         test('Validate Creating My Story - With My Profile Media',async()=>{
             const filePath = getRandomJpegFile()
             const {response} = await TestContext.flows.storyFlow.createStoryWithMyNewProfileMedia([filePath])
             await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
     })
 
@@ -76,20 +76,20 @@ describe('Validate POST /stories/create',()=>{
 
         test('Validate Creating My Story - With My Friends Present Story Media',async()=>{
             const {response} = await TestContext.flows.storyFlow.createStoryWithFriendsPresentStoryMedia()
-            await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateStatus(response, 400)
+            await ResponseValidator.validateErrorMessage(response, 'Invalid media for story')
         })
 
         test('Validate Creating My Story - With My Friends Expired Story Media',async()=>{
             const {response} = await TestContext.flows.storyFlow.createStoryWithFriendsExpiredStoryMedia()
-            await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateStatus(response, 400)
+            await ResponseValidator.validateErrorMessage(response, 'Invalid media for story')
         })
 
         test('Validate Creating My Story - With My Friends Only Minio Loaded Story Media',async()=>{
             const {response} = await TestContext.flows.storyFlow.createStoryWithFriendsExistingMinioLoadedOnlyStoryMedia()
-            await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateStatus(response, 400)
+            await ResponseValidator.validateErrorMessage(response, 'Invalid media for story')
         })
     })
 
@@ -97,20 +97,20 @@ describe('Validate POST /stories/create',()=>{
 
         test('Validate Creating My Story - With My Friends Friend Present Story Media',async()=>{
             const {response} = await TestContext.flows.storyFlow.createStoryWithFriendsFriendPresentStoryMedia()
-            await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateStatus(response, 400)
+            await ResponseValidator.validateErrorMessage(response, 'Invalid media for story')
         })
 
         test('Validate Creating My Story - With My Friends Friend Expired Story Media',async()=>{
             const {response} = await TestContext.flows.storyFlow.createStoryWithFriendsFriendExpiredStoryMedia()
-            await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateStatus(response, 400)
+            await ResponseValidator.validateErrorMessage(response, 'Invalid media for story')
         })
 
         test('Validate Creating My Story - With My Friends Friend Minio Loaded Story Media',async()=>{
             const {response} = await TestContext.flows.storyFlow.createStoryWithFriendsFriendExistingMinioLoadedOnlyStoryMedia()
-            await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateStatus(response, 400)
+            await ResponseValidator.validateErrorMessage(response, 'Invalid media for story')
         })
     })
 
@@ -118,20 +118,20 @@ describe('Validate POST /stories/create',()=>{
 
         test('Validate Creating My Story - With Non Friends Present Story Media',async()=>{
             const {response} = await TestContext.flows.storyFlow.createStoryWithNonFriendsPresentStoryMedia()
-            await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateStatus(response, 400)
+            await ResponseValidator.validateErrorMessage(response, 'Invalid media for story')
         })
 
         test('Validate Creating My Story - With Non Friends Expired Story Media',async()=>{
             const {response} = await TestContext.flows.storyFlow.createStoryWithNonFriendsExpiredStoryMedia()
-            await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateStatus(response, 400)
+            await ResponseValidator.validateErrorMessage(response, 'Invalid media for story')
         })
 
         test('Validate Creating My Story - With Non Friends Minio Loaded Story Media',async()=>{
             const {response} = await TestContext.flows.storyFlow.createStoryWithNonFriendsExistingMinioLoadedOnlyStoryMedia()
-            await ResponseValidator.validateStatus(response, 201)
-            await ResponseValidator.validateErrorMessage(response, 'Story Saved Successfully')
+            await ResponseValidator.validateStatus(response, 400)
+            await ResponseValidator.validateErrorMessage(response, 'Invalid media for story')
         })
     })
 })

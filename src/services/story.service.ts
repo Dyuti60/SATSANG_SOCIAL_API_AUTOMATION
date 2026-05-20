@@ -59,7 +59,6 @@ export class StoryServices {
         const requestPayload = new RequestBuilder()
             .setUrl(`${story.DELETE_STORY}${payload.storyId}`)
             .setMethod('DELETE')
-            .setBody(payload)
             .build()
         const response = await this.socialApi.request(requestPayload)
         return {
