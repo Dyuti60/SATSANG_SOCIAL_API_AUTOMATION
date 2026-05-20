@@ -4,65 +4,69 @@ export class StoryRepo {
     
     async getMyPresentStoryMediaId(userId:string){
         const query = `
-            select sss.sss_id as storyId, sss.sss_smm_id as storyMediaId from satsang_social.satsang_social_stories sss
+            select sss.sss_id as storyId, sss.sss_smm_id as storyMediaId, sss.sss_created_by as createdBy from satsang_social.satsang_social_stories sss
             inner join satsang_social.satsang_media_metadata smm on sss.sss_smm_id =smm.smm_id 
             where sss.sss_created_by = $1 and smm.smm_object_path like '%stories%'
-            and sss.sss_expires_at > NOW() and sss.sss_ssc_id=1
+            and sss.sss_expires_at > NOW() and sss.sss_ssc_id=802
             order by Random()
             limit 1
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            storyId: result.rows[0]?.storyId,
-            storyMediaId: result.rows[0]?.storyMediaId
+            storyId: result.rows[0]?.storyid,
+            storyMediaId: result.rows[0]?.storymediaid,
+            createdBy: result.rows[0]?.createdby
         }
     }
 
     async getMyPresentDeletedStoryMediaId(userId:string){
         const query = `
-            select sss.sss_id as storyId, sss.sss_smm_id as storyMediaId from satsang_social.satsang_social_stories sss
+            select sss.sss_id as storyId, sss.sss_smm_id as storyMediaId, sss.sss_created_by as createdBy  from satsang_social.satsang_social_stories sss
             inner join satsang_social.satsang_media_metadata smm on sss.sss_smm_id =smm.smm_id 
             where sss.sss_created_by = $1 and smm.smm_object_path like '%stories%'
-            and sss.sss_expires_at > NOW() and sss.sss_ssc_id=2
+            and sss.sss_expires_at > NOW() and sss.sss_ssc_id=804
             order by Random()
             limit 1
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            storyId: result.rows[0]?.storyId,
-            storyMediaId: result.rows[0]?.storyMediaId
+            storyId: result.rows[0]?.storyid,
+            storyMediaId: result.rows[0]?.storymediaid,
+            createdBy: result.rows[0]?.createdby
         }
     }
 
     async getMyExpiredStoryMediaId(userId:string){
         const query = `
-            select sss.sss_id as storyId, sss.sss_smm_id as storyMediaId from satsang_social.satsang_social_stories sss
+            select sss.sss_id as storyId, sss.sss_smm_id as storyMediaId, sss.sss_created_by as createdBy  from satsang_social.satsang_social_stories sss
             inner join satsang_social.satsang_media_metadata smm on sss.sss_smm_id =smm.smm_id 
-            where sss.sss_created_by = $1 and sss.sss_ssc_id = 1 and smm.smm_object_path like '%stories%'
+            where sss.sss_created_by = $1 and sss.sss_ssc_id = 803 and smm.smm_object_path like '%stories%'
             and sss.sss_expires_at < NOW()
             order by Random()
             limit 1
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            storyId: result.rows[0]?.storyId,
-            storyMediaId: result.rows[0]?.storyMediaId
+            storyId: result.rows[0]?.storyid,
+            storyMediaId: result.rows[0]?.storymediaid,
+            createdBy: result.rows[0]?.createdby
         }
     }
 
     async getMyExpiredDeletedStoryMediaId(userId:string){
         const query = `
-            select sss.sss_id as storyId, sss.sss_smm_id as storyMediaId from satsang_social.satsang_social_stories sss
+            select sss.sss_id as storyId, sss.sss_smm_id as storyMediaId, sss.sss_created_by as createdBy  from satsang_social.satsang_social_stories sss
             inner join satsang_social.satsang_media_metadata smm on sss.sss_smm_id =smm.smm_id 
-            where sss.sss_created_by = $1 and sss.sss_ssc_id = 2 and smm.smm_object_path like '%stories%'
+            where sss.sss_created_by = $1 and sss.sss_ssc_id = 804 and smm.smm_object_path like '%stories%'
             and sss.sss_expires_at < NOW()
             order by Random()
             limit 1
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            storyId: result.rows[0]?.storyId,
-            storyMediaId: result.rows[0]?.storyMediaId
+            storyId: result.rows[0]?.storyid,
+            storyMediaId: result.rows[0]?.storymediaid,
+            createdBy: result.rows[0]?.createdby
         }
     }
 
@@ -70,7 +74,7 @@ export class StoryRepo {
         const query = `
             select smm.smm_id as mediaId, smm.smm_object_path as storyUrl
             from satsang_social.satsang_media_metadata smm 
-            left join satsang_social_stories sss on smm.smm_id =sss.sss_smm_id  
+            left join satsang_social.satsang_social_stories sss on smm.smm_id =sss.sss_smm_id  
             where smm.smm_ssc_id =14 and smm.smm_object_path like '%stories%'
             and sss.sss_id is null and smm.smm_sfmm_id = $1
             order by Random()
@@ -78,8 +82,8 @@ export class StoryRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            storyUrl: result.rows[0]?.storyUrl,
-            storyMediaId: result.rows[0]?.mediaId
+            storyUrl: result.rows[0]?.storyurl,
+            storyMediaId: result.rows[0]?.mediaid
         }
     }
 
@@ -100,9 +104,9 @@ export class StoryRepo {
                 or ssfr.ssfr_to_sfmm_id =$1)
                 and ssfr.ssfr_ssc_id in (23,24,21)
             )
-            select af.friendid, sss.sss_smm_id as mediaId, sss.sss_id as storyId
+            select af.friendid, sss.sss_smm_id as mediaId, sss.sss_id as storyId, sss.sss_created_by as createdBy 
             from acceptedFriends af inner join satsang_social.satsang_social_stories sss 
-            on af.friendid =sss.sss_created_by and sss.sss_expires_at > NOW() and sss.sss_ssc_id=1
+            on af.friendid =sss.sss_created_by and sss.sss_expires_at > NOW() and sss.sss_ssc_id=802
             inner join satsang_social.satsang_media_metadata smm on sss.sss_smm_id =smm.smm_id and smm.smm_object_path like '%stories%'
             order by Random()
             limit 1
@@ -110,8 +114,9 @@ export class StoryRepo {
         const result = await PgSocialClient.query(query,[userId])
         return {
             friendId: result.rows[0]?.friendid,
-            storyId: result.rows[0]?.storyId,
-            storyMediaId: result.rows[0]?.mediaId
+            storyId: result.rows[0]?.storyid,
+            storyMediaId: result.rows[0]?.mediaid,
+            createdBy: result.rows[0]?.createdby
         }
     }
 
@@ -132,9 +137,9 @@ export class StoryRepo {
                 or ssfr.ssfr_to_sfmm_id =$1)
                 and ssfr.ssfr_ssc_id in (23,24,21)
             )
-            select af.friendid, sss.sss_smm_id as mediaId, sss.sss_id as storyId
+            select af.friendid, sss.sss_smm_id as mediaId, sss.sss_id as storyId, sss.sss_created_by as createdBy 
             from acceptedFriends af inner join satsang_social.satsang_social_stories sss 
-            on af.friendid =sss.sss_created_by and sss.sss_expires_at > NOW() and sss.sss_ssc_id=2
+            on af.friendid =sss.sss_created_by and sss.sss_expires_at > NOW() and sss.sss_ssc_id=804
             inner join satsang_social.satsang_media_metadata smm on sss.sss_smm_id =smm.smm_id and smm.smm_object_path like '%stories%'
             order by Random()
             limit 1
@@ -142,8 +147,9 @@ export class StoryRepo {
         const result = await PgSocialClient.query(query,[userId])
         return {
             friendId: result.rows[0]?.friendid,
-            storyId: result.rows[0]?.storyId,
-            storyMediaId: result.rows[0]?.mediaId
+            storyId: result.rows[0]?.storyid,
+            storyMediaId: result.rows[0]?.mediaid,
+            createdBy: result.rows[0]?.createdby
         }
     }
 
@@ -164,9 +170,9 @@ export class StoryRepo {
                 or ssfr.ssfr_to_sfmm_id =$1)
                 and ssfr.ssfr_ssc_id in (23,24,21)
             )
-            select af.friendid, sss.sss_smm_id as mediaId, sss.sss_id as storyId
+            select af.friendid, sss.sss_smm_id as mediaId, sss.sss_id as storyId, sss.sss_created_by as createdBy 
             from acceptedFriends af inner join satsang_social.satsang_social_stories sss 
-            on af.friendid =sss.sss_created_by and sss.sss_expires_at < NOW() and sss.sss_ssc_id=1
+            on af.friendid =sss.sss_created_by and sss.sss_expires_at < NOW() and sss.sss_ssc_id=803
             inner join satsang_social.satsang_media_metadata smm on sss.sss_smm_id =smm.smm_id and smm.smm_object_path like '%stories%'
             order by Random()
             limit 1
@@ -174,8 +180,9 @@ export class StoryRepo {
         const result = await PgSocialClient.query(query,[userId])
         return {
             friendId: result.rows[0]?.friendid,
-            storyId: result.rows[0]?.storyId,
-            storyMediaId: result.rows[0]?.mediaId
+            storyId: result.rows[0]?.storyid,
+            storyMediaId: result.rows[0]?.mediaid,
+            createdBy: result.rows[0]?.createdby
         }
 
     }
@@ -201,7 +208,7 @@ export class StoryRepo {
             from acceptedFriends af 
             inner join satsang_social.satsang_media_metadata smm 
             on af.friendid =smm.smm_sfmm_id 
-            left join satsang_social_stories sss 
+            left join satsang_social.satsang_social_stories sss 
             on smm.smm_id =sss.sss_smm_id  
             where smm.smm_ssc_id =14 and smm.smm_object_path like '%stories%'
             and sss.sss_id is null 
@@ -210,8 +217,8 @@ export class StoryRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            friendId: result.rows[0]?.userId,
-            storyMediaId: result.rows[0]?.mediaId
+            friendId: result.rows[0]?.userid,
+            storyMediaId: result.rows[0]?.mediaid
         }
     }
 
@@ -238,9 +245,9 @@ export class StoryRepo {
                 where fof_id not in 
                 (select * from myFriends) and fof_id != $1
                 )
-            select fof.fof_id as friendid, sss.sss_smm_id as mediaId, sss.sss_id as storyId, sss.sss_expires_at
+            select fof.fof_id as friendid, sss.sss_smm_id as mediaId, sss.sss_id as storyId, sss.sss_expires_at, sss.sss_created_by as createdBy 
             from friends_of_friends fof inner join satsang_social.satsang_social_stories sss 
-            on fof.fof_id =sss.sss_created_by and sss.sss_expires_at > NOW() and sss.sss_ssc_id=1
+            on fof.fof_id =sss.sss_created_by and sss.sss_expires_at > NOW() and sss.sss_ssc_id=802
             inner join satsang_social.satsang_media_metadata smm on sss.sss_smm_id =smm.smm_id and smm.smm_object_path like '%stories%'
             order by Random()
             limit 1
@@ -248,8 +255,9 @@ export class StoryRepo {
         const result = await PgSocialClient.query(query,[userId])
         return {
             friendId: result.rows[0]?.friendid,
-            storyId: result.rows[0]?.storyId,
-            storyMediaId: result.rows[0]?.mediaId
+            storyId: result.rows[0]?.storyid,
+            storyMediaId: result.rows[0]?.mediaid,
+            createdBy: result.rows[0]?.createdby
         }
     }
 
@@ -276,9 +284,9 @@ export class StoryRepo {
                 where fof_id not in 
                 (select * from myFriends) and fof_id != $1
                 )
-            select fof.fof_id as friendid, sss.sss_smm_id as mediaId, sss.sss_id as storyId, sss.sss_expires_at
+            select fof.fof_id as friendid, sss.sss_smm_id as mediaId, sss.sss_id as storyId, sss.sss_expires_at, sss.sss_created_by as createdBy 
             from friends_of_friends fof inner join satsang_social.satsang_social_stories sss 
-            on fof.fof_id =sss.sss_created_by and sss.sss_expires_at < NOW() and sss.sss_ssc_id=1
+            on fof.fof_id =sss.sss_created_by and sss.sss_expires_at < NOW() and sss.sss_ssc_id=803
             inner join satsang_social.satsang_media_metadata smm on sss.sss_smm_id =smm.smm_id and smm.smm_object_path like '%stories%'
             order by Random()
             limit 1
@@ -286,8 +294,9 @@ export class StoryRepo {
         const result = await PgSocialClient.query(query,[userId])
         return {
             friendId: result.rows[0]?.friendid,
-            storyId: result.rows[0]?.storyId,
-            storyMediaId: result.rows[0]?.mediaId
+            storyId: result.rows[0]?.storyid,
+            storyMediaId: result.rows[0]?.mediaid,
+            createdBy: result.rows[0]?.createdby
         }
     }
 
@@ -318,7 +327,7 @@ export class StoryRepo {
             from friends_of_friends fof 
             inner join satsang_social.satsang_media_metadata smm 
             on fof.fof_id =smm.smm_sfmm_id 
-            left join satsang_social_stories sss 
+            left join satsang_social.satsang_social_stories sss 
             on smm.smm_id =sss.sss_smm_id  
             where smm.smm_ssc_id =14 and smm.smm_object_path like '%stories%'
             and sss.sss_id is null 
@@ -327,8 +336,8 @@ export class StoryRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            friendId: result.rows[0]?.userId,
-            storyMediaId: result.rows[0]?.mediaId
+            friendId: result.rows[0]?.userid,
+            storyMediaId: result.rows[0]?.mediaid
         }
     }
 
@@ -344,18 +353,19 @@ export class StoryRepo {
                 where ssfr.ssfr_id is null
                 and ssup.ssup_sfmm_id != $1
             )
-            select nsf.userId, sss.sss_smm_id as mediaId, sss.sss_id as storyId
+            select nsf.userId, sss.sss_smm_id as mediaId, sss.sss_id as storyId, sss.sss_created_by as createdBy 
             from nonSocialFriends nsf inner join satsang_social.satsang_social_stories sss 
-            on nsf.userid =sss.sss_created_by and sss.sss_expires_at > NOW() and sss.sss_ssc_id=1
+            on nsf.userid =sss.sss_created_by and sss.sss_expires_at > NOW() and sss.sss_ssc_id=802
             inner join satsang_social.satsang_media_metadata smm on sss.sss_smm_id =smm.smm_id and smm.smm_object_path like '%stories%'
             order by Random()
             limit 1
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            friendId: result.rows[0]?.userId,
-            storyId: result.rows[0]?.storyId,
-            storyMediaId: result.rows[0]?.mediaId
+            friendId: result.rows[0]?.userid,
+            storyId: result.rows[0]?.storyid,
+            storyMediaId: result.rows[0]?.mediaid,
+            createdBy: result.rows[0]?.createdby
         }
     }
 
@@ -371,18 +381,19 @@ export class StoryRepo {
                 where ssfr.ssfr_id is null
                 and ssup.ssup_sfmm_id != $1
             )
-            select nsf.userId, sss.sss_smm_id as mediaId, sss.sss_id as storyId
+            select nsf.userId, sss.sss_smm_id as mediaId, sss.sss_id as storyId, sss.sss_created_by as createdBy 
             from nonSocialFriends nsf inner join satsang_social.satsang_social_stories sss 
-            on nsf.userid =sss.sss_created_by and sss.sss_expires_at > NOW() and sss.sss_ssc_id=2
+            on nsf.userid =sss.sss_created_by and sss.sss_expires_at > NOW() and sss.sss_ssc_id=804
             inner join satsang_social.satsang_media_metadata smm on sss.sss_smm_id =smm.smm_id and smm.smm_object_path like '%stories%'
             order by Random()
             limit 1
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            friendId: result.rows[0]?.userId,
-            storyId: result.rows[0]?.storyId,
-            storyMediaId: result.rows[0]?.mediaId
+            friendId: result.rows[0]?.userid,
+            storyId: result.rows[0]?.storyid,
+            storyMediaId: result.rows[0]?.mediaid,
+            createdBy: result.rows[0]?.createdby
         }
     }
 
@@ -398,18 +409,19 @@ export class StoryRepo {
                 where ssfr.ssfr_id is null
                 and ssup.ssup_sfmm_id != $1
             )
-            select nsf.userId, sss.sss_smm_id as mediaId, sss.sss_id as storyId
+            select nsf.userId, sss.sss_smm_id as mediaId, sss.sss_id as storyId, sss.sss_created_by as createdBy 
             from nonSocialFriends nsf inner join satsang_social.satsang_social_stories sss 
-            on nsf.userid =sss.sss_created_by and sss.sss_expires_at < NOW() and sss.sss_ssc_id=1
+            on nsf.userid =sss.sss_created_by and sss.sss_expires_at < NOW() and sss.sss_ssc_id=803
             inner join satsang_social.satsang_media_metadata smm on sss.sss_smm_id =smm.smm_id and smm.smm_object_path like '%stories%'
             order by Random()
             limit 1
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            friendId: result.rows[0]?.userId,
-            storyId: result.rows[0]?.storyId,
-            storyMediaId: result.rows[0]?.mediaId
+            friendId: result.rows[0]?.userid,
+            storyId: result.rows[0]?.storyid,
+            storyMediaId: result.rows[0]?.mediaid,
+            createdBy: result.rows[0]?.createdby
         }
     }
 
@@ -429,7 +441,7 @@ export class StoryRepo {
             from nonSocialFriends nsf 
             inner join satsang_social.satsang_media_metadata smm 
             on nsf.userid =smm.smm_sfmm_id 
-            left join satsang_social_stories sss 
+            left join satsang_social.satsang_social_stories sss 
             on smm.smm_id =sss.sss_smm_id  
             where smm.smm_ssc_id =14 and smm.smm_object_path like '%stories%'
             and sss.sss_id is null 
@@ -438,8 +450,8 @@ export class StoryRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            friendId: result.rows[0]?.userId,
-            storyMediaId: result.rows[0]?.mediaId
+            friendId: result.rows[0]?.userid,
+            storyMediaId: result.rows[0]?.mediaid
         }
     }
 

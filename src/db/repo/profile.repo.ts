@@ -4,15 +4,15 @@ export class ProfileRepo {
     
     async getMyPresentProfileMediaId(userId:string){
         const query = `
-        select ssup.ssup_username as username, ssup.ssup_active_profile_smm_id as profileMediaId, ssup.ssup_active_profile_url qs profileUrl
+        select ssup.ssup_username as username, ssup.ssup_active_profile_smm_id as profileMediaId, ssup.ssup_active_profile_url as profileUrl
         from satsang_social.satsang_social_user_profiles ssup 
         where ssup.ssup_sfmm_id = $1
         `
         const result = await PgSocialClient.query(query,[userId])
         return{
             username: result.rows[0].username,
-            profileMediaId: result.rows[0].profileMediaId,
-            profileUrl: result.rows[0].profileUrl
+            profileMediaId: result.rows[0].profilemediaid,
+            profileUrl: result.rows[0].profileurl
         }
     }
 
@@ -28,7 +28,7 @@ export class ProfileRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return{
-            mediaId: result.rows[0].mediaId
+            mediaId: result.rows[0].mediaid
         }
     }
 
@@ -61,7 +61,7 @@ export class ProfileRepo {
         const result = await PgSocialClient.query(query,[userId])
         return{
             friendId: result.rows[0]?.friendid,
-            mediaId: result.rows[0]?.friendProfileMediaId
+            mediaId: result.rows[0]?.friendprofilemediaid
         }
     }
 
@@ -94,8 +94,8 @@ export class ProfileRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return{
-            friendId: result.rows[0]?.userId,
-            mediaId: result.rows[0]?.mediaId
+            friendId: result.rows[0]?.userid,
+            mediaId: result.rows[0]?.mediaid
         }
     }
 
@@ -128,8 +128,8 @@ export class ProfileRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return{
-            friendId: result.rows[0]?.userId,
-            mediaId: result.rows[0]?.mediaId
+            friendId: result.rows[0]?.userid,
+            mediaId: result.rows[0]?.mediaid
         }
     }
 
@@ -166,8 +166,8 @@ export class ProfileRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return{
-            friendId: result.rows[0]?.userId,
-            mediaId: result.rows[0]?.profileMediaId
+            friendId: result.rows[0]?.userid,
+            mediaId: result.rows[0]?.profilemediaid
         }
     }
 
@@ -207,8 +207,8 @@ export class ProfileRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return{
-            friendId: result.rows[0]?.userId,
-            mediaId: result.rows[0]?.mediaId
+            friendId: result.rows[0]?.userid,
+            mediaId: result.rows[0]?.mediaid
         }
     }
 
@@ -235,8 +235,8 @@ export class ProfileRepo {
         `;
         const result = await PgSocialClient.query(query,[userId])
         return{
-            friendId: result.rows[0]?.userId,
-            mediaId: result.rows[0]?.mediaId
+            friendId: result.rows[0]?.userid,
+            mediaId: result.rows[0]?.mediaid
         }
     }
 
@@ -265,8 +265,8 @@ export class ProfileRepo {
         `;
         const result = await PgSocialClient.query(query,[userId])
         return{
-            friendId: result.rows[0]?.userId,
-            mediaId: result.rows[0]?.mediaId
+            friendId: result.rows[0]?.userid,
+            mediaId: result.rows[0]?.mediaid
         }
     }
 }

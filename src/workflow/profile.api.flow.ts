@@ -5,6 +5,7 @@ import { MediaFlow } from "./media.api.flow";
 import { DataGenerator } from '../utils/data.generator';
 import { ProfileFactory } from "../testdata/factory/profile.factory";
 import { getMemDetailsFromJwt } from "../helper/auth/jwt.decode";
+import Log from "../../src/utils/logger";
 
 export class ProfileFlow{
     constructor(
@@ -30,6 +31,8 @@ export class ProfileFlow{
         // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const memuuid = TestContext.initialMemuuid
         const {username, profileMediaId, profileUrl} = await TestContext.services.profileRepo.getMyPresentProfileMediaId(memuuid)
+        
+        Log.info(`Logged in Member: ${memuuid} - Present Profile Media: ${profileMediaId}, ${username}, ${profileUrl}`)
         // const uploadProfilePicPayload = {
         //     ...ProfileFactory.uploadProfileMedia,
         //     ...{mediaId: profileMediaId}
@@ -115,11 +118,11 @@ export class ProfileFlow{
         const memuuid = TestContext.initialMemuuid
         // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const {mediaId, friendId} = await TestContext.services.profileRepo.getMyNonFriendsPresentProfileMediaId(memuuid)
-        const uploadProfilePicPayload = {
-            ...ProfileFactory.uploadProfileMedia,
-            mediaId
-        }
-        const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
+        // const uploadProfilePicPayload = {
+        //     ...ProfileFactory.uploadProfileMedia,
+        //     mediaId
+        // }
+        // const response = await this.service.profileService.uploadProfilePicture(uploadProfilePicPayload)
         return {
             mediaId: mediaId
         }

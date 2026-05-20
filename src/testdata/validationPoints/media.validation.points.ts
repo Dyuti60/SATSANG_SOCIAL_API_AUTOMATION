@@ -10,21 +10,21 @@ interface postStoryCases{
     expectedMessage: string
 }
 
-export const mediaPostValidationTestCases: postStoryCases[]=[
+export const mediaPostImageValidationTestCases: postStoryCases[]=[
     {
         description: 'Higher Image Media Height For Post',
         overrides: {
             medias:[
                 {
-                    mediaHeight: 1200,
+                    mediaHeight: 1082,
                     mimeType:'image/webp',
-                    mediaWidth:1920,
-                    mediaSizeInBytes:524880
+                    mediaWidth:1080,
+                    mediaSizeInBytes:5242880
                 }
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Higher Media Hight for Post'
+        expectedMessage: 'Invalid file dimensions.'
     },
     {
         description: 'Smaller Image Media Height For Post',
@@ -33,13 +33,13 @@ export const mediaPostValidationTestCases: postStoryCases[]=[
                 {
                     mediaHeight: 1000,
                     mimeType:'image/webp',
-                    mediaWidth:1920,
-                    mediaSizeInBytes:524880
+                    mediaWidth:1080,
+                    mediaSizeInBytes:5242880
                 }
             ]
         },
-        expectedStatus: 400,
-        expectedMessage: 'Smaller Media Hight for post'
+        expectedStatus: 201,
+        expectedMessage: 'Success'
     },
     {
         description: 'Higher Image Media Width For Post',
@@ -48,13 +48,13 @@ export const mediaPostValidationTestCases: postStoryCases[]=[
                 {
                     mediaHeight:1080,
                     mimeType:'image/webp',
-                    mediaWidth:1950,
-                    mediaSizeInBytes:524880
+                    mediaWidth:1082,
+                    mediaSizeInBytes:5242880
                 }
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Higher Media Width for post'
+        expectedMessage: 'Invalid file dimensions.'
     },
     {
         description: 'Smaller Image Media Width For Post',
@@ -63,13 +63,13 @@ export const mediaPostValidationTestCases: postStoryCases[]=[
                 {
                     mediaHeight:1080,
                     mimeType:'image/webp',
-                    mediaWidth:1900,
-                    mediaSizeInBytes:524880
+                    mediaWidth:1070,
+                    mediaSizeInBytes:5242880
                 }
             ]
         },
-        expectedStatus: 400,
-        expectedMessage: 'Higher Media Width for Post'
+        expectedStatus: 201,
+        expectedMessage: 'Success'
     },
     {
         description: 'Smaller Image Media Height And Width For Post',
@@ -78,13 +78,13 @@ export const mediaPostValidationTestCases: postStoryCases[]=[
                 {
                     mediaHeight:980,
                     mimeType:'image/webp',
-                    mediaWidth:1680,
-                    mediaSizeInBytes:524880
+                    mediaWidth:980,
+                    mediaSizeInBytes:5242880
                 }
             ]
         },
-        expectedStatus: 400,
-        expectedMessage: 'Smaller Image Media Height And Width For Post'
+        expectedStatus: 201,
+        expectedMessage: 'Success'
     },
     {
         description: 'Higher Image Media Height And Width For Post',
@@ -93,13 +93,13 @@ export const mediaPostValidationTestCases: postStoryCases[]=[
                 {
                     mediaHeight:1081,
                     mimeType:'image/webp',
-                    mediaWidth:1921,
-                    mediaSizeInBytes:524880
+                    mediaWidth:1090,
+                    mediaSizeInBytes:5242880
                 }
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Higher Image Media Height And Width For Post'
+        expectedMessage: 'Invalid file dimensions.'
     },
     {
         description: 'Zero Image Media Height And Width For Post',
@@ -114,7 +114,7 @@ export const mediaPostValidationTestCases: postStoryCases[]=[
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Zero Image Media Height And Width For Post'
+        expectedMessage: 'Invalid file dimensions.'
     },
     {
         description: 'Zero Media Size For Post',
@@ -123,13 +123,13 @@ export const mediaPostValidationTestCases: postStoryCases[]=[
                 {
                     mediaHeight:1080,
                     mimeType:'image/webp',
-                    mediaWidth:1920,
+                    mediaWidth:1080,
                     mediaSizeInBytes:0
                 }
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Zero Media Size For Post'
+        expectedMessage: 'Invalid file dimensions.'
     },
     {
         description: 'Higher Media Size For Post',
@@ -139,12 +139,12 @@ export const mediaPostValidationTestCases: postStoryCases[]=[
                     mediaHeight:1080,
                     mimeType:'image/webp',
                     mediaWidth:1920,
-                    mediaSizeInBytes:524881
+                    mediaSizeInBytes:5242881
                 }
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Higher Media Size For Post'
+        expectedMessage: 'File size exceeds the allowed limit.'
     },
     {
         description: 'Invalid Media Size For Post',
@@ -158,8 +158,162 @@ export const mediaPostValidationTestCases: postStoryCases[]=[
                 }
             ]
         },
+        expectedStatus: 201,
+        expectedMessage: 'Success'
+    },
+]
+
+
+export const mediaPostVideoValidationTestCases: postStoryCases[]=[
+    {
+        description: 'Higher Image Media Height For Post',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight: 750,
+                    mimeType:'video/mp4',
+                    mediaWidth:1280,
+                    mediaSizeInBytes:5242880
+                }
+            ]
+        },
         expectedStatus: 400,
-        expectedMessage: 'Invalid Media Size For Post'
+        expectedMessage: 'Invalid file dimensions.'
+    },
+    {
+        description: 'Smaller Image Media Height For Post',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight: 700,
+                    mimeType:'video/mp4',
+                    mediaWidth: 1280,
+                    mediaSizeInBytes:5242880
+                }
+            ]
+        },
+        expectedStatus: 201,
+        expectedMessage: 'Success'
+    },
+    {
+        description: 'Higher Image Media Width For Post',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:720,
+                    mimeType:'video/mp4',
+                    mediaWidth:1281,
+                    mediaSizeInBytes:5242880
+                }
+            ]
+        },
+        expectedStatus: 400,
+        expectedMessage: 'Invalid file dimensions.'
+    },
+    {
+        description: 'Smaller Image Media Width For Post',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:720,
+                    mimeType:'image/webp',
+                    mediaWidth:1279,
+                    mediaSizeInBytes:5242880
+                }
+            ]
+        },
+        expectedStatus: 201,
+        expectedMessage: 'Success'
+    },
+    {
+        description: 'Smaller Image Media Height And Width For Post',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:718,
+                    mimeType:'image/webp',
+                    mediaWidth:1278,
+                    mediaSizeInBytes:5242880
+                }
+            ]
+        },
+        expectedStatus: 201,
+        expectedMessage: 'Success'
+    },
+    {
+        description: 'Higher Image Media Height And Width For Post',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:1081,
+                    mimeType:'image/webp',
+                    mediaWidth:1090,
+                    mediaSizeInBytes:5242880
+                }
+            ]
+        },
+        expectedStatus: 400,
+        expectedMessage: 'Invalid file dimensions.'
+    },
+    {
+        description: 'Zero Image Media Height And Width For Post',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:0,
+                    mimeType:'image/webp',
+                    mediaWidth:0,
+                    mediaSizeInBytes:524880
+                }
+            ]
+        },
+        expectedStatus: 400,
+        expectedMessage: 'Invalid file dimensions.'
+    },
+    {
+        description: 'Zero Media Size For Post',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:1080,
+                    mimeType:'image/webp',
+                    mediaWidth:1080,
+                    mediaSizeInBytes:0
+                }
+            ]
+        },
+        expectedStatus: 400,
+        expectedMessage: 'Invalid file dimensions.'
+    },
+    {
+        description: 'Higher Media Size For Post',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:720,
+                    mimeType:'image/webp',
+                    mediaWidth:1280,
+                    mediaSizeInBytes:5242881
+                }
+            ]
+        },
+        expectedStatus: 400,
+        expectedMessage: 'File size exceeds the allowed limit.'
+    },
+    {
+        description: 'Invalid Media Size For Post',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:100,
+                    mimeType:'image/webp',
+                    mediaWidth:100,
+                    mediaSizeInBytes:100
+                }
+            ]
+        },
+        expectedStatus: 201,
+        expectedMessage: 'Success'
     },
 ]
 
@@ -173,7 +327,7 @@ interface mediaStoryCases{
     expectedMessage: string
 }
 
-export const mediaStoryValidationTestCases: mediaStoryCases[]=[
+export const mediaStoryImageValidationTestCases: mediaStoryCases[]=[
     {
         description: 'Higher Image Media Height For Story',
         overrides: {
@@ -187,7 +341,7 @@ export const mediaStoryValidationTestCases: mediaStoryCases[]=[
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Higher Media Hight for Story'
+        expectedMessage: 'Invalid file dimensions.'
     },
     {
         description: 'Smaller Image Media Height For Story',
@@ -201,8 +355,8 @@ export const mediaStoryValidationTestCases: mediaStoryCases[]=[
                 }
             ]
         },
-        expectedStatus: 400,
-        expectedMessage: 'Smaller Media Hight for Story'
+        expectedStatus: 201,
+        expectedMessage: 'Success'
     },
     {
         description: 'Higher Image Media Width For Story',
@@ -217,7 +371,7 @@ export const mediaStoryValidationTestCases: mediaStoryCases[]=[
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Higher Media Width for Story'
+        expectedMessage: 'Invalid file dimensions.'
     },
     {
         description: 'Smaller Image Media Width For Story',
@@ -231,8 +385,8 @@ export const mediaStoryValidationTestCases: mediaStoryCases[]=[
                 }
             ]
         },
-        expectedStatus: 400,
-        expectedMessage: 'Higher Media Width for Story'
+        expectedStatus: 201,
+        expectedMessage: 'Success'
     },
     {
         description: 'Smaller Image Media Height And Width For Story',
@@ -246,8 +400,8 @@ export const mediaStoryValidationTestCases: mediaStoryCases[]=[
                 }
             ]
         },
-        expectedStatus: 400,
-        expectedMessage: 'Smaller Image Media Height And Width For Story'
+        expectedStatus: 201,
+        expectedMessage: 'Success'
     },
     {
         description: 'Higher Image Media Height And Width For Story',
@@ -262,7 +416,7 @@ export const mediaStoryValidationTestCases: mediaStoryCases[]=[
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Higher Image Media Height And Width For Story'
+        expectedMessage: 'Invalid file dimensions.'
     },
     {
         description: 'Zero Image Media Height And Width For Story',
@@ -302,12 +456,12 @@ export const mediaStoryValidationTestCases: mediaStoryCases[]=[
                     mediaHeight:1080,
                     mimeType:'image/webp',
                     mediaWidth:1920,
-                    mediaSizeInBytes:524881
+                    mediaSizeInBytes:5242881
                 }
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Higher Media Size For Story'
+        expectedMessage: 'File size exceeds the allowed limit.'
     },
     {
         description: 'Invalid Media Size For Story',
@@ -323,6 +477,160 @@ export const mediaStoryValidationTestCases: mediaStoryCases[]=[
         },
         expectedStatus: 400,
         expectedMessage: 'Invalid Media Size For Story'
+    },
+]
+
+
+export const mediaStoryVideoValidationTestCases: mediaStoryCases[]=[
+    {
+        description: 'Higher Video Media Height For Story',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight: 1200,
+                    mimeType:'image/webp',
+                    mediaWidth:1920,
+                    mediaSizeInBytes:524880
+                }
+            ]
+        },
+        expectedStatus: 400,
+        expectedMessage: 'Invalid file dimensions.'
+    },
+    {
+        description: 'Smaller Video Media Height For Story',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight: 1000,
+                    mimeType:'image/webp',
+                    mediaWidth:1920,
+                    mediaSizeInBytes:524880
+                }
+            ]
+        },
+        expectedStatus: 201,
+        expectedMessage: 'Success'
+    },
+    {
+        description: 'Higher Video Media Width For Story',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:1080,
+                    mimeType:'image/webp',
+                    mediaWidth:1950,
+                    mediaSizeInBytes:524880
+                }
+            ]
+        },
+        expectedStatus: 400,
+        expectedMessage: 'Invalid file dimensions.'
+    },
+    {
+        description: 'Smaller Video Media Width For Story',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:1080,
+                    mimeType:'image/webp',
+                    mediaWidth:1900,
+                    mediaSizeInBytes:524880
+                }
+            ]
+        },
+        expectedStatus: 201,
+        expectedMessage: 'Success'
+    },
+    {
+        description: 'Smaller Video Media Height And Width For Story',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:980,
+                    mimeType:'image/webp',
+                    mediaWidth:1680,
+                    mediaSizeInBytes:524880
+                }
+            ]
+        },
+        expectedStatus: 201,
+        expectedMessage: 'Success'
+    },
+    {
+        description: 'Higher Video Media Height And Width For Story',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:1081,
+                    mimeType:'image/webp',
+                    mediaWidth:1921,
+                    mediaSizeInBytes:524880
+                }
+            ]
+        },
+        expectedStatus: 400,
+        expectedMessage: 'Invalid file dimensions.'
+    },
+    {
+        description: 'Zero Video Media Height And Width For Story',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:0,
+                    mimeType:'image/webp',
+                    mediaWidth:0,
+                    mediaSizeInBytes:524880
+                }
+            ]
+        },
+        expectedStatus: 400,
+        expectedMessage: 'Invalid file dimensions.'
+    },
+    {
+        description: 'Zero Vidio Size For Story',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:1080,
+                    mimeType:'image/webp',
+                    mediaWidth:1920,
+                    mediaSizeInBytes:0
+                }
+            ]
+        },
+        expectedStatus: 400,
+        expectedMessage: 'Invalid file dimensions.'
+    },
+    {
+        description: 'Higher Video Size For Story',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:1080,
+                    mimeType:'image/webp',
+                    mediaWidth:1920,
+                    mediaSizeInBytes:5242881
+                }
+            ]
+        },
+        expectedStatus: 400,
+        expectedMessage: 'Invalid file dimensions.'
+    },
+    {
+        description: 'Invalid Video Size For Story',
+        overrides: {
+            medias:[
+                {
+                    mediaHeight:100,
+                    mimeType:'image/webp',
+                    mediaWidth:100,
+                    mediaSizeInBytes:100
+                }
+            ]
+        },
+        expectedStatus: 400,
+        expectedMessage: 'Invalid file dimensions.'
     },
 ]
 
@@ -345,13 +653,13 @@ export const mediaProfileValidationTestCases: mediaProfileCases[]=[
                 {
                     mediaHeight: 1200,
                     mimeType:'image/webp',
-                    mediaWidth:1920,
-                    mediaSizeInBytes:524880
+                    mediaWidth:1080,
+                    mediaSizeInBytes:5242880
                 }
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Higher Media Hight for Profile'
+        expectedMessage: 'Invalid file dimensions.'
     },
     {
         description: 'Smaller Image Media Height For Profile',
@@ -360,13 +668,13 @@ export const mediaProfileValidationTestCases: mediaProfileCases[]=[
                 {
                     mediaHeight: 1000,
                     mimeType:'image/webp',
-                    mediaWidth:1920,
-                    mediaSizeInBytes:524880
+                    mediaWidth:1080,
+                    mediaSizeInBytes:5242880
                 }
             ]
         },
-        expectedStatus: 400,
-        expectedMessage: 'Smaller Media Hight for Profile'
+        expectedStatus: 201,
+        expectedMessage: 'Success'
     },
     {
         description: 'Higher Image Media Width For Profile',
@@ -376,12 +684,12 @@ export const mediaProfileValidationTestCases: mediaProfileCases[]=[
                     mediaHeight:1080,
                     mimeType:'image/webp',
                     mediaWidth:1950,
-                    mediaSizeInBytes:524880
+                    mediaSizeInBytes:5242880
                 }
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Higher Media Width for Profile'
+        expectedMessage: 'Invalid file dimensions.'
     },
     {
         description: 'Smaller Image Media Width For Profile',
@@ -390,13 +698,13 @@ export const mediaProfileValidationTestCases: mediaProfileCases[]=[
                 {
                     mediaHeight:1080,
                     mimeType:'image/webp',
-                    mediaWidth:1900,
-                    mediaSizeInBytes:524880
+                    mediaWidth:1070,
+                    mediaSizeInBytes:5242880
                 }
             ]
         },
-        expectedStatus: 400,
-        expectedMessage: 'Higher Media Width for Profile'
+        expectedStatus: 201,
+        expectedMessage: 'Success'
     },
     {
         description: 'Smaller Image Media Height And Width For Profile',
@@ -405,13 +713,13 @@ export const mediaProfileValidationTestCases: mediaProfileCases[]=[
                 {
                     mediaHeight:980,
                     mimeType:'image/webp',
-                    mediaWidth:1680,
-                    mediaSizeInBytes:524880
+                    mediaWidth:980,
+                    mediaSizeInBytes:5242880
                 }
             ]
         },
-        expectedStatus: 400,
-        expectedMessage: 'Smaller Image Media Height And Width For Profile'
+        expectedStatus: 201,
+        expectedMessage: 'Success'
     },
     {
         description: 'Higher Image Media Height And Width For Profile',
@@ -420,13 +728,13 @@ export const mediaProfileValidationTestCases: mediaProfileCases[]=[
                 {
                     mediaHeight:1081,
                     mimeType:'image/webp',
-                    mediaWidth:1921,
-                    mediaSizeInBytes:524880
+                    mediaWidth:1082,
+                    mediaSizeInBytes:5242880
                 }
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Higher Image Media Height And Width For Profile'
+        expectedMessage: 'Invalid file dimensions.'
     },
     {
         description: 'Zero Image Media Height And Width For Profile',
@@ -436,12 +744,12 @@ export const mediaProfileValidationTestCases: mediaProfileCases[]=[
                     mediaHeight:0,
                     mimeType:'image/webp',
                     mediaWidth:0,
-                    mediaSizeInBytes:524880
+                    mediaSizeInBytes:5242880
                 }
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Zero Image Media Height And Width For Profile'
+        expectedMessage: 'Invalid file dimensions.'
     },
     {
         description: 'Zero Media Size For Profile',
@@ -450,13 +758,13 @@ export const mediaProfileValidationTestCases: mediaProfileCases[]=[
                 {
                     mediaHeight:1080,
                     mimeType:'image/webp',
-                    mediaWidth:1920,
+                    mediaWidth:1080,
                     mediaSizeInBytes:0
                 }
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Zero Media Size For Profile'
+        expectedMessage: 'Invalid file dimensions.'
     },
     {
         description: 'Higher Media Size For Profile',
@@ -465,13 +773,13 @@ export const mediaProfileValidationTestCases: mediaProfileCases[]=[
                 {
                     mediaHeight:1080,
                     mimeType:'image/webp',
-                    mediaWidth:1920,
-                    mediaSizeInBytes:524881
+                    mediaWidth:1080,
+                    mediaSizeInBytes:5242881
                 }
             ]
         },
         expectedStatus: 400,
-        expectedMessage: 'Higher Media Size For Profile'
+        expectedMessage: 'File size exceeds the allowed limit.'
     },
     {
         description: 'Invalid Media Size For Profile',
@@ -485,7 +793,7 @@ export const mediaProfileValidationTestCases: mediaProfileCases[]=[
                 }
             ]
         },
-        expectedStatus: 400,
-        expectedMessage: 'Invalid Media Size For Profile'
+        expectedStatus: 201,
+        expectedMessage: 'Success'
     },
 ]

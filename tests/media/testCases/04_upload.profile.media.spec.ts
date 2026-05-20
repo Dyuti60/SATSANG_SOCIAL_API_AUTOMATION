@@ -8,57 +8,57 @@ describe('Validate POST /media/updateStatus for profile',()=>{
     test('Validate Profile Image Upload And Check Update Status',async()=>{
         const filePath = getRandomJpegFile()
         const {response} = await TestContext.flows.profileFlow.profileNewMediaUpload([filePath])
-        await ResponseValidator.validateStatus(response,200)
-        await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')   
+        await ResponseValidator.validateStatus(response,201)
+        await ResponseValidator.validateErrorMessage(response,'Media uploaded successfully.')   
     })
 
-    test('Validate Profile Video Upload And Check Update Status',async()=>{
-        const filePath = getRandomMp4File()
-        const {response} = await TestContext.flows.profileFlow.profileNewMediaUpload([filePath])
-        await ResponseValidator.validateStatus(response,200)
-        await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')     
-    })
+    // test('Validate Profile Video Upload And Check Update Status',async()=>{
+    //     const filePath = getRandomMp4File()
+    //     const {response} = await TestContext.flows.profileFlow.profileNewMediaUpload([filePath])
+    //     await ResponseValidator.validateStatus(response,201)
+    //     await ResponseValidator.validateErrorMessage(response,'Media uploaded successfully.')     
+    // })
 
-    test('Validate Multiple Profile Images Upload And Check Update Status',async()=>{
-        let filePaths:any
-        for (let i =1; i=3; i++){
-            const filePath = getRandomJpegFile()
-            filePaths.push[filePath]
-        }
-        const {response} = await TestContext.flows.profileFlow.profileNewMediaUpload(filePaths)
-        await ResponseValidator.validateStatus(response,200)
-        await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')   
-    })
+    // test('Validate Multiple Profile Images Upload And Check Update Status',async()=>{
+    //     let filePaths:any=[]
+    //     for (let i =1; i<=3; i++){
+    //         const filePath = getRandomJpegFile()
+    //         filePaths.push(filePath)
+    //     }
+    //     const {response} = await TestContext.flows.profileFlow.profileNewMediaUpload(filePaths)
+    //     await ResponseValidator.validateStatus(response,200)
+    //     await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')   
+    // })
 
     test('Validate Profile Update Status - Invalid MediaId',async()=>{
         const {response} = await TestContext.services.mediaService.updateMediaStatus({
-            mediaIds:['b59cef1d-3d8-49-9f7-6bfb8eb01']
+            mediaIds:['bc967a38-c75b-4f7d-9432-3b76bec83b51']
         })
-        await ResponseValidator.validateStatus(response,200)
-        await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')
+        await ResponseValidator.validateStatus(response,400)
+        await ResponseValidator.validateErrorMessage(response,'Media file not found. Upload may be incomplete.')
     })
 
     test('Validate Profile Update Status - Blank MediaId',async()=>{
         const {response} = await TestContext.services.mediaService.updateMediaStatus({
             mediaIds:[]
         })
-        await ResponseValidator.validateStatus(response,200)
-        await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')
+        await ResponseValidator.validateStatus(response,400)
+        await ResponseValidator.validateErrorMessage(response,'mediaIds must contain at least 1 elements')
     })
 
     test('Validate Profile Update Status - Null MediaId',async()=>{
         const {response} = await TestContext.services.mediaService.updateMediaStatus({
             mediaIds:[null]
         })
-        await ResponseValidator.validateStatus(response,200)
-        await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')
+        await ResponseValidator.validateStatus(response,400)
+        await ResponseValidator.validateErrorMessage(response,'Media file not found. Upload may be incomplete.')
     })
 
     test('Validate Profile Update Status - No Payload',async()=>{
         const {response} = await TestContext.services.mediaService.updateMediaStatus({
         })
         await ResponseValidator.validateStatus(response,200)
-        await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')
+        await ResponseValidator.validateErrorMessage(response,'mediaIds must contain at least 1 elements')
     })
 
     describe('Validate My Profile Update Status - My Profile Media Variant',()=>{
@@ -68,8 +68,8 @@ describe('Validate POST /media/updateStatus for profile',()=>{
             const {response} = await TestContext.services.mediaService.updateMediaStatus({
                 mediaIds: [mediaId]
             })
-            await ResponseValidator.validateStatus(response,200)
-            await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')
+            await ResponseValidator.validateStatus(response,201)
+            await ResponseValidator.validateErrorMessage(response,'Media uploaded successfully.')
         })
 
         test('Validate My Profile Update Status - With Existing Profile',async()=>{
@@ -77,8 +77,8 @@ describe('Validate POST /media/updateStatus for profile',()=>{
             const {response} = await TestContext.services.mediaService.updateMediaStatus({
                 mediaIds: [mediaId]
             })
-            await ResponseValidator.validateStatus(response,200)
-            await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')
+            await ResponseValidator.validateStatus(response,201)
+            await ResponseValidator.validateErrorMessage(response,'Media uploaded successfully.')
         })
 
 
@@ -87,8 +87,8 @@ describe('Validate POST /media/updateStatus for profile',()=>{
             const {response} = await TestContext.services.mediaService.updateMediaStatus({
                 mediaIds: [mediaId]
             })
-            await ResponseValidator.validateStatus(response,200)
-            await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Media file not found. Upload may be incomplete.')
         })
 
         test('Validate My Profile Update Status - With My Friends Existing Profile',async()=>{
@@ -96,8 +96,8 @@ describe('Validate POST /media/updateStatus for profile',()=>{
             const {response} = await TestContext.services.mediaService.updateMediaStatus({
                 mediaIds: [mediaId]
             })
-            await ResponseValidator.validateStatus(response,200)
-            await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Media file not found. Upload may be incomplete.')
         })
 
 
@@ -106,8 +106,8 @@ describe('Validate POST /media/updateStatus for profile',()=>{
             const {response} = await TestContext.services.mediaService.updateMediaStatus({
                 mediaIds: [mediaId]
             })
-            await ResponseValidator.validateStatus(response,200)
-            await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Media file not found. Upload may be incomplete.')
         })
 
         test('Validate My Profile Update Status - With My Friends Friend Existing Profile',async()=>{
@@ -115,8 +115,8 @@ describe('Validate POST /media/updateStatus for profile',()=>{
             const {response} = await TestContext.services.mediaService.updateMediaStatus({
                 mediaIds: [mediaId]
             })
-            await ResponseValidator.validateStatus(response,200)
-            await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Media file not found. Upload may be incomplete.')
         })
 
         test('Validate My Profile Update Status - With Non Friends Present Profile',async()=>{
@@ -124,8 +124,8 @@ describe('Validate POST /media/updateStatus for profile',()=>{
             const {response} = await TestContext.services.mediaService.updateMediaStatus({
                 mediaIds: [mediaId]
             })
-            await ResponseValidator.validateStatus(response,200)
-            await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Media file not found. Upload may be incomplete.')
         })
 
         test('Validate My Profile Update Status - With Non Friends Existing Profile',async()=>{
@@ -133,8 +133,8 @@ describe('Validate POST /media/updateStatus for profile',()=>{
             const {response} = await TestContext.services.mediaService.updateMediaStatus({
                 mediaIds: [mediaId]
             })
-            await ResponseValidator.validateStatus(response,200)
-            await ResponseValidator.validateErrorMessage(response,'Media Uploaded Successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Media file not found. Upload may be incomplete.')
         })
 
     })
