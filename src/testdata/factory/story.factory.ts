@@ -1,17 +1,17 @@
 import { faker } from '@faker-js/faker';
 
 type StoryPayloadOptions = {
-  mediaId?: string;
-  visibilityType?: number;
-  caption?: string;
-  thumbnailMediaId?: string;
-  viewerIds?: string[]
+  mediaId?: any;
+  visibilityType?: any;
+  caption?: any
+  thumbnailMediaId?: any;
+  viewerIds?: any[]
 }
 
 type BulkStoryPayloadOptions = {
   mediaIds?: string[];
-  visibilityType?: number;
-  caption?: string;
+  visibilityType?: string;
+  caption?: string | null;
   thumbnailMediaIds?: string;
   viewerIds?: string[];
 };

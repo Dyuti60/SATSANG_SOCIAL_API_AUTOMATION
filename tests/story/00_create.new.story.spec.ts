@@ -1,3 +1,4 @@
+import { storyCreateTestCases } from "../../src/testdata/validationPoints/story.validation.points"
 import ResponseValidator from "../../src/api/response.validator"
 import { TestContext } from "../../src/context/test.context"
 import { StoryFactory } from "../../src/testdata/factory/story.factory"
@@ -8,98 +9,148 @@ describe('Validate POST /stories/create',()=>{
 
     describe('Validate Creating A Story - Varying Payload',()=>{
 
-        test('Validate Creating Story - All Visibility',async()=>{
-            let storyPayload = StoryFactory.buildStoryPayload({
-                visibilityType:1
+        test('Validate Creating Story - Only MediaId',async()=>{
+            const filePath = getRandomJpegFile()
+            const {mediaIds} = await TestContext.flows.mediaFlow.verifyUploadStatus('story',[filePath])
+            const {response} = await TestContext.services.storyService.createStory({
+                mediaId: mediaIds[0]
             })
-            const {response} = await TestContext.services.storyService.createStory(storyPayload)
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response, 'visibility must be one of the following values: ALL_FRIENDS, CLOSE_FRIENDS, SELECTED_FRIENDS')
+        })
+
+
+        test('Validate Creating Story - All Visibility',async()=>{
+            const filePath = getRandomJpegFile()
+            const {mediaIds} = await TestContext.flows.mediaFlow.verifyUploadStatus('story',[filePath])
+            const {response} = await TestContext.services.storyService.createStory({
+                mediaId: mediaIds[0],
+                visibility: 'ALL_FRIENDS'
+            })
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Saved Story Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
 
         test('Validate Creating Story - Close Visibility',async()=>{
-            let storyPayload = StoryFactory.buildStoryPayload({
-                visibilityType:2
+            const filePath = getRandomJpegFile()
+            const {mediaIds} = await TestContext.flows.mediaFlow.verifyUploadStatus('story',[filePath])
+            const {response} = await TestContext.services.storyService.createStory({
+                mediaId: mediaIds[0],
+                visibility: 'CLOSE_FRIENDS'
             })
-            const {response} = await TestContext.services.storyService.createStory(storyPayload)
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Saved Story Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
 
         test('Validate Creating Story - Selected Visibility And No ViewerIds',async()=>{
-            let storyPayload = StoryFactory.buildStoryPayload({
-                visibilityType:3,
+            const filePath = getRandomJpegFile()
+            const {mediaIds} = await TestContext.flows.mediaFlow.verifyUploadStatus('story',[filePath])
+            const {response} = await TestContext.services.storyService.createStory({
+                mediaId: mediaIds[0],
+                visibility: 'SELECTED_FRIENDS',
                 viewerIds: []
             })
-            const {response} = await TestContext.services.storyService.createStory(storyPayload)
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Saved Story Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
 
-        // test('Validate Creating Story - Selected Visibility And Friends ViewerIds',async()=>{
-        //     let storyPayload = StoryFactory.buildStoryPayload({
-        //         visibilityType:3,
-        //         viewerIds: []
-        //     })
-        //     const {response} = await TestContext.services.storyService.createStory(storyPayload)
-        //     await ResponseValidator.validateStatus(response,201)
-        //     await ResponseValidator.validateErrorMessage(response, 'Saved Story Successfully')
-        // })
+        test('Validate Creating Story - Selected Visibility And Friends ViewerIds',async()=>{
+            const filePath = getRandomJpegFile()
+            const {friendId} = await TestContext.services.userRepo.getRandomFriendIdWithAcceptedStatusOtherThanLoggedIn(TestContext.initialMemuuid)
+            const {mediaIds} = await TestContext.flows.mediaFlow.verifyUploadStatus('story',[filePath])
+            const {response} = await TestContext.services.storyService.createStory({
+                mediaId: mediaIds[0],
+                visibility: 'SELECTED_FRIENDS',
+                viewerIds: [friendId]
+            })
+            await ResponseValidator.validateStatus(response,201)
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
+        })
 
-        // test('Validate Creating Story - Selected Visibility And Friends Friend ViewerIds',async()=>{
-        //     let storyPayload = StoryFactory.buildStoryPayload({
-        //         visibilityType:3,
-        //         viewerIds: []
-        //     })
-        //     const {response} = await TestContext.services.storyService.createStory(storyPayload)
-        //     await ResponseValidator.validateStatus(response,201)
-        //     await ResponseValidator.validateErrorMessage(response, 'Saved Story Successfully')
-        // })
+        test('Validate Creating Story - Selected Visibility And Friends Friend ViewerIds',async()=>{
+            const filePath = getRandomJpegFile()
+            const {friendId} = await TestContext.services.userRepo.getValidFriendsOfFriendId(TestContext.initialMemuuid)
+            const {mediaIds} = await TestContext.flows.mediaFlow.verifyUploadStatus('story',[filePath])
+            const {response} = await TestContext.services.storyService.createStory({
+                mediaId: mediaIds[0],
+                visibility: 'SELECTED_FRIENDS',
+                viewerIds: [friendId]
+            })
+            await ResponseValidator.validateStatus(response,201)
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
+        })
 
         test('Validate Creating Story - Selected Visibility Logged In ViewerIds',async()=>{
-            let storyPayload = StoryFactory.buildStoryPayload({
-                visibilityType:3,
+            const filePath = getRandomJpegFile()
+            const {friendId} = await TestContext.services.userRepo.getValidFriendsOfFriendId(TestContext.initialMemuuid)
+            const {mediaIds} = await TestContext.flows.mediaFlow.verifyUploadStatus('story',[filePath])
+            const {response} = await TestContext.services.storyService.createStory({
+                mediaId: mediaIds[0],
+                visibility: 'SELECTED_FRIENDS',
                 viewerIds: [TestContext.initialMemuuid]
             })
-            const {response} = await TestContext.services.storyService.createStory(storyPayload)
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Saved Story Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
 
-        // test('Validate Creating Story - Selected Visibility Non Friends ViewerIds',async()=>{
-        //     let storyPayload = StoryFactory.buildStoryPayload({
-        //         visibilityType:3,
-        //         viewerIds: []
-        //     })
-        //     const {response} = await TestContext.services.storyService.createStory(storyPayload)
-        //     await ResponseValidator.validateStatus(response,201)
-        //     await ResponseValidator.validateErrorMessage(response, 'Saved Story Successfully')
-        // })
-
-        test('Validate Creating Story - With Caption',async()=>{
-            let storyPayload = StoryFactory.buildStoryPayload()
-            const {response} = await TestContext.services.storyService.createStory(storyPayload)
+        test('Validate Creating Story - Selected Visibility Non Friends ViewerIds',async()=>{
+            const filePath = getRandomJpegFile()
+            const friendId = await TestContext.services.userRepo.getRandomNonSocialFriendId(TestContext.initialMemuuid)
+            const {mediaIds} = await TestContext.flows.mediaFlow.verifyUploadStatus('story',[filePath])
+            const {response} = await TestContext.services.storyService.createStory({
+                mediaId: mediaIds[0],
+                visibility: 'SELECTED_FRIENDS',
+                viewerIds: [friendId]
+            })
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Saved Story Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
 
-        test('Validate Creating Story - Without Caption',async()=>{
-            let storyPayload = StoryFactory.buildStoryPayload()
-            const {response} = await TestContext.services.storyService.createStory(storyPayload)
+        test('Validate Creating Story - All Friends Visibility Friends ViewId',async()=>{
+            const filePath = getRandomJpegFile()
+            const friendId = await TestContext.services.userRepo.getRandomNonSocialFriendId(TestContext.initialMemuuid)
+            const {mediaIds} = await TestContext.flows.mediaFlow.verifyUploadStatus('story',[filePath])
+            const {response} = await TestContext.services.storyService.createStory({
+                mediaId: mediaIds[0],
+                visibility: 'ALL_FRIENDS',
+                viewerIds: [friendId]
+            })
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Saved Story Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
+
+        test('Validate Creating Story - Close Friends Visibility Friends ViewId',async()=>{
+            const filePath = getRandomJpegFile()
+            const friendId = await TestContext.services.userRepo.getRandomNonSocialFriendId(TestContext.initialMemuuid)
+            const {mediaIds} = await TestContext.flows.mediaFlow.verifyUploadStatus('story',[filePath])
+            const {response} = await TestContext.services.storyService.createStory({
+                mediaId: mediaIds[0],
+                visibility: 'CLOSE_FRIENDS',
+                viewerIds: [friendId]
+            })
+            await ResponseValidator.validateStatus(response,201)
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
+        })
+
+        test('Validate Creating Story - With Caption Only',async()=>{
+            const {response} = await TestContext.services.storyService.createStory({
+                caption: 'Hello mello'
+            })
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response, 'mediaId must be a UUID')
+        })
+
 
         test('Validate Creating Story - With Same Thumbnail',async()=>{
             const filePath = getRandomJpegFile()
-            const {mediaIds}= await TestContext.flows.storyFlow.storyMediaUpload([filePath])
-            let storyPayload = StoryFactory.buildStoryPayload({
+            const {mediaIds} = await TestContext.flows.mediaFlow.verifyUploadStatus('story',[filePath])
+            const {response} = await TestContext.services.storyService.createStory({
                 mediaId: mediaIds[0],
+                visibility: 'ALL_FRIENDS',
                 thumbnailMediaId: mediaIds[0]
             })
-            const {response} = await TestContext.services.storyService.createStory(storyPayload)
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Saved Story Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
 
         test('Validate Creating Story - With Different Thumbnail',async()=>{
@@ -108,19 +159,33 @@ describe('Validate POST /stories/create',()=>{
 
             let filePath2 = getRandomJpegFile()
             let mediaIds2 = await TestContext.flows.storyFlow.storyMediaUpload([filePath2])
-            let storyPayload = StoryFactory.buildStoryPayload({
+            const {response} = await TestContext.services.storyService.createStory({
                 mediaId: mediaIds1.mediaIds[0],
+                visibility: 'ALL_FRIENDS',
                 thumbnailMediaId: mediaIds2.mediaIds[0]
             })
-            const {response} = await TestContext.services.storyService.createStory(storyPayload)
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Saved Story Successfully')
+            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
         })
+
 
     })
 
 
     describe('Validate Creating Stories - Miscellaneous Payload',()=>{
-        
+        storyCreateTestCases.forEach((testCases)=>{
+            test(`Validate Create Story When - ${testCases.description}`,async()=>{
+                const filePath = getRandomJpegFile()
+                const {mediaIds} = await TestContext.flows.mediaFlow.verifyUploadStatus('story',[filePath])
+                const payload ={
+                    visibility: 'ALL_FRIENDS',
+                    mediaId: mediaIds[0],
+                    ...testCases.overrides
+                }
+                const {response} = await TestContext.services.storyService.createStory(payload)
+                await ResponseValidator.validateStatus(response,testCases.expectedStatus)
+                await ResponseValidator.validateErrorMessage(response, testCases.expectedMessage)
+            })
+        })
     })
 })
