@@ -70,7 +70,6 @@ export class StoryServices {
         const requestPayload = new RequestBuilder()
             .setUrl(`${story.GET_REACTION_AND_VIEWS}${payload.storyId}/reactions`)
             .setMethod('GET')
-            .setBody(payload)
             .build()
         const response = await this.socialApi.request(requestPayload)
         return {
