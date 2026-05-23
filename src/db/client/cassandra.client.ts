@@ -14,10 +14,10 @@ export const CassandraClient = new Client({
       }
     : undefined,
 
-  sslOptions:
-    ENV.CASSANDRA_SSL === 'true'
-      ? { rejectUnauthorized: false }
-      : undefined
+  sslOptions: undefined
+    // ENV.CASSANDRA_SSL === 'true'
+    //   ? { rejectUnauthorized: false }
+    //   : undefined
 });
 
 // 🔹 Connect once

@@ -1143,4 +1143,80 @@ describe('Bulk Data Creation For Feed',()=>{
                 }  
         })
     })
+
+
+describe('Bulk Delete',()=>{
+    test('Bulk Delete - My Post',async()=>{
+        const TOTAL = 3;
+        let count = 0
+        while(count<TOTAL){
+            Log.info("###################################################################################");
+            Log.info(`Bulk Delete - My Post - ${count + 1}/${TOTAL}`);
+            Log.info("###################################################################################");
+
+            const {response} = await TestContext.flows.feedFlow.createPostWithMyPostMedia('deleted')
+            await ResponseValidator.validateStatus(response,201)
+            count++
+        }
+    })
+
+    test('Bulk Delete - My Friends POST',async()=>{
+        const TOTAL = 3;
+        let count = 0
+        while(count<TOTAL){
+            Log.info("###################################################################################");
+            Log.info(`Bulk Delete - My Friends POST - ${count + 1}/${TOTAL}`);
+            Log.info("###################################################################################");
+
+            const {friendId} = await TestContext.services.userRepo.getRandomFriendIdWithAcceptedStatusOtherThanLoggedIn(TestContext.initialMemuuid)
+            const {contact_number} = await TestContext.flows.userFlow.getParticularUserDetails(friendId)
+            TestContext.activeUser='current'
+            await TestContext.flows.loginFlow.loginFlow(contact_number,friendId,'current user')
+            const {response} = await TestContext.flows.feedFlow.createPostWithMyPostMedia('deleted')
+            await ResponseValidator.validateStatus(response,201)
+            count++
+        }
+    })
+
+
+    test('Bulk Delete - My Friends Friend POST',async()=>{
+        const TOTAL = 3;
+        let count = 0
+        while(count<TOTAL){
+            Log.info("###################################################################################");
+            Log.info(`Bulk Delete - My Friends POST - ${count + 1}/${TOTAL}`);
+            Log.info("###################################################################################");
+
+            const {friendId} = await TestContext.services.userRepo.getValidFriendsOfFriendId(TestContext.initialMemuuid)
+            const {contact_number} = await TestContext.flows.userFlow.getParticularUserDetails(friendId)
+            TestContext.activeUser='current'
+            await TestContext.flows.loginFlow.loginFlow(contact_number,friendId,'current user')
+            const {response} = await TestContext.flows.feedFlow.createPostWithMyPostMedia('deleted')
+            await ResponseValidator.validateStatus(response,201)
+            count++
+        }
+    })
+
+
+    test('Bulk Delete - My Non Friends POST',async()=>{
+        const TOTAL = 3;
+        let count = 0
+        while(count<TOTAL){
+            Log.info("###################################################################################");
+            Log.info(`Bulk Delete - My Friends POST - ${count + 1}/${TOTAL}`);
+            Log.info("###################################################################################");
+
+            const friendId = await TestContext.services.userRepo.getRandomNonSocialFriendId(TestContext.initialMemuuid)
+            const {contact_number} = await TestContext.flows.userFlow.getParticularUserDetails(friendId)
+            TestContext.activeUser='current'
+            await TestContext.flows.loginFlow.loginFlow(contact_number,friendId,'current user')
+            const {response} = await TestContext.flows.feedFlow.createPostWithMyPostMedia('deleted')
+            await ResponseValidator.validateStatus(response,201)
+            count++
+        }
+    })
+
+
+})
+
 })

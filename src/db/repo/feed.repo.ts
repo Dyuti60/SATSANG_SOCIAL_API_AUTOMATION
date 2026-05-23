@@ -12,10 +12,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
     async getMyRandomHiddenPost(userId:string){
@@ -27,10 +27,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
     async getMyRandomDeletedPost(userId:string){
@@ -42,10 +42,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
     async getMyRandomPostWithFriendsVisibility(userId:string){
@@ -57,10 +57,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
     async getMyRandomPostWithFriendsOfFriendVisibility(userId:string){
@@ -72,10 +72,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -90,8 +90,8 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postMediaId: result.rows[0]?.mediaId,
-            postUrl: result.rows[0]?.postUrl
+            postMediaId: result.rows[0]?.mediaid,
+            postUrl: result.rows[0]?.posturl
         }
     }
 
@@ -106,8 +106,8 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            chatMediaId: result.rows[0]?.mediaId,
-            chatUrl: result.rows[0]?.chatUrl
+            chatMediaId: result.rows[0]?.mediaid,
+            chatUrl: result.rows[0]?.chaturl
         }
     }
     async getMyRandomChatMedia(userId:string){
@@ -171,8 +171,8 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            storyId: result.rows[0]?.storyId,
-            storyMediaId: result.rows[0]?.storyMediaId
+            storyId: result.rows[0]?.storyid,
+            storyMediaId: result.rows[0]?.storymediaid
         }
     }
 
@@ -187,8 +187,8 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            storyMediaId: result.rows[0]?.mediaId,
-            storyUrl: result.rows[0]?.storyUrl
+            storyMediaId: result.rows[0]?.mediaid,
+            storyUrl: result.rows[0]?.storyurl
         }
     }
 
@@ -204,13 +204,13 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return{
-            mediaId: result.rows[0].mediaId
+            mediaId: result.rows[0].mediaid
         }
     }
 
     async getMyRandomMinioProfileMedia(userId:string){
         const query = `
-            select smm.smm_id as mediaId, smm.smm_object_path as chatUrl from satsang_social.satsang_media_metadata smm 
+            select smm.smm_id as mediaId, smm.smm_object_path as profileUrl from satsang_social.satsang_media_metadata smm 
             left join satsang_social.satsang_post_media_map spmm on smm.smm_id =spmm.spmm_smm_id 
             where smm.smm_ssc_id =14 and smm.smm_object_path like '%profiles%'
             and spmm.spmm_id  is null and smm.smm_sfmm_id = $1
@@ -219,8 +219,8 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            profileMediaId: result.rows[0]?.mediaId,
-            profileUrl: result.rows[0]?.chatUrl
+            profileMediaId: result.rows[0]?.mediaid,
+            profileUrl: result.rows[0]?.profileurl
         }
     }
 
@@ -253,10 +253,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -289,10 +289,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -325,10 +325,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -361,10 +361,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -397,10 +397,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -434,10 +434,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -469,8 +469,8 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postMediaId: result.rows[0]?.postMediaId,
-            postUrl: result.rows[0]?.postUrl
+            postMediaId: result.rows[0]?.postmediaid,
+            postUrl: result.rows[0]?.posturl
         }
     }
 
@@ -509,10 +509,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -551,10 +551,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -593,10 +593,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -635,10 +635,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -677,10 +677,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -710,10 +710,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -741,10 +741,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -772,10 +772,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -803,10 +803,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -834,10 +834,10 @@ export class FeedRepo {
         `
         const result = await PgSocialClient.query(query,[userId])
         return {
-            postId: result.rows[0]?.postId,
-            userId: result.rows[0]?.userId,
+            postId: result.rows[0]?.postid,
+            userId: result.rows[0]?.userid,
             caption: result.rows[0]?.caption,
-            postMediaId: result.rows[0]?.postMediaId
+            postMediaId: result.rows[0]?.postmediaid
         }
     }
 
@@ -851,6 +851,7 @@ export class FeedRepo {
             allow filtering
         `
         const casRes = await CassandraQuery(casQuery, [uuid], 'social')
+        console.log(`Cas Res - ${JSON.stringify(casRes)}`)
 
         const casRows = [...casRes.rows]
 
@@ -873,10 +874,13 @@ export class FeedRepo {
             ({postId} = await this.getMyRandomPostWithFriendsOfFriendVisibility(userId))
         }
 
+        console.log(`Random Public PostID - ${JSON.stringify(postId)}`)
         // 🔹 Filter rows where media exists
         const filteredRows = casRows.filter(
             (r: any) => r.postId?.toString() === postId.toString()
         );
+
+        console.log(`Filtered Rows - ${JSON.stringify(filteredRows)}`)
 
         if (!filteredRows.length) return null;
 

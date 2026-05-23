@@ -230,7 +230,8 @@ export class FeedFlow{
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomPublicPost(memuuid))
         }
         const payload = FeedFactory.buildPostReactionPayload({
-            postId
+            postId,
+            reactionType:501
         })
         const response = await this.service.feedService.reactToPost(payload)
         return response
@@ -255,7 +256,8 @@ export class FeedFlow{
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyFriendsRandomPostWithFriendsOfFriendsVisibility(memuuid))
         }
         const payload = FeedFactory.buildPostReactionPayload({
-            postId
+            postId,
+            reactionType:501
         })
         const response = await this.service.feedService.reactToPost(payload)
         return response
@@ -281,7 +283,8 @@ export class FeedFlow{
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomPostWithFriendsOfFriendVisibility(memuuid))
         }
         const payload = FeedFactory.buildPostReactionPayload({
-            postId
+            postId,
+            reactionType:501
         })
         const response = await this.service.feedService.reactToPost(payload)
         return response
@@ -306,7 +309,8 @@ export class FeedFlow{
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyNonFriendsRandomPostWithFriendsOfFriendVisibility(memuuid))
         }
         const payload = FeedFactory.buildPostReactionPayload({
-            postId
+            postId,
+            reactionType:501
         })
         const response = await this.service.feedService.reactToPost(payload)
         return response
@@ -419,8 +423,9 @@ export class FeedFlow{
         const memuuid = TestContext.initialMemuuid
         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnFriendsPost(memuuid, type)
+        console.log(`data in replyMyCommentToMyPosts2: ${JSON.stringify(data)}`)
 
-        const payload = FeedFactory.buildPostCommentPayload({
+        const payload = await FeedFactory.buildPostCommentPayload({
             parentCommentId: data?.commentId,
             postId: data?.postId
         })
@@ -432,8 +437,9 @@ export class FeedFlow{
         const memuuid = TestContext.initialMemuuid
         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnFriendsOfFriendsPost(memuuid, type)
+        console.log(`data in replyMyCommentToMyPosts3: ${JSON.stringify(data)}`)
 
-        const payload = FeedFactory.buildPostCommentPayload({
+        const payload = await FeedFactory.buildPostCommentPayload({
             parentCommentId: data?.commentId,
             postId: data?.postId
         })
@@ -445,8 +451,8 @@ export class FeedFlow{
         const memuuid = TestContext.initialMemuuid
         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnNonFriendsPost(memuuid, type)
-
-        const payload = FeedFactory.buildPostCommentPayload({
+        console.log(`data in replyMyCommentToMyPosts4: ${JSON.stringify(data)}`)
+        const payload = await FeedFactory.buildPostCommentPayload({
             parentCommentId: data?.commentId,
             postId: data?.postId
         })
@@ -458,8 +464,9 @@ export class FeedFlow{
         const memuuid = TestContext.initialMemuuid
         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnMyPost(memuuid, type)
+        console.log(`data in replyMyCommentToMyPosts: ${JSON.stringify(data)}`)
 
-        const payload = FeedFactory.buildPostCommentPayload({
+        const payload = await FeedFactory.buildPostCommentPayload({
             parentCommentId: data?.commentId,
             postId: data?.postId
         })

@@ -6,7 +6,7 @@ describe('Validate GET /feed/post/reactions',()=>{
 
     test('Validate fetching reaction options',async()=>{
         const {response} = await TestContext.services.feedService.getPostReactionOptions()
-        await ResponseValidator.validateStatus(response,201)
-        await ResponseValidator.validateErrorMessage(response,'Reaction Options Fetched Successfully')
+        await ResponseValidator.validateStatus(response,200)
+        await ResponseValidator.validateErrorMessage(response,'Successfully fetched post reaction options.')
     })
 })
