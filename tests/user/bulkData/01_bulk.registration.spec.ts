@@ -1,6 +1,6 @@
-import Log from "../../../src/utils/logger"
-import { TestContext } from "../../../src/context/test.context"
-import { wait } from "../../../src/utils/wait"
+import Log from "src/utils/logger"
+import { TestContext } from "src/context/test.context"
+import { wait } from "src/utils/wait"
 
 jest.setTimeout(300000)
 describe(`Test - UserApp - Bulk - POST /auth/register api endpoint `,()=>{

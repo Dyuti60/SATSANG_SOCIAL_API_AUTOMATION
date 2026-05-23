@@ -1,7 +1,7 @@
-import { RegistrationFactory } from "../../src/testdata/factory/registration.factory"
-import ResponseValidator from "../../src/api/response.validator"
-import { TestContext } from "../../src/context/test.context"
-import { invalidRegisterUserCases, invalidRegisterUserStateTokenCases } from "../../src/testdata/validationPoints/registration.validation.points"
+import { RegistrationFactory } from "src/testdata/factory/registration.factory"
+import ResponseValidator from "src/api/response.validator"
+import { TestContext } from "src/context/test.context"
+import { invalidRegisterUserCases, invalidRegisterUserStateTokenCases } from "src/testdata/validationPoints/registration.validation.points"
 
 describe('🔐 Registration API Tests', () => {
 

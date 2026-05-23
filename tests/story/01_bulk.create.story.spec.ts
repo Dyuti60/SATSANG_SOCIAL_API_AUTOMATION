@@ -1,7 +1,7 @@
-import ResponseValidator from "../../src/api/response.validator"
-import { TestContext } from "../../src/context/test.context"
-import { StoryFactory } from "../../src/testdata/factory/story.factory"
-import { getRandomJpegFile } from "../../src/utils/mediaPicker"
+import ResponseValidator from "src/api/response.validator"
+import { TestContext } from "src/context/test.context"
+import { StoryFactory } from "src/testdata/factory/story.factory"
+import { getRandomJpegFile } from "src/utils/mediaPicker"
 
 describe('Validate POST /stories/bulk-create',()=>{
 

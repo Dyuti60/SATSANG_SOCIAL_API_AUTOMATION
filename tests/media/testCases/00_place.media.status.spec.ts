@@ -1,8 +1,8 @@
-import { mediaPostImageValidationTestCases, mediaPostVideoValidationTestCases, mediaProfileValidationTestCases, mediaStoryImageValidationTestCases, mediaStoryVideoValidationTestCases } from "../../../src/testdata/validationPoints/media.validation.points";
-import ResponseValidator from "../../../src/api/response.validator";
-import { TestContext } from "../../../src/context/test.context";
-import { MediaFactory } from "../../../src/testdata/factory/media.factory";
-import { getRandomJpegFile, getRandomMp4File } from "../../../src/utils/mediaPicker";
+import { mediaPostImageValidationTestCases, mediaPostVideoValidationTestCases, mediaProfileValidationTestCases, mediaStoryImageValidationTestCases, mediaStoryVideoValidationTestCases } from "src/testdata/validationPoints/media.validation.points";
+import ResponseValidator from "src/api/response.validator";
+import { TestContext } from "src/context/test.context";
+import { MediaFactory } from "src/testdata/factory/media.factory";
+import { getRandomJpegFile, getRandomMp4File } from "src/utils/mediaPicker";
 
 
 describe('Validate POST /media/upload/story Endpoint',()=>{

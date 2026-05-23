@@ -1,7 +1,7 @@
-import Log from "../../../src/utils/logger";
-import ResponseValidator from "../../../src/api/response.validator";
-import { TestContext } from "../../../src/context/test.context";
-import { wait } from "../../../src/utils/wait";
+import Log from "src/utils/logger";
+import ResponseValidator from "src/api/response.validator";
+import { TestContext } from "src/context/test.context";
+import { wait } from "src/utils/wait";
 
 jest.setTimeout(300000)
 describe(`Bulk POST /user/friendRequest/accept api endpoint`,()=>{

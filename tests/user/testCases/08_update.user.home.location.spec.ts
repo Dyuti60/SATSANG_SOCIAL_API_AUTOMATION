@@ -1,7 +1,7 @@
-import ResponseValidator from "../../../src/api/response.validator"
-import { TestContext } from "../../../src/context/test.context"
-import { updateUserLocationPayloadTestCases1 } from "../../../src/testdata/validationPoints/user.validation.points"
-import { updateUserLocationPayloadTestCases2 } from '../../../src/testdata/validationPoints/user.validation.points';
+import ResponseValidator from "src/api/response.validator"
+import { TestContext } from "src/context/test.context"
+import { updateUserLocationPayloadTestCases1 } from "src/testdata/validationPoints/user.validation.points"
+import { updateUserLocationPayloadTestCases2 } from "src/testdata/validationPoints/user.validation.points";
 
 describe('Validate the User Location API',()=>{
     test(`Verify Update User Location - valid payload`,async()=>{

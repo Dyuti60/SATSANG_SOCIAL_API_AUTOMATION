@@ -1,6 +1,6 @@
-import ResponseValidator from "../../../src/api/response.validator"
-import { TestContext } from "../../../src/context/test.context"
-import { searchUserPayloadTestCases } from "../../../src/testdata/validationPoints/user.validation.points"
+import ResponseValidator from "src/api/response.validator"
+import { TestContext } from "src/context/test.context"
+import { searchUserPayloadTestCases } from "src/testdata/validationPoints/user.validation.points"
 
 describe('Validate Search By Name API',()=>{
 

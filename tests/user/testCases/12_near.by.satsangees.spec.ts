@@ -1,6 +1,6 @@
-import ResponseValidator from "../../../src/api/response.validator"
-import { TestContext } from "../../../src/context/test.context"
-import { UserFactory } from "../../../src/testdata/factory/user.factory"
+import ResponseValidator from "src/api/response.validator"
+import { TestContext } from "src/context/test.context"
+import { UserFactory } from "src/testdata/factory/user.factory"
 
 describe('Validate Near By Satsangee',()=>{
     test(`Verify Near By Satsangee API - Valid Payload`,async()=>{
