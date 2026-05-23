@@ -1,7 +1,7 @@
-import ResponseValidator from "../../src/api/response.validator"
-import { TestContext } from "../../src/context/test.context"
-import { StoryFactory } from "../../src/testdata/factory/story.factory"
-import { getRandomJpegFile } from "../../src/utils/mediaPicker"
+import ResponseValidator from "src/api/response.validator"
+import { TestContext } from "src/context/test.context"
+import { StoryFactory } from "src/testdata/factory/story.factory"
+import { getRandomJpegFile } from "src/utils/mediaPicker"
 
 describe('Validate POST /stories/bulk-create',()=>{
 
@@ -197,17 +197,6 @@ describe('Validate POST /stories/bulk-create',()=>{
             await ResponseValidator.validateErrorMessage(response, 'Stories created successfully')
         })
 
-        test('Validate Creating Story - With Same Thumbnail',async()=>{
-            let filePaths:any=[]
-            for(let i=1; i<=2; i++ ){
-                filePaths.push(getRandomJpegFile())
-            }
-            const {mediaIds} = await TestContext.flows.storyFlow.storyMediaUpload(filePaths)
-            const payload = StoryFactory.buildBulkStoryPayload({mediaIds:mediaIds})
-            const {response} = await TestContext.services.storyService.bulkCreateStories(payload)
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Stories created successfully')
-        })
 
         test('Validate Creating Stories - Invalid MediaId Out of All',async()=>{
             let filePaths:any=[]
@@ -248,62 +237,6 @@ describe('Validate POST /stories/bulk-create',()=>{
             const {response} = await TestContext.services.storyService.bulkCreateStories(payload1)
             await ResponseValidator.validateStatus(response,400)
             await ResponseValidator.validateErrorMessage(response, 'stories.0.visibility must be one of the following values: ALL_FRIENDS, CLOSE_FRIENDS, SELECTED_FRIENDS')
-        })
-
-        test('Validate Creating Stories - With Different Thumbnails',async()=>{
-            let filePaths:any=[]
-            let filePath:any
-            let mediaIds:any=[]
-            let mediaId
-            let friendId:any
-
-            for(let i=1; i<=2; i++ ){
-                filePaths.push(getRandomJpegFile())
-            }
-            ({mediaIds} = await TestContext.flows.storyFlow.storyMediaUpload([filePaths[0]]))
-            filePath = getRandomJpegFile()
-            mediaId = await TestContext.flows.storyFlow.storyMediaUpload([filePath])
-            let payload1 = StoryFactory.buildBulkStoryPayload({mediaIds:mediaIds,visibilityType:'ALL_FRIENDS',thumbnailMediaIds:mediaId.mediaIds[0]});
-
-            ({mediaIds} = await TestContext.flows.storyFlow.storyMediaUpload([filePaths[1]]))
-            filePath = getRandomJpegFile()
-            mediaId = await TestContext.flows.storyFlow.storyMediaUpload([filePath])
-            let payload2 = StoryFactory.buildBulkStoryPayload({mediaIds:mediaIds,visibilityType:'ALL_FRIENDS',thumbnailMediaIds:mediaId.mediaIds[0]})
-
-            if (payload1.stories && payload2.stories) {
-                payload1?.stories?.push(payload2?.stories[0])
-            }
-
-            const {response} = await TestContext.services.storyService.bulkCreateStories(payload1)
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Stories created successfully')
-        })
-
-        test('Validate Creating Stories - With Invalid Thumbnail Out Of Many',async()=>{
-            let filePaths:any=[]
-            let filePath:any
-            let mediaIds:any=[]
-            let mediaId
-            let friendId:any
-
-            for(let i=1; i<=2; i++ ){
-                filePaths.push(getRandomJpegFile())
-            }
-            ({mediaIds} = await TestContext.flows.storyFlow.storyMediaUpload([filePaths[0]]))
-            filePath = getRandomJpegFile()
-            mediaId = await TestContext.flows.storyFlow.storyMediaUpload([filePath])
-            let payload1 = StoryFactory.buildBulkStoryPayload({mediaIds:mediaIds,visibilityType:'ALL_FRIENDS',thumbnailMediaIds:mediaId.mediaIds[0]});
-
-            ({mediaIds} = await TestContext.flows.storyFlow.storyMediaUpload([filePaths[1]]))
-            let payload2 = StoryFactory.buildBulkStoryPayload({mediaIds:mediaIds,visibilityType:'ALL_FRIENDS',thumbnailMediaIds:'0196ee78-3ba1-7663-88fd-b385aa46c64b'})
-
-            if (payload1.stories && payload2.stories) {
-                payload1?.stories?.push(payload2?.stories[0])
-            }
-
-            const {response} = await TestContext.services.storyService.bulkCreateStories(payload1)
-            await ResponseValidator.validateStatus(response,400)
-            await ResponseValidator.validateErrorMessage(response, 'Stories created successfully')
         })
 
     })

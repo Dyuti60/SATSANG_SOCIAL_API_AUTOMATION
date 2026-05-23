@@ -1,9 +1,9 @@
-import { TestContext } from "../../../src/context/test.context";
-import Log from "../../../src/utils/logger";
-import { getRandomJpegFile, getRandomMp4File } from "../../../src/utils/mediaPicker";
-import { FeedFlow } from '../../../src/workflow/feed.api.flow';
-import { FeedFactory } from "../../../src/testdata/factory/feed.factory";
-import ResponseValidator from "../../../src/api/response.validator";
+import { TestContext } from "src/context/test.context";
+import Log from "src/utils/logger";
+import { getRandomJpegFile, getRandomMp4File } from "src/utils/mediaPicker";
+import { FeedFlow } from "src/workflow/feed.api.flow";
+import { FeedFactory } from "src/testdata/factory/feed.factory";
+import ResponseValidator from "src/api/response.validator";
 
 describe('Bulk Data Creation For Feed',()=>{
 

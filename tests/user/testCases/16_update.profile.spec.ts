@@ -1,7 +1,7 @@
-import ResponseValidator from "../../../src/api/response.validator"
-import { TestContext } from "../../../src/context/test.context"
-import { UserFactory } from "../../../src/testdata/factory/user.factory"
-import { updateProfilePayloadTestCases } from "../../../src/testdata/validationPoints/user.validation.points"
+import ResponseValidator from "src/api/response.validator"
+import { TestContext } from "src/context/test.context"
+import { UserFactory } from "src/testdata/factory/user.factory"
+import { updateProfilePayloadTestCases } from "src/testdata/validationPoints/user.validation.points"
 
 describe('Validate update profile API',()=>{
 

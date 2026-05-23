@@ -1,6 +1,6 @@
-import { TestContext } from "../../../src/context/test.context";
-import Log from "../../../src/utils/logger";
-import { getRandomJpegFile } from "../../../src/utils/mediaPicker";
+import { TestContext } from "src/context/test.context";
+import Log from "src/utils/logger";
+import { getRandomJpegFile } from "src/utils/mediaPicker";
 
 describe('[no-test-login] Bulk Data Creation For Profile',()=>{
 

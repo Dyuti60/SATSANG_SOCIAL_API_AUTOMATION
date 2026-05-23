@@ -1,7 +1,7 @@
-import { ENV } from "../../../src/helper/env/env.config"
-import ResponseValidator from "../../../src/api/response.validator"
-import { TestContext } from "../../../src/context/test.context"
-import { sendFriendRequestPayloadTestCases } from "../../../src/testdata/validationPoints/user.validation.points"
+import { ENV } from "src/helper/env/env.config"
+import ResponseValidator from "src/api/response.validator"
+import { TestContext } from "src/context/test.context"
+import { sendFriendRequestPayloadTestCases } from "src/testdata/validationPoints/user.validation.points"
 
 describe('Validate Send Friend Request API',()=>{
     

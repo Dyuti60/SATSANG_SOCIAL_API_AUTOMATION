@@ -1,8 +1,8 @@
-import { invalidRegionTestCases } from "../../../src/testdata/validationPoints/user.validation.points"
-import ResponseValidator from "../../../src/api/response.validator"
-import { TestContext } from "../../../src/context/test.context"
-import { UserFactory } from "../../../src/testdata/factory/user.factory"
-import { invalidRegisterUserCases } from "../../../src/testdata/validationPoints/registration.validation.points"
+import { invalidRegionTestCases } from "src/testdata/validationPoints/user.validation.points"
+import ResponseValidator from "src/api/response.validator"
+import { TestContext } from "src/context/test.context"
+import { UserFactory } from "src/testdata/factory/user.factory"
+import { invalidRegisterUserCases } from "src/testdata/validationPoints/registration.validation.points"
 
 describe('Get Region API Test',()=>{
 

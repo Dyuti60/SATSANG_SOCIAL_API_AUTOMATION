@@ -91,38 +91,7 @@ export const storyCreateTestCases: postStoryCases[]=[
         expectedStatus: 400,
         expectedMessage: 'caption must be a string'
     },
-    {
-        description: 'Invalid ThumbnailMediaId',
-        overrides: {
-            thumbnailMediaId:'0196ee78-3ba1-7663-88fd-b385aa46c64b'
-        },
-        expectedStatus: 400,
-        expectedMessage: 'Invalid MediaId'
-    },
-    {
-        description: 'Null ThumbnailMediaId',
-        overrides: {
-            thumbnailMediaId:null
-        },
-        expectedStatus: 201,
-        expectedMessage: 'Story created successfully'
-    },
-    {
-        description: 'Blank ThumbnailMediaId',
-        overrides: {
-            thumbnailMediaId:''
-        },
-        expectedStatus: 400,
-        expectedMessage: 'thumbnailMediaId must be a UUID'
-    },
-    {
-        description: 'Invalid ThumbnailMediaId Datatype',
-        overrides: {
-            thumbnailMediaId:123
-        },
-        expectedStatus: 400,
-        expectedMessage: 'thumbnailMediaId must be a UUID'
-    },
+
     {
         description: 'Invalid ViewersId',
         overrides: {

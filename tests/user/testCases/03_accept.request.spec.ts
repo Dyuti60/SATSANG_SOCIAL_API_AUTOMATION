@@ -1,6 +1,6 @@
-import { acceptFriendRequestPayloadTestCases } from "../../../src/testdata/validationPoints/user.validation.points"
-import ResponseValidator from "../../../src/api/response.validator"
-import { TestContext } from "../../../src/context/test.context"
+import { acceptFriendRequestPayloadTestCases } from "src/testdata/validationPoints/user.validation.points"
+import ResponseValidator from "src/api/response.validator"
+import { TestContext } from "src/context/test.context"
 
 describe('Validate Accept Friend Request API',()=>{
 

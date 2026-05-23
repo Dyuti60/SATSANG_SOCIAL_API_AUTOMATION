@@ -1,6 +1,6 @@
-import ResponseValidator from "../../../src/api/response.validator"
-import { TestContext } from "../../../src/context/test.context"
-import { deleteFriendPayloadTestCases } from "../../../src/testdata/validationPoints/user.validation.points"
+import ResponseValidator from "src/api/response.validator"
+import { TestContext } from "src/context/test.context"
+import { deleteFriendPayloadTestCases } from "src/testdata/validationPoints/user.validation.points"
 
 describe('Validate Delete Friend API',()=>{
     test('Verify Delete Friend - Valid Accept Friend Payload',async ()=>{

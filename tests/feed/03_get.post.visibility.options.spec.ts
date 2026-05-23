@@ -1,5 +1,5 @@
-import ResponseValidator from "../../src/api/response.validator"
-import { TestContext } from "../../src/context/test.context"
+import ResponseValidator from "src/api/response.validator"
+import { TestContext } from "src/context/test.context"
 
 describe('Validate GET /feed/post/visibility',()=>{
 
