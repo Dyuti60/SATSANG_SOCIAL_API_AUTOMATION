@@ -140,33 +140,6 @@ describe('Validate POST /stories/create',()=>{
         })
 
 
-        test('Validate Creating Story - With Same Thumbnail',async()=>{
-            const filePath = getRandomJpegFile()
-            const {mediaIds} = await TestContext.flows.mediaFlow.verifyUploadStatus('story',[filePath])
-            const {response} = await TestContext.services.storyService.createStory({
-                mediaId: mediaIds[0],
-                visibility: 'ALL_FRIENDS',
-                thumbnailMediaId: mediaIds[0]
-            })
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
-        })
-
-        test('Validate Creating Story - With Different Thumbnail',async()=>{
-            let filePath1 = getRandomJpegFile()
-            let mediaIds1 = await TestContext.flows.storyFlow.storyMediaUpload([filePath1])
-
-            let filePath2 = getRandomJpegFile()
-            let mediaIds2 = await TestContext.flows.storyFlow.storyMediaUpload([filePath2])
-            const {response} = await TestContext.services.storyService.createStory({
-                mediaId: mediaIds1.mediaIds[0],
-                visibility: 'ALL_FRIENDS',
-                thumbnailMediaId: mediaIds2.mediaIds[0]
-            })
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
-        })
-
 
     })
 

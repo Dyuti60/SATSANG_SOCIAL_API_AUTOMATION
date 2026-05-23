@@ -4,7 +4,6 @@ type StoryPayloadOptions = {
   mediaId?: any;
   visibilityType?: any;
   caption?: any
-  thumbnailMediaId?: any;
   viewerIds?: any[]
 }
 
@@ -12,7 +11,6 @@ type BulkStoryPayloadOptions = {
   mediaIds?: string[];
   visibilityType?: string;
   caption?: string | null;
-  thumbnailMediaIds?: string;
   viewerIds?: string[];
 };
 
@@ -36,7 +34,6 @@ export class StoryFactory {
             mediaId: options.mediaId ?? '',
             visibility: options.visibilityType ?? 'ALL_FRIENDS',
             caption: options.caption ?? faker.lorem.words(10),
-            thumbnailMediaId: options.thumbnailMediaId ?? options.mediaId,
             viewerIds: options.viewerIds ?? []
         }
         
@@ -55,9 +52,6 @@ export class StoryFactory {
             caption:
             options.caption ??
             faker.lorem.words(10),
-
-            thumbnailMediaId:
-            options.mediaIds?.[index] ?? '',
 
             viewerIds: options.viewerIds ?? []
         }))
