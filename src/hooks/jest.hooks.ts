@@ -8,6 +8,7 @@ import { ServiceContainer } from '../services/service.container';
 import { FlowContainer } from '../workflow/flow.container';
 import { PgSocialClient } from '../../src/db/client/pg.social.client';
 import { PgSsoClient } from '../../src/db/client/pg.sso.client';
+import { CassandraClient } from 'src/db/client/cassandra.client';
 
 /**
  * ============================
@@ -86,6 +87,7 @@ afterAll(async () => {
   https.globalAgent.destroy();
   TestContext.currentDetailsReset();
   TestContext.initialDetailsReset();
+  await CassandraClient.shutdown();
 })
 /**
  * ============================

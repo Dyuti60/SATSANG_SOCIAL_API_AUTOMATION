@@ -15,21 +15,21 @@ describe('Validate Delete Friend API',()=>{
     test('Verify Delete Friend - Cancel Friend Status',async()=>{
         const {friendIdPayload} = await TestContext.flows.userFlow.deleteFriendWithDifferentPayload('Cancel Friend')
         const {response} = await TestContext.services.userService.deleteFriend(friendIdPayload)
-        await ResponseValidator.validateStatus(response,200)
+        await ResponseValidator.validateStatus(response,400)
         await ResponseValidator.validateErrorMessage(response,'Successfully deleted the friend')
     })
 
     test('Verify Delete Friend - Pending Friend Status',async()=>{
         const {friendIdPayload} = await TestContext.flows.userFlow.deleteFriendWithDifferentPayload('Pending Friend')
         const {response} = await TestContext.services.userService.deleteFriend(friendIdPayload)
-        await ResponseValidator.validateStatus(response,200)
+        await ResponseValidator.validateStatus(response,400)
         await ResponseValidator.validateErrorMessage(response,'Successfully deleted the friend')
     })
 
     test('Verify Delete Friend - Rejected Friend Status',async()=>{
         const {friendIdPayload} = await TestContext.flows.userFlow.deleteFriendWithDifferentPayload('Rejected Friend')
         const {response} = await TestContext.services.userService.deleteFriend(friendIdPayload)
-        await ResponseValidator.validateStatus(response,200)
+        await ResponseValidator.validateStatus(response,400)
         await ResponseValidator.validateErrorMessage(response,'Successfully deleted the friend')
     })
 

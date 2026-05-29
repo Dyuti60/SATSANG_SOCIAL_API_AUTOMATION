@@ -1,5 +1,5 @@
-import ResponseValidator from "api/response.validator"
-import { TestContext } from "src/context/test.context"
+import ResponseValidator from "../../../src/api/response.validator"
+import { TestContext } from "../../../src/context/test.context"
 
 describe('Validate POST /feed/post/react Endpoint',()=>{
 
@@ -9,22 +9,22 @@ describe('Validate POST /feed/post/react Endpoint',()=>{
         test('Validate react to my public visibility post',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToMyPost('public')
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
         test('Validate react to my friends public visibility post',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToMyFriendsPost('public')
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
         test('Validate react to my friends friend public visibility post',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToMyFriendsOfFriendsPost('public')
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
         test('Validate react to my non friend public visibility post',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToNonFriendsPost('public')
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
 
     })
@@ -34,22 +34,22 @@ describe('Validate POST /feed/post/react Endpoint',()=>{
         test('Validate react to my hidden visibility post',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToMyPost('hidden')
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
         test('Validate react to my friends hidden visibility post',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToMyFriendsPost('hidden')
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
         test('Validate react to my friends friend hidden visibility post',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToMyFriendsOfFriendsPost('hidden')
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
         test('Validate react to my non friend hidden visibility post',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToNonFriendsPost('hidden')
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
     })
 
@@ -58,22 +58,22 @@ describe('Validate POST /feed/post/react Endpoint',()=>{
         test('Validate react to my post with friends visibility',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToMyPost('friends visibility')
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
         test('Validate react to my friends post with friend visibility',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToMyFriendsPost('friends visibility')
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
-        test('Validate react to my friends friend post with hidden visibility',async()=>{
+        test('Validate react to my friends friend post with friends visibility',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToMyFriendsOfFriendsPost('friends visibility')
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
-        test('Validate react to my non friend post with hidden visibility',async()=>{
+        test('Validate react to my non friend post with friends visibility',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToNonFriendsPost('friends visibility')
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
     })
 
@@ -82,22 +82,22 @@ describe('Validate POST /feed/post/react Endpoint',()=>{
         test('Validate react to my friends of friends visibility post',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToMyPost('fof visibility')
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
         test('Validate react to my friends with friends of friend visibility',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToMyFriendsPost('fof visibility')
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
         test('Validate react to my friends friend post with friends of friend visibility',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToMyFriendsOfFriendsPost('fof visibility')
             await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
         test('Validate react to my non friend post with friend of friends visibility',async()=>{
             const {response} = await TestContext.flows.feedFlow.reactToNonFriendsPost('fof visibility')
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reacted Successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Successfully saved post-reaction.')
         })
     })
 

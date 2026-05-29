@@ -8,8 +8,8 @@ describe('Validate GET /feed/post/comment?parentCommentId&postId Endpoint',()=>{
         const {response} = await TestContext.services.feedService.getCommentOnPost({
             postId:'6a1c5baf-452b-4d98-b18d-82047ccc1b32'
         })
-        await ResponseValidator.validateStatus(response,201)
-        await ResponseValidator.validateErrorMessage(response,'Fetched Comments On Post')
+        await ResponseValidator.validateStatus(response,200)
+        await ResponseValidator.validateErrorMessage(response,'Successfully fetched feed Posts.')
     })
 
     test('Validate Child Comments Fetched On Posts',async()=>{
@@ -17,7 +17,7 @@ describe('Validate GET /feed/post/comment?parentCommentId&postId Endpoint',()=>{
             postId:'6a1c5baf-452b-4d98-b18d-82047ccc1b32',
             parentCommentId:'2e7d3030-4188-11f1-835d-f96d0d72cb11'
         })
-        await ResponseValidator.validateStatus(response,201)
-        await ResponseValidator.validateErrorMessage(response,'Fetched Comments On Post')
+        await ResponseValidator.validateStatus(response,200)
+        await ResponseValidator.validateErrorMessage(response,'Successfully fetched feed Posts.')
     })
 })

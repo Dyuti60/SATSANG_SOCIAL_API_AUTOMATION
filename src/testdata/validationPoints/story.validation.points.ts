@@ -95,34 +95,38 @@ export const storyCreateTestCases: postStoryCases[]=[
     {
         description: 'Invalid ViewersId',
         overrides: {
+            visibility:'SELECTED_FRIENDS',
             viewerIds:['0814d9ac-1542-4e74-82ec-28866c8ce8ca']
         },
         expectedStatus: 400,
-        expectedMessage: 'Invalid ViewerId'
+        expectedMessage: 'viewerIds must only contain active friends of the user'
     },
     {
         description: 'Null ViewersId',
         overrides: {
+            visibility:'SELECTED_FRIENDS',
             viewerIds:[null]
         },
-        expectedStatus: 201,
-        expectedMessage: 'Story created successfully'
+        expectedStatus: 400,
+        expectedMessage: 'viewerIds must only contain active friends of the user'
     },
     {
         description: 'Blank ViewersId',
         overrides: {
+            visibility:'SELECTED_FRIENDS',
             viewerIds:['']
         },
-        expectedStatus: 201,
-        expectedMessage: 'Story created successfully'
+        expectedStatus: 400,
+        expectedMessage: 'viewerIds must only contain active friends of the user'
     },
     {
         description: 'Invalid Datatype ViewersId',
         overrides: {
+            visibility:'SELECTED_FRIENDS',
             viewerIds:[123]
         },
         expectedStatus: 400,
-        expectedMessage: 'viewerId must be a UUID'
+        expectedMessage: 'viewerIds must only contain active friends of the user'
     },
 
 ]

@@ -8,15 +8,15 @@ describe('Validate POST /stories/react',()=>{
         test('Validate reaction to my present story - like',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToMyPresentStory(true))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'You cannot react to your own story');
         })
 
         test('Validate reaction to my present story - unlike',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToMyPresentStory(false))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'You cannot react to your own story');
         })
 
         test('Validate reaction to my friends present story - like',async()=>{
@@ -36,29 +36,29 @@ describe('Validate POST /stories/react',()=>{
         test('Validate reaction to my friends friend present story - like',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToMyFriendsOfFriendsPresentStory(true))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'You can only react to stories of your friends');
         })
 
         test('Validate reaction to my friends friend present story - unlike',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToMyFriendsOfFriendsPresentStory(false))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'You can only react to stories of your friends');
         })
 
         test('Validate reaction to my non friends present story - like',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToNonFriendsPresentStory(true))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'You can only react to stories of your friends');
         })
 
         test('Validate reaction to my non friends present story - unlike',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToNonFriendsPresentStory(false))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'You can only react to stories of your friends');
         })
     })
 
@@ -67,57 +67,57 @@ describe('Validate POST /stories/react',()=>{
         test('Validate reaction to my expired story - like',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToMyExpiredStory(true))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Story is not active or has expired');
         })
 
         test('Validate reaction to my expired story - unlike',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToMyExpiredStory(false))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Story is not active or has expired');
         })
 
         test('Validate reaction to my friends expired story - like',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToMyFriendsExpiredStory(true))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Story is not active or has expired');
         })
 
         test('Validate reaction to my friends expired story - unlike',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToMyFriendsExpiredStory(false))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Story is not active or has expired');
         })
 
         test('Validate reaction to my friends friend expired story - like',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToMyFriendsOfFriendsExpiredStory(true))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Story is not active or has expired');
         })
 
         test('Validate reaction to my friends friend expired story - unlike',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToMyFriendsOfFriendsExpiredStory(false))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Story is not active or has expired');
         })
 
         test('Validate reaction to my non friends expired story - like',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToNonFriendsExpiredStory(true))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Story is not active or has expired');
         })
 
         test('Validate reaction to my non friends expired story - unlike',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToNonFriendsExpiredStory(false))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Story is not active or has expired');
         })
     })
 
@@ -126,29 +126,29 @@ describe('Validate POST /stories/react',()=>{
         test('Validate reaction to my deleted story - like',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToMyDeletedStory(true))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Story is not active or has expired');
         })
 
         test('Validate reaction to my deleted story - unlike',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToMyDeletedStory(false))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Story is not active or has expired');
         })
 
         test('Validate reaction to my friends deleted story - like',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToMyFriendsPresentDeletedStory(true))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Story is not active or has expired');
         })
 
         test('Validate reaction to my friends deleted story - unlike',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToMyFriendsPresentDeletedStory(false))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Story is not active or has expired');
         })
 
         // test('Validate reaction to my friends friend deleted story',async()=>{
@@ -158,15 +158,15 @@ describe('Validate POST /stories/react',()=>{
         test('Validate reaction to my non friends deleted story - like',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToNonFriendsPresentDeletedStory(true))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Story is not active or has expired');
         })
 
         test('Validate reaction to my non friends deleted story - unlike',async()=>{
             let response:any
             ({response} = await TestContext.flows.storyFlow.reactToNonFriendsPresentDeletedStory(false))
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response,'Reaction saved');
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response,'Story is not active or has expired');
 
         })
     })
