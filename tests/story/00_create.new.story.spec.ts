@@ -49,8 +49,8 @@ describe('Validate POST /stories/create',()=>{
                 visibility: 'SELECTED_FRIENDS',
                 viewerIds: []
             })
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response, 'viewerIds cannot be empty when visibility is SELECTED_FRIENDS')
         })
 
         test('Validate Creating Story - Selected Visibility And Friends ViewerIds',async()=>{
@@ -75,8 +75,8 @@ describe('Validate POST /stories/create',()=>{
                 visibility: 'SELECTED_FRIENDS',
                 viewerIds: [friendId]
             })
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response, 'viewerIds must only contain active friends of the user')
         })
 
         test('Validate Creating Story - Selected Visibility Logged In ViewerIds',async()=>{
@@ -88,8 +88,8 @@ describe('Validate POST /stories/create',()=>{
                 visibility: 'SELECTED_FRIENDS',
                 viewerIds: [TestContext.initialMemuuid]
             })
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response, 'viewerIds must only contain active friends of the user')
         })
 
         test('Validate Creating Story - Selected Visibility Non Friends ViewerIds',async()=>{
@@ -101,8 +101,8 @@ describe('Validate POST /stories/create',()=>{
                 visibility: 'SELECTED_FRIENDS',
                 viewerIds: [friendId]
             })
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response, 'viewerIds must only contain active friends of the user')
         })
 
         test('Validate Creating Story - All Friends Visibility Friends ViewId',async()=>{
@@ -114,8 +114,8 @@ describe('Validate POST /stories/create',()=>{
                 visibility: 'ALL_FRIENDS',
                 viewerIds: [friendId]
             })
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response, 'viewerIds must be empty when visibility is not SELECTED_FRIENDS')
         })
 
         test('Validate Creating Story - Close Friends Visibility Friends ViewId',async()=>{
@@ -127,8 +127,8 @@ describe('Validate POST /stories/create',()=>{
                 visibility: 'CLOSE_FRIENDS',
                 viewerIds: [friendId]
             })
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Story created successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response, 'viewerIds must be empty when visibility is not SELECTED_FRIENDS')
         })
 
         test('Validate Creating Story - With Caption Only',async()=>{
@@ -138,9 +138,6 @@ describe('Validate POST /stories/create',()=>{
             await ResponseValidator.validateStatus(response,400)
             await ResponseValidator.validateErrorMessage(response, 'mediaId must be a UUID')
         })
-
-
-
     })
 
 

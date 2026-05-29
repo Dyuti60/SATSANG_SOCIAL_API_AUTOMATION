@@ -26,11 +26,20 @@ export class FeedFlow{
 
 //////////////////////////////////////// MY MEDIA /////////////////////////////////////
 
-    async createPostWithMyNewPostMedia(files: string[]){
+    async createPostWithMyNewPostMedia(files: string[],visibility:number=0){
         const {mediaIds} = await this.postMediaUpload(files)
-        const payload = FeedFactory.buildPostPayload({
-            mediaIds: mediaIds
-        })
+        let payload:any
+        if(visibility){
+            payload = FeedFactory.buildPostPayload({
+                mediaIds: mediaIds,
+                visibility: visibility
+            })
+        }else{
+            payload = FeedFactory.buildPostPayload({
+                mediaIds: mediaIds
+            }) 
+        }
+
         const response = await this.service.feedService.createPost(payload)
         return response
     }
@@ -397,19 +406,19 @@ export class FeedFlow{
         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         let postId, userId, caption, postMediaId
         if(type=='public'){
-            ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyFriendsRandomPublicPost(memuuid))
+            ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyRandomPublicPost(memuuid))
         }
         else if(type=='hidden'){
-            ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyFriendsRandomHiddenPost(memuuid))
+            ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyRandomHiddenPost(memuuid))
         }
         else if(type=='deleted'){
-            ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyFriendsRandomDeletedPost(memuuid))
+            ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyRandomDeletedPost(memuuid))
         }
         else if (type=='friends visibility'){
-            ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyFriendsRandomPostWithFriendsVisibility(memuuid))
+            ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyRandomPostWithFriendsVisibility(memuuid))
         }
         else if (type =='fof visibility'){
-            ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyFriendsRandomPostWithFriendsOfFriendsVisibility(memuuid))
+            ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyRandomPostWithFriendsOfFriendVisibility(memuuid))
         }
         const payload = FeedFactory.buildPostCommentPayload({
             postId
@@ -436,7 +445,7 @@ export class FeedFlow{
     async replyMyCommentOnMyFriendsOfFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
         const memuuid = TestContext.initialMemuuid
         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
-        const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnFriendsOfFriendsPost(memuuid, type)
+        const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnFriendsOfFriendPost(memuuid, type)
         console.log(`data in replyMyCommentToMyPosts3: ${JSON.stringify(data)}`)
 
         const payload = await FeedFactory.buildPostCommentPayload({
@@ -546,8 +555,7 @@ export class FeedFlow{
     async updateMyCommentOnMyFriendsOfFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
         const memuuid = TestContext.initialMemuuid
         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
-        const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnFriendsOfFriendsPost(memuuid, type)
-
+        const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnFriendsOfFriendPost(memuuid, type)
         const payload = FeedFactory.buildPostCommentPayload({
             commentId: data?.commentId,
             postId: data?.postId
@@ -569,8 +577,13 @@ export class FeedFlow{
         return response
     }
 
-    async updateMyCommentOnMyPosts(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const memuuid = TestContext.initialMemuuid
+    async updateMyCommentOnMyPosts(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility',commentBy:'current'|'initial'='initial'){
+        let memuuid:any
+        if(commentBy=='initial'){
+            memuuid = TestContext.initialMemuuid
+        }else{
+            memuuid = TestContext.currentMemuuid
+        }
         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnMyPost(memuuid, type)
 
@@ -624,8 +637,9 @@ export class FeedFlow{
         return response
     }
 
-    async updateOthersCommentOnMyPosts(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
-        const memuuid = TestContext.initialMemuuid
+    async updateOthersCommentOnMyPosts(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility',commentBy:'current'|'initial'='initial'){
+        let memuuid:any
+        memuuid = TestContext.initialMemuuid
         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         const data = await TestContext.services.feedRepo.getOthersRandomCommentMadeOnMyPost(memuuid, type)
 
@@ -633,6 +647,12 @@ export class FeedFlow{
             commentId: data?.commentId,
             postId: data?.postId
         })
+
+        if(commentBy=='initial'){
+            TestContext.activeUser='initial'
+        }else{
+           TestContext.activeUser='current'
+        }
         const response = await this.service.feedService.placeCommentToAPost(payload)
         return response
     }
@@ -657,7 +677,7 @@ export class FeedFlow{
     async reactToMyCommentOnMyFriendsOfFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'='public'){
         const memuuid = TestContext.initialMemuuid
         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
-        const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnFriendsOfFriendsPost(memuuid, type)
+        const data = await TestContext.services.feedRepo.getMyRandomCommentMadeOnFriendsOfFriendPost(memuuid, type)
 
         const payload = FeedFactory.buildReactOnCommentPayload({
             commentId: data?.commentId,
@@ -752,208 +772,262 @@ export class FeedFlow{
 
 
 //////////////////////////////////////////// BOOKMARK A POST //////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////Logged In User will add/remove bookmark my, my friends, my friends of friend and non friends never bookmarked post/////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    async bookmarkNeverBookmarkedFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility',action:'add'|'remove'){
+        const memuuid = TestContext.initialMemuuid
+        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+        let postId, postedByUserId, bookmarkedByUserId
+        if(type=='public'){
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomNeverBookmarkedPost(memuuid,'public'))
+        }
+        else if(type=='hidden'){
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomNeverBookmarkedPost(memuuid,'hidden'))
+        }
+        else if(type=='deleted'){
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomNeverBookmarkedPost(memuuid,'deleted'))
+        }
+        else if (type=='friends visibility'){
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomNeverBookmarkedPost(memuuid,'friends visibility'))
+        }
+        else if (type =='fof visibility'){
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomNeverBookmarkedPost(memuuid,'fof visibility'))
+        }
+        const payload = FeedFactory.buildBookmarkPayload({
+            postId
+        })
+        let response:any
+        if(action=='add'){
+            response = await this.service.feedService.bookmarkAPost(payload)
+        }else{
+            response = await this.service.feedService.removePostFromBookmark(payload)
+        }
 
-///////////////////////////////////////add Bookmark/////////////////////////////////////////////////
-    async bookmarkMyFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
-        const memuuid = TestContext.initialMemuuid
-        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
-        let postId, postedByUserId, bookmarkedByUserId
-        if(type=='public'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomPublicBookmarkReadyPost(memuuid))
-        }
-        else if(type=='hidden'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomBookmarkReadyHiddenPost(memuuid))
-        }
-        else if(type=='deleted'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomBookmarkReadyDeletedPost(memuuid))
-        }
-        else if (type=='friends visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomBookmarkReadyPostWithFriendsVisibility(memuuid))
-        }
-        else if (type =='fof visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomBookmarkReadyPostWithFriendsOfFriendsVisibility(memuuid))
-        }
-        const payload = FeedFactory.buildBookmarkPayload({
-            postId
-        })
-        const response = await this.service.feedService.bookmarkAPost(payload)
         return response
     }
-    async bookmarkMyFriendsOfFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
+    async bookmarkNeverBookmarkedMyFriendsOfFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility',action:'add'|'remove'){
         const memuuid = TestContext.initialMemuuid
         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         let postId, postedByUserId, bookmarkedByUserId
         if(type=='public'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomBookmarkReadyPublicPost(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsFriendsRandomNeverBookmarkedPost(memuuid,'public'))
         }
         else if(type=='hidden'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomBookmarkReadyHiddenPost(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsFriendsRandomNeverBookmarkedPost(memuuid,'hidden'))
         }
         else if(type=='deleted'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomBookmarkReadyDeletedPost(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsFriendsRandomNeverBookmarkedPost(memuuid,'deleted'))
         }
         else if (type=='friends visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomBookmarkReadyPostWithFriendsVisibility(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsFriendsRandomNeverBookmarkedPost(memuuid,'friends visibility'))
         }
         else if (type =='fof visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomBookmarkReadyPostWithFriendsOfFriendVisibility(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsFriendsRandomNeverBookmarkedPost(memuuid,'fof visibility'))
         }
         const payload = FeedFactory.buildBookmarkPayload({
             postId
         })
-        const response = await this.service.feedService.bookmarkAPost(payload)
+        let response:any
+        if(action=='add'){
+            response = await this.service.feedService.bookmarkAPost(payload)
+        }else{
+            response = await this.service.feedService.removePostFromBookmark(payload)
+        }
         return response
     }
-    async bookmarkOtherNonFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
+    async bookmarkNeverBookmarkedOtherNonFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility',action:'add'|'remove'){
         const memuuid = TestContext.initialMemuuid
         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         let postId, postedByUserId, bookmarkedByUserId
         if(type=='public'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomBookmarkReadyPublicPost(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomNeverBookmarkedPost(memuuid,'public'))
         }
         else if(type=='hidden'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomBookmarkReadyHiddenPost(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomNeverBookmarkedPost(memuuid,'hidden'))
         }
         else if(type=='deleted'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomBookmarkReadyDeletedPost(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomNeverBookmarkedPost(memuuid,'deleted'))
         }
         else if (type=='friends visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomBookmarkReadyPostWithFriendsVisibility(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomNeverBookmarkedPost(memuuid,'friends visibility'))
         }
         else if (type =='fof visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomBookmarkReadyPostWithFriendsOfFriendVisibility(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomNeverBookmarkedPost(memuuid,'fof visibility'))
         }
         const payload = FeedFactory.buildBookmarkPayload({
             postId
         })
-        const response = await this.service.feedService.bookmarkAPost(payload)
+        let response:any
+        if(action=='add'){
+            response = await this.service.feedService.bookmarkAPost(payload)
+        }else{
+            response = await this.service.feedService.removePostFromBookmark(payload)
+        }
         return response
     }
-    async bookmarkMyPosts(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
+    async bookmarkMyNeverBookmarkedPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility',action:'add'|'remove'){
         const memuuid = TestContext.initialMemuuid
         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         let postId, postedByUserId, bookmarkedByUserId
         if(type=='public'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomBookmarkReadyPublicPost(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomNeverBookmarkedPost(memuuid,'public'))
         }
         else if(type=='hidden'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomBookmarkReadyHiddenPost(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomNeverBookmarkedPost(memuuid,'hidden'))
         }
         else if(type=='deleted'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomBookmarkReadyDeletedPost(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomNeverBookmarkedPost(memuuid,'deleted'))
         }
         else if (type=='friends visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomBookmarkReadyPostWithFriendsVisibility(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomNeverBookmarkedPost(memuuid,'friends visibility'))
         }
         else if (type =='fof visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomBookmarkReadyPostWithFriendsOfFriendsVisibility(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomNeverBookmarkedPost(memuuid,'fof visibility'))
         }
         const payload = FeedFactory.buildBookmarkPayload({
             postId
         })
-        const response = await this.service.feedService.bookmarkAPost(payload)
+        let response:any
+        if(action=='add'){
+            response = await this.service.feedService.bookmarkAPost(payload)
+        }else{
+            response = await this.service.feedService.removePostFromBookmark(payload)
+        }
         return response
     }
 
-//////////////////////////////////////Remove Bookmark//////////////////////////////////////////////////
-    async removeBookmarkFromMyFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
+// Bookmarked Posts By Me
+    async getBookmarkedPostsByMe(action:'add'|'remove',type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
         const memuuid = TestContext.initialMemuuid
         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
         let postId, postedByUserId, bookmarkedByUserId
         if(type=='public'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomRemoveBookmarkPublicReadyPost(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getPostsBookmarkedByMe(memuuid,'add','public'))
         }
         else if(type=='hidden'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomRemoveBookmarkReadyHiddenPost(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getPostsBookmarkedByMe(memuuid,'add','hidden'))
         }
         else if(type=='deleted'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomRemoveBookmarkReadyDeletedPost(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getPostsBookmarkedByMe(memuuid,'add','deleted'))
         }
         else if (type=='friends visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomRemoveBookmarkReadyPostWithFriendsVisibility(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getPostsBookmarkedByMe(memuuid,'add','friends visibility'))
         }
         else if (type =='fof visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomRemoveBookmarkReadyPostWithFriendsOfFriendsVisibility(memuuid))
+            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getPostsBookmarkedByMe(memuuid,'add','fof visibility'))
         }
         const payload = FeedFactory.buildBookmarkPayload({
             postId
         })
-        const response = await this.service.feedService.removePostFromBookmark(payload)
+        let response:any
+        if(action=='add'){
+            response = await this.service.feedService.bookmarkAPost(payload)
+        }else{
+            response = await this.service.feedService.removePostFromBookmark(payload)
+        }
         return response
     }
-    async RemovebookmarkFromMyFriendsOfFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
-        const memuuid = TestContext.initialMemuuid
-        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
-        let postId, postedByUserId, bookmarkedByUserId
-        if(type=='public'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomRemoveBookmarkReadyPublicPost(memuuid))
-        }
-        else if(type=='hidden'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomRemoveBookmarkReadyHiddenPost(memuuid))
-        }
-        else if(type=='deleted'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomRemoveBookmarkReadyDeletedPost(memuuid))
-        }
-        else if (type=='friends visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomRemoveBookmarkReadyPostWithFriendsVisibility(memuuid))
-        }
-        else if (type =='fof visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomRemoveBookmarkReadyPostWithFriendsOfFriendVisibility(memuuid))
-        }
-        const payload = FeedFactory.buildBookmarkPayload({
-            postId
-        })
-        const response = await this.service.feedService.removePostFromBookmark(payload)
-        return response
-    }
-    async removeBookmarkOtherNonFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
-        const memuuid = TestContext.initialMemuuid
-        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
-        let postId, postedByUserId, bookmarkedByUserId
-        if(type=='public'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomRemoveBookmarkReadyPublicPost(memuuid))
-        }
-        else if(type=='hidden'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomRemoveBookmarkReadyHiddenPost(memuuid))
-        }
-        else if(type=='deleted'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomRemoveBookmarkReadyDeletedPost(memuuid))
-        }
-        else if (type=='friends visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomRemoveBookmarkReadyPostWithFriendsVisibility(memuuid))
-        }
-        else if (type =='fof visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomRemoveBookmarkReadyPostWithFriendsOfFriendVisibility(memuuid))
-        }
-        const payload = FeedFactory.buildBookmarkPayload({
-            postId
-        })
-        const response = await this.service.feedService.removePostFromBookmark(payload)
-        return response
-    }
-    async removeBookmarkFromMyPosts(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
-        const memuuid = TestContext.initialMemuuid
-        //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
-        let postId, postedByUserId, bookmarkedByUserId
-        if(type=='public'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomBookmarkRemoveReadyPublicPost(memuuid))
-        }
-        else if(type=='hidden'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomBookmarkRemoveReadyHiddenPost(memuuid))
-        }
-        else if(type=='deleted'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomBookmarkRemoveReadyDeletedPost(memuuid))
-        }
-        else if (type=='friends visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomBookmarkRemoveReadyPostWithFriendsVisibility(memuuid))
-        }
-        else if (type =='fof visibility'){
-            ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomBookmarkRemoveReadyPostWithFriendsOfFriendsVisibility(memuuid))
-        }
-        const payload = FeedFactory.buildBookmarkPayload({
-            postId
-        })
-        const response = await this.service.feedService.removePostFromBookmark(payload)
-        return response
-    }
+
+// //////////////////////////////////////Remove Bookmark//////////////////////////////////////////////////
+//     async removeBookmarkFromMyFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
+//         const memuuid = TestContext.initialMemuuid
+//         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+//         let postId, postedByUserId, bookmarkedByUserId
+//         if(type=='public'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomRemoveBookmarkPublicReadyPost(memuuid))
+//         }
+//         else if(type=='hidden'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomRemoveBookmarkReadyHiddenPost(memuuid))
+//         }
+//         else if(type=='deleted'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomRemoveBookmarkReadyDeletedPost(memuuid))
+//         }
+//         else if (type=='friends visibility'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomRemoveBookmarkReadyPostWithFriendsVisibility(memuuid))
+//         }
+//         else if (type =='fof visibility'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsRandomRemoveBookmarkReadyPostWithFriendsOfFriendsVisibility(memuuid))
+//         }
+//         const payload = FeedFactory.buildBookmarkPayload({
+//             postId
+//         })
+//         const response = await this.service.feedService.removePostFromBookmark(payload)
+//         return response
+//     }
+//     async RemovebookmarkFromMyFriendsOfFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
+//         const memuuid = TestContext.initialMemuuid
+//         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+//         let postId, postedByUserId, bookmarkedByUserId
+//         if(type=='public'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomRemoveBookmarkReadyPublicPost(memuuid))
+//         }
+//         else if(type=='hidden'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomRemoveBookmarkReadyHiddenPost(memuuid))
+//         }
+//         else if(type=='deleted'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomRemoveBookmarkReadyDeletedPost(memuuid))
+//         }
+//         else if (type=='friends visibility'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomRemoveBookmarkReadyPostWithFriendsVisibility(memuuid))
+//         }
+//         else if (type =='fof visibility'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomRemoveBookmarkReadyPostWithFriendsOfFriendVisibility(memuuid))
+//         }
+//         const payload = FeedFactory.buildBookmarkPayload({
+//             postId
+//         })
+//         const response = await this.service.feedService.removePostFromBookmark(payload)
+//         return response
+//     }
+//     async removeBookmarkOtherNonFriendsPost(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
+//         const memuuid = TestContext.initialMemuuid
+//         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+//         let postId, postedByUserId, bookmarkedByUserId
+//         if(type=='public'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomRemoveBookmarkReadyPublicPost(memuuid))
+//         }
+//         else if(type=='hidden'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomRemoveBookmarkReadyHiddenPost(memuuid))
+//         }
+//         else if(type=='deleted'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomRemoveBookmarkReadyDeletedPost(memuuid))
+//         }
+//         else if (type=='friends visibility'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomRemoveBookmarkReadyPostWithFriendsVisibility(memuuid))
+//         }
+//         else if (type =='fof visibility'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyNonFriendsRandomRemoveBookmarkReadyPostWithFriendsOfFriendVisibility(memuuid))
+//         }
+//         const payload = FeedFactory.buildBookmarkPayload({
+//             postId
+//         })
+//         const response = await this.service.feedService.removePostFromBookmark(payload)
+//         return response
+//     }
+//     async removeBookmarkFromMyPosts(type:'public'|'hidden'|'deleted'|'friends visibility'|'fof visibility'){
+//         const memuuid = TestContext.initialMemuuid
+//         //const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
+//         let postId, postedByUserId, bookmarkedByUserId
+//         if(type=='public'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomBookmarkRemoveReadyPublicPost(memuuid))
+//         }
+//         else if(type=='hidden'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomBookmarkRemoveReadyHiddenPost(memuuid))
+//         }
+//         else if(type=='deleted'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomBookmarkRemoveReadyDeletedPost(memuuid))
+//         }
+//         else if (type=='friends visibility'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomBookmarkRemoveReadyPostWithFriendsVisibility(memuuid))
+//         }
+//         else if (type =='fof visibility'){
+//             ({postId, postedByUserId, bookmarkedByUserId} = await TestContext.services.feedRepo.getMyRandomBookmarkRemoveReadyPostWithFriendsOfFriendsVisibility(memuuid))
+//         }
+//         const payload = FeedFactory.buildBookmarkPayload({
+//             postId
+//         })
+//         const response = await this.service.feedService.removePostFromBookmark(payload)
+//         return response
+//     }
 }

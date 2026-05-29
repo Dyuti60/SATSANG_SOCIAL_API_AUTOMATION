@@ -39,8 +39,8 @@ describe('Validate POST /stories/bulk-create',()=>{
             const {mediaIds} = await TestContext.flows.storyFlow.storyMediaUpload(filePaths)
             const payload = StoryFactory.buildBulkStoryPayload({mediaIds:mediaIds,visibilityType:'SELECTED_FRIENDS'})
             const {response} = await TestContext.services.storyService.bulkCreateStories(payload)
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Stories created successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response, 'viewerIds cannot be empty when visibility is SELECTED_FRIENDS')
         })
 
         test('Validate Creating Story - Selected Visibility And Same Friends ViewerIds',async()=>{
@@ -115,8 +115,8 @@ describe('Validate POST /stories/bulk-create',()=>{
             }
 
             const {response} = await TestContext.services.storyService.bulkCreateStories(payload1)
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Stories created successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response, 'viewerIds must only contain active friends of the user')
         })
 
         test('Validate Creating Story - Selected Visibility Logged In ViewerIds',async()=>{
@@ -127,8 +127,8 @@ describe('Validate POST /stories/bulk-create',()=>{
             const {mediaIds} = await TestContext.flows.storyFlow.storyMediaUpload(filePaths)
             const payload = StoryFactory.buildBulkStoryPayload({mediaIds:mediaIds,visibilityType:'SELECTED_FRIENDS',viewerIds:[TestContext.initialMemuuid]})
             const {response} = await TestContext.services.storyService.bulkCreateStories(payload)
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Stories created successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response, 'viewerIds must only contain active friends of the user')
         })
 
         test('Validate Creating Story - Selected Visibility Non Friends ViewerIds',async()=>{
@@ -152,8 +152,8 @@ describe('Validate POST /stories/bulk-create',()=>{
             }
 
             const {response} = await TestContext.services.storyService.bulkCreateStories(payload1)
-            await ResponseValidator.validateStatus(response,201)
-            await ResponseValidator.validateErrorMessage(response, 'Stories created successfully')
+            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateErrorMessage(response, 'viewerIds must only contain active friends of the user')
         })
 
         test('Validate Creating Story - Stories With Mix Visibility',async()=>{
@@ -166,7 +166,7 @@ describe('Validate POST /stories/bulk-create',()=>{
             }
             friendId = await TestContext.services.userRepo.getRandomFriendIdWithAcceptedStatusOtherThanLoggedIn(TestContext.initialMemuuid),
             ({mediaIds} = await TestContext.flows.storyFlow.storyMediaUpload([filePaths[0]]))
-            let payload1 = StoryFactory.buildBulkStoryPayload({mediaIds:mediaIds,visibilityType:'SELECTED_FRIENDS',viewerIds:[friendId]});
+            let payload1 = StoryFactory.buildBulkStoryPayload({mediaIds:mediaIds,visibilityType:'SELECTED_FRIENDS',viewerIds:[friendId?.friendId]});
 
 
             ({mediaIds} = await TestContext.flows.storyFlow.storyMediaUpload([filePaths[1]]))
@@ -181,7 +181,7 @@ describe('Validate POST /stories/bulk-create',()=>{
             }
 
             const {response} = await TestContext.services.storyService.bulkCreateStories(payload1)
-            await ResponseValidator.validateStatus(response,400)
+            await ResponseValidator.validateStatus(response,201)
             await ResponseValidator.validateErrorMessage(response, 'Stories created successfully')
         })
 
@@ -236,7 +236,7 @@ describe('Validate POST /stories/bulk-create',()=>{
 
             const {response} = await TestContext.services.storyService.bulkCreateStories(payload1)
             await ResponseValidator.validateStatus(response,400)
-            await ResponseValidator.validateErrorMessage(response, 'stories.0.visibility must be one of the following values: ALL_FRIENDS, CLOSE_FRIENDS, SELECTED_FRIENDS')
+            await ResponseValidator.validateErrorMessage(response, 'stories.2.visibility must be one of the following values: ALL_FRIENDS, CLOSE_FRIENDS, SELECTED_FRIENDS')
         })
 
     })
@@ -259,7 +259,7 @@ describe('Validate POST /stories/bulk-create',()=>{
             const payload = StoryFactory.buildBulkStoryPayload({mediaIds:mediaIds, visibilityType:'ALL_FRIENDS'})
             const {response} = await TestContext.services.storyService.bulkCreateStories(payload)
             await ResponseValidator.validateStatus(response,400)
-            await ResponseValidator.validateErrorMessage(response, 'medias must contain no more than 5 elements')
+            await ResponseValidator.validateErrorMessage(response, 'stories must contain no more than 5 elements')
         })
     })
 

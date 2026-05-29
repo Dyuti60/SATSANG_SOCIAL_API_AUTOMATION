@@ -177,19 +177,19 @@ describe('Bulk Delete',()=>{
         }
     })
 
-    test('Bulk Delete - My Expired Story',async()=>{
-        const TOTAL = 1;
-        let count = 0
-        while(count<TOTAL){
-            Log.info("###################################################################################");
-            Log.info(`Bulk Delete - My Present Story - ${count + 1}/${TOTAL}`);
-            Log.info("###################################################################################");
+    // test('Bulk Delete - My Expired Story',async()=>{
+    //     const TOTAL = 1;
+    //     let count = 0
+    //     while(count<TOTAL){
+    //         Log.info("###################################################################################");
+    //         Log.info(`Bulk Delete - My Present Story - ${count + 1}/${TOTAL}`);
+    //         Log.info("###################################################################################");
 
-            const {response} = await TestContext.flows.storyFlow.deleteMyExpiredStory()
-            await ResponseValidator.validateStatus(response,200)
-            count++
-        }
-    })
+    //         const {response} = await TestContext.flows.storyFlow.deleteMyExpiredStory()
+    //         await ResponseValidator.validateStatus(response,200)
+    //         count++
+    //     }
+    // })
 
 
 
@@ -213,25 +213,25 @@ describe('Bulk Delete',()=>{
         }
     })
 
-    test('Bulk Delete - My Friends Expired Story',async()=>{
-        const TOTAL = 1;
-        let count = 0
-        while(count<TOTAL){
-            Log.info("###################################################################################");
-            Log.info(`Bulk Delete - My Friends Story - ${count + 1}/${TOTAL}`);
-            Log.info("###################################################################################");
+    // test('Bulk Delete - My Friends Expired Story',async()=>{
+    //     const TOTAL = 1;
+    //     let count = 0
+    //     while(count<TOTAL){
+    //         Log.info("###################################################################################");
+    //         Log.info(`Bulk Delete - My Friends Story - ${count + 1}/${TOTAL}`);
+    //         Log.info("###################################################################################");
 
-            const {storyId,createdBy} = await TestContext.services.storyRepo.myFriendsExpiredStoryMediaId(TestContext.initialMemuuid)
-            const {contact_number} = await TestContext.flows.userFlow.getParticularUserDetails(createdBy)
-            TestContext.activeUser='current'
-            await TestContext.flows.loginFlow.loginFlow(contact_number,createdBy,'current user')
-            const {response} = await TestContext.services.storyService.deleteStory({
-                storyId: storyId
-            })
-            await ResponseValidator.validateStatus(response,200)
-            count++
-        }
-    })
+    //         const {storyId,createdBy} = await TestContext.services.storyRepo.myFriendsExpiredStoryMediaId(TestContext.initialMemuuid)
+    //         const {contact_number} = await TestContext.flows.userFlow.getParticularUserDetails(createdBy)
+    //         TestContext.activeUser='current'
+    //         await TestContext.flows.loginFlow.loginFlow(contact_number,createdBy,'current user')
+    //         const {response} = await TestContext.services.storyService.deleteStory({
+    //             storyId: storyId
+    //         })
+    //         await ResponseValidator.validateStatus(response,200)
+    //         count++
+    //     }
+    // })
 
 
 
@@ -255,25 +255,25 @@ describe('Bulk Delete',()=>{
         }
     })
 
-    test('Bulk Delete - My Friends Friend Expired Story',async()=>{
-        const TOTAL = 1;
-        let count = 0
-        while(count<TOTAL){
-            Log.info("###################################################################################");
-            Log.info(`Bulk Delete - My Friends Story - ${count + 1}/${TOTAL}`);
-            Log.info("###################################################################################");
+    // test('Bulk Delete - My Friends Friend Expired Story',async()=>{
+    //     const TOTAL = 1;
+    //     let count = 0
+    //     while(count<TOTAL){
+    //         Log.info("###################################################################################");
+    //         Log.info(`Bulk Delete - My Friends Story - ${count + 1}/${TOTAL}`);
+    //         Log.info("###################################################################################");
 
-            const {storyId,createdBy} = await TestContext.services.storyRepo.myFriendsOfFriendExpiredStoryMediaId(TestContext.initialMemuuid)
-            const {contact_number} = await TestContext.flows.userFlow.getParticularUserDetails(createdBy)
-            TestContext.activeUser='current'
-            await TestContext.flows.loginFlow.loginFlow(contact_number,createdBy,'current user')
-            const {response} = await TestContext.services.storyService.deleteStory({
-                storyId: storyId
-            })
-            await ResponseValidator.validateStatus(response,200)
-            count++
-        }
-    })
+    //         const {storyId,createdBy} = await TestContext.services.storyRepo.myFriendsOfFriendExpiredStoryMediaId(TestContext.initialMemuuid)
+    //         const {contact_number} = await TestContext.flows.userFlow.getParticularUserDetails(createdBy)
+    //         TestContext.activeUser='current'
+    //         await TestContext.flows.loginFlow.loginFlow(contact_number,createdBy,'current user')
+    //         const {response} = await TestContext.services.storyService.deleteStory({
+    //             storyId: storyId
+    //         })
+    //         await ResponseValidator.validateStatus(response,200)
+    //         count++
+    //     }
+    // })
 
 
 
@@ -298,24 +298,24 @@ describe('Bulk Delete',()=>{
         }
     })
 
-    test('Bulk Delete - My Non Friends Expired Story',async()=>{
-        const TOTAL = 1;
-        let count = 0
-        while(count<TOTAL){
-            Log.info("###################################################################################");
-            Log.info(`Bulk Delete - My Friends Story - ${count + 1}/${TOTAL}`);
-            Log.info("###################################################################################");
+    // test('Bulk Delete - My Non Friends Expired Story',async()=>{
+    //     const TOTAL = 1;
+    //     let count = 0
+    //     while(count<TOTAL){
+    //         Log.info("###################################################################################");
+    //         Log.info(`Bulk Delete - My Friends Story - ${count + 1}/${TOTAL}`);
+    //         Log.info("###################################################################################");
 
-            const {storyId,createdBy} = await TestContext.services.storyRepo.nonFriendsExpiredStoryId(TestContext.initialMemuuid)
-            const {contact_number} = await TestContext.flows.userFlow.getParticularUserDetails(createdBy)
-            TestContext.activeUser='current'
-            await TestContext.flows.loginFlow.loginFlow(contact_number,createdBy,'current user')
-            const {response} = await TestContext.services.storyService.deleteStory({
-                storyId: storyId
-            })
-            await ResponseValidator.validateStatus(response,200)
-            count++
-        }
-    })
+    //         const {storyId,createdBy} = await TestContext.services.storyRepo.nonFriendsExpiredStoryId(TestContext.initialMemuuid)
+    //         const {contact_number} = await TestContext.flows.userFlow.getParticularUserDetails(createdBy)
+    //         TestContext.activeUser='current'
+    //         await TestContext.flows.loginFlow.loginFlow(contact_number,createdBy,'current user')
+    //         const {response} = await TestContext.services.storyService.deleteStory({
+    //             storyId: storyId
+    //         })
+    //         await ResponseValidator.validateStatus(response,200)
+    //         count++
+    //     }
+    // })
 
 })

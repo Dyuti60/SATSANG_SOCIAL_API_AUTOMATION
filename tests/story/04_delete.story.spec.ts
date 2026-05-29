@@ -14,25 +14,25 @@ describe('Validate Delete /stories/{storyId}',()=>{
         test('Validate Delete My Friends Present Story',async()=>{
             const {response} = await TestContext.flows.storyFlow.deleteMyFriendsPresentStory()
             await ResponseValidator.validateStatus(response,400)
-            await ResponseValidator.validateErrorMessage(response,'Story deleted')
+            await ResponseValidator.validateErrorMessage(response,'Story not found or unauthorized')
         })
 
         test('Validate Delete My Friends Friend Present Story',async()=>{
             const {response} = await TestContext.flows.storyFlow.deleteMyFriendsFriendPresentStory()
             await ResponseValidator.validateStatus(response,400)
-            await ResponseValidator.validateErrorMessage(response,'Story deleted')
+            await ResponseValidator.validateErrorMessage(response,'Story not found or unauthorized')
         })
 
         test('Validate Delete My Deleted Story',async()=>{
             const {response} = await TestContext.flows.storyFlow.deleteMyDeletedStory()
             await ResponseValidator.validateStatus(response,400)
-            await ResponseValidator.validateErrorMessage(response,'Story deleted')
+            await ResponseValidator.validateErrorMessage(response,'Story not found or unauthorized')
         })
 
         test('Validate Delete My Expired Story',async()=>{
             const {response} = await TestContext.flows.storyFlow.deleteMyExpiredStory()
             await ResponseValidator.validateStatus(response,400)
-            await ResponseValidator.validateErrorMessage(response,'Story deleted')
+            await ResponseValidator.validateErrorMessage(response,'Story not found or unauthorized')
         })
     })
 })

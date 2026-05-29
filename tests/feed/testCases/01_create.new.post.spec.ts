@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker"
-import ResponseValidator from "../../src/api/response.validator"
-import { TestContext } from "../../src/context/test.context"
-import { getRandomJpegFile } from "../../src/utils/mediaPicker"
+import ResponseValidator from "../../../src/api/response.validator"
+import { TestContext } from "../../../src/context/test.context"
+import { getRandomJpegFile } from "../../../src/utils/mediaPicker"
 
 describe('Validate POST /feed/post Endpoint',()=>{
 
