@@ -26,7 +26,7 @@ export class FeedFlow{
 
 //////////////////////////////////////// MY MEDIA /////////////////////////////////////
 
-    async createPostWithMyNewPostMedia(files: string[],visibility:number=0){
+    async createPostWithMyNewPostMedia(files: string[],visibility:number=202){
         const {mediaIds} = await this.postMediaUpload(files)
         let payload:any
         if(visibility){
@@ -92,25 +92,31 @@ export class FeedFlow{
     async createPostWithMyPostMedia(type:'public'|'deleted'|'hidden'|'fof visibility'|'friends visibility'){
         const memuuid = TestContext.initialMemuuid
         // const {memuuid} = getMemDetailsFromJwt(TestContext.accessToken)
-        let postId, userId, caption, postMediaId
+        let postId, userId, caption, postMediaId, visibility
         if(type=='public'){
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyRandomPublicPost(memuuid))
+            visibility = 204
         }
         else if(type=='hidden'){
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyRandomHiddenPost(memuuid))
+            visibility = 201
         }
         else if(type=='deleted'){
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyRandomDeletedPost(memuuid))
+            visibility = 200
         }
         else if (type=='friends visibility'){
             ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyRandomPostWithFriendsVisibility(memuuid))
+            visibility = 202
         }
         else if (type =='fof visibility'){
-            ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyFriendsOfFriendsRandomPublicPost(memuuid))
+            ({postId, userId, caption, postMediaId} = await TestContext.services.feedRepo.getMyRandomPostWithFriendsOfFriendVisibility(memuuid))
+            visibility = 203
         }
         
         const payload = FeedFactory.buildPostPayload({
-            mediaIds: [postMediaId]
+            mediaIds: [postMediaId],
+            visibility
         })
         const response = await this.service.feedService.createPost(payload)
         return response
@@ -188,7 +194,8 @@ export class FeedFlow{
     }
 
     async createPostWithMyCaptionOnly(){
-        const payload = FeedFactory.buildPostPayload()
+        let obj = FeedFactory.buildPostPayload()
+        const {mediaIds, ...payload} = obj
         const response = await this.service.feedService.createPost(payload)
         return response
     }
@@ -1030,4 +1037,15 @@ export class FeedFlow{
 //         const response = await this.service.feedService.removePostFromBookmark(payload)
 //         return response
 //     }
+
+
+///////////////////// GET FEED ///////////////////////////////////
+        async getAllFeedOfUser(){
+            let pageState:string='uuid'
+            while(pageState!=''){
+                const {response} = await TestContext.services.feedService.getPostInFeed()
+                pageState = response?.data?.data?.PageState
+            }
+            
+        }
 }

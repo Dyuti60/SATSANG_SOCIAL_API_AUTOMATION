@@ -27,8 +27,8 @@ describe('Validate POST /feed/post Endpoint',()=>{
                 shareEnable: true,
                 visibility: 202
             })
+            await ResponseValidator.validateErrorMessage(response,'Attached invalid medias')
             await ResponseValidator.validateStatus(response,400)
-            await ResponseValidator.validateErrorMessage(response,'Failed to save post. Please try again later.')
         })
 
         test('Validate Creating Post - Only Caption',async()=>{
@@ -53,22 +53,23 @@ describe('Validate POST /feed/post Endpoint',()=>{
 
         test('Validate Creating Post - Only LocationId',async()=>{
             const {response} = await TestContext.services.feedService.createPost({
-                locationId: 101,
+                locationId: "101",
                 shareEnable: true,
                 visibility:202
             })
-            await ResponseValidator.validateStatus(response,400)
             await ResponseValidator.validateErrorMessage(response,'Failed to save post. Please try again later.')
+            await ResponseValidator.validateStatus(response,400)
         })
 
         test('Validate Creating Post - Invalid Only LocationId',async()=>{
             const {response} = await TestContext.services.feedService.createPost({
-                locationId: 576567,
+                caption: faker.lorem.words(20),
+                locationId: "576567",
                 shareEnable: true,
                 visibility: 202
             })
-            await ResponseValidator.validateStatus(response,400)
             await ResponseValidator.validateErrorMessage(response,'Failed to save post. Please try again later.')
+            await ResponseValidator.validateStatus(response,400)
         })
 
         test('Validate Creating Post - Only shareEnable',async()=>{
@@ -76,26 +77,27 @@ describe('Validate POST /feed/post Endpoint',()=>{
                 shareEnable: true,
                 visibility: 202
             })
-            await ResponseValidator.validateStatus(response,400)
             await ResponseValidator.validateErrorMessage(response,'Failed to save post. Please try again later.')
+            await ResponseValidator.validateStatus(response,400)
         })
 
         test('Validate Creating Post - Invalid Only ShareEnable',async()=>{
             const {response} = await TestContext.services.feedService.createPost({
+                caption: faker.lorem.words(20),
                 shareEnable: 'hello',
                 visibility:202
             })
-            await ResponseValidator.validateStatus(response,400)
             await ResponseValidator.validateErrorMessage(response,'shareEnable must be a boolean value')
+            await ResponseValidator.validateStatus(response,400)
         })
 
         test('Validate Creating Post - Only Visibility',async()=>{
             const {response} = await TestContext.services.feedService.createPost({
-                visibility: 204,
+                visibility: 202,
                 shareEnable:true
             })
-            await ResponseValidator.validateStatus(response,400)
             await ResponseValidator.validateErrorMessage(response,'Failed to save post. Please try again later.')
+            await ResponseValidator.validateStatus(response,400)
         })
 
         test('Validate Creating Post - Invalid Only Visibility',async()=>{
@@ -104,7 +106,7 @@ describe('Validate POST /feed/post Endpoint',()=>{
                 shareEnable:true
             })
             await ResponseValidator.validateStatus(response,400)
-            await ResponseValidator.validateErrorMessage(response,'visibility must be one of the following values: 205, 200, 203, 202, 201, 204')
+            await ResponseValidator.validateErrorMessage(response,'visibility must be one of the following values: 203, 202, 204')
         })
 
         test('Validate Creating Post - Deleted Visibility',async()=>{
@@ -116,7 +118,7 @@ describe('Validate POST /feed/post Endpoint',()=>{
                 shareEnable:true
             })
             await ResponseValidator.validateStatus(response,400)
-            await ResponseValidator.validateErrorMessage(response,'Failed to save post. Please try again later.')
+            await ResponseValidator.validateErrorMessage(response,'visibility must be one of the following values: 203, 202, 204')
         })
     })
 
@@ -141,7 +143,7 @@ describe('Validate POST /feed/post Endpoint',()=>{
             const {mediaIds} = await TestContext.flows.feedFlow.postMediaUpload([filePath])
             const {response} = await TestContext.services.feedService.createPost({
                 mediaIds: [mediaIds[0]],
-                locationId: 101,
+                locationId: "101",
                 shareEnable:true,
                 visibility:202
             })
@@ -169,7 +171,7 @@ describe('Validate POST /feed/post Endpoint',()=>{
         test('Validate Creating Post - With Valid Caption And LocationId',async()=>{
             const {response} = await TestContext.services.feedService.createPost({
                 caption: faker.lorem.words(200),
-                locationId: 101,
+                locationId: "101",
                 shareEnable:true,
                 visibility: 202
             })
@@ -191,7 +193,7 @@ describe('Validate POST /feed/post Endpoint',()=>{
             const {response} = await TestContext.services.feedService.createPost({
                 caption: faker.lorem.words(200),
                 shareEnable:true,
-                visibility: 203
+                visibility: 202
             })
             await ResponseValidator.validateStatus(response,201)
             await ResponseValidator.validateErrorMessage(response,'Successfully saved post.')

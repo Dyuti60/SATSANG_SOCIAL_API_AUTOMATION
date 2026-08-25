@@ -60,6 +60,7 @@ export const feed = {
     GET_POSTS_VISIBILITY_OPTIONS: '/feed/post/visibility',
     GET_POSTS_REACTION_OPTIONS: '/feed/post/reactions',
     POST_REACT_TO_POST: '/feed/post/react',
+    DELETE_REACTION_FROM_POST: '/feed/post/react',
     POST_ADDCOMMENT_ON_POST: '/feed/post/comment',
     GET_COMMENTS_ON_POST: '/feed/post/comment',
     GET_USERCOMMENT_REACTIONS: '/feed/post/comment/reactions',
@@ -68,7 +69,8 @@ export const feed = {
     PATCH_REMOVE_BOOKMARKED_POST: '/feed/post/bookmark',
     GET_BOOKMARKED_POSTS: '/feed/post/bookmark',
     GET_POSTS_IN_PROFILE: '/feed/post/profile',
-    GET_FEED_LOCATION: '/feed/locations'
+    GET_FEED_LOCATION: '/feed/locations',
+    GET_ALL_REACTIONS_ON_POST: '/feed/post/'
 }
 
 export const story = {

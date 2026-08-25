@@ -33,7 +33,6 @@ export class TestContext {
   static initialAccessToken: string = '';
   static initialStateToken: string = '';
   static initialSsoSession: string = '';
-
   static initialMemuuid: string = '';
   static initialFamilyCode: string = '';
   static initialMemberCode: string = '';
@@ -49,6 +48,7 @@ export class TestContext {
     this.initialMemberCode = '';
     this.initialFirstName = '';
     this.initialLastName = '';
+
   }
 
   /**
@@ -100,6 +100,7 @@ export class TestContext {
       ? this.currentSsoSession
       : this.initialSsoSession;
   }
+
 
   /**
    * =====================================

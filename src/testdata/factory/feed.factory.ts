@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 type FeedPayloadOptions = {
   caption?: string;
   mediaIds?: string[];
-  locationId?: number;
+  locationId?: string;
   visibility?: number;
   shareEnable?: boolean;
 }
@@ -35,10 +35,10 @@ export class FeedFactory {
     static buildPostPayload(options: FeedPayloadOptions={}){
         const payload = {
             caption: options.caption ?? faker.lorem.words(10),
-            locationId: options.locationId ?? 101,
-            visibility: options.visibility ?? faker.helpers.arrayElement([201,202,203]),
+            locationId: options.locationId ?? "101",
+            visibility: options.visibility ?? 202,
             mediaIds: options.mediaIds ?? [],
-            shareEnable: options.shareEnable ?? faker.helpers.arrayElement([true, false])
+            shareEnable: options.shareEnable ?? true
         }
         
         if((!payload.caption || payload.caption.trim()==="") && payload.mediaIds.length==0){

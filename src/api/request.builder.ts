@@ -24,6 +24,17 @@ export class RequestBuilder {
       headers["Authorization"] = TestContext.accessToken;
     }
 
+
+  console.log(`
+    ////////////////////////////////
+    REQUEST BUILDER
+    ///////////////////////////////
+    
+    ActiveUser: ${TestContext.activeUser}
+    AccessToken: ${TestContext.accessToken}
+    StateToken: ${TestContext.stateToken}
+    SsoSession: ${TestContext.ssoSession}
+  `);
     return headers;
   }
 

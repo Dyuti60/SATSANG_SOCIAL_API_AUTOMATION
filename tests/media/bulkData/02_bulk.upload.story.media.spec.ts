@@ -6,7 +6,7 @@ import { getRandomJpegFile } from "src/utils/mediaPicker";
 describe('[no-test-login] Bulk Data Creation For Single Story',()=>{
 
     test('Bulk Upload - My Story',async()=>{
-        const TOTAL = 3;
+        const TOTAL = 30;
         let count = 0
         while(count<TOTAL){
             Log.info("###################################################################################");
@@ -20,7 +20,7 @@ describe('[no-test-login] Bulk Data Creation For Single Story',()=>{
     })
 
     test('Bulk Upload - My Friends Story',async()=>{
-        const TOTAL = 10;
+        const TOTAL = 50;
         let count = 0
         while(count<TOTAL){
             Log.info("###################################################################################");
@@ -79,7 +79,7 @@ describe('[no-test-login] Bulk Data Creation For Single Story',()=>{
 
 describe('[no-test-login] Bulk Data Creation For Multiple Stories',()=>{
     test('Bulk Upload - My Story',async()=>{
-        const TOTAL = 1;
+        const TOTAL = 20;
         let count = 0
         while(count<TOTAL){
             Log.info("###################################################################################");
@@ -96,7 +96,7 @@ describe('[no-test-login] Bulk Data Creation For Multiple Stories',()=>{
     })
 
     test('Bulk Upload - My Friends Story',async()=>{
-        const TOTAL = 10;
+        const TOTAL = 20;
         let count = 0
         while(count<TOTAL){
             Log.info("###################################################################################");

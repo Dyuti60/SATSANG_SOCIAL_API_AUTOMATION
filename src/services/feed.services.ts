@@ -64,6 +64,18 @@ export class FeedServices {
         }
     }
 
+    async removeReactionFromPost(payload:any){
+        const requestPayload = new RequestBuilder()
+            .setUrl(`${feed.DELETE_REACTION_FROM_POST}`)
+            .setMethod('DELETE')
+            .setBody(payload)
+            .build()
+        const response = await this.socialApi.request(requestPayload)
+        return {
+            response
+        }
+    }
+
     async placeCommentToAPost(payload: any){
         const requestPayload = new RequestBuilder()
             .setUrl(`${feed.POST_ADDCOMMENT_ON_POST}`)
@@ -163,6 +175,18 @@ export class FeedServices {
         const requestPayload = new RequestBuilder()
             .setUrl(`${feed.GET_FEED_LOCATION}`)
             .setMethod('GET')
+            .build()
+        const response = await this.socialApi.request(requestPayload)
+        return {
+            response
+        }
+    }
+
+    async getAllReactionOnPost(payload:any){
+        const requestPayload = new RequestBuilder()
+            .setUrl(`${feed.GET_ALL_REACTIONS_ON_POST}/${payload.postId}`)
+            .setMethod('GET')
+            .setParams(payload)
             .build()
         const response = await this.socialApi.request(requestPayload)
         return {

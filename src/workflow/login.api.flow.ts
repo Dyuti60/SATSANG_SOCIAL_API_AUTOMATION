@@ -30,12 +30,12 @@ export class LoginFlow{
             id:Number(signInContactResponse.otpRequestId)
         }
         const verifyOtpResponse = await this.service.loginService.verifyOtp(verifyOtpPayload)
-
+        // Name : DYUTISUNDAR DUTTA
         if(verifyOtpResponse.members.length>0 && verifyOtpResponse.stateToken){
             let memUUID:any
-            if(verifyOtpResponse.members[0]?.fullName=='DYUTISUNDAR DUTTA'){
+            if(verifyOtpResponse.members[0]?.fullName=='BIKASH HALDAR'){
                 memUUID = verifyOtpResponse.members[0].memuuid
-            }else if(verifyOtpResponse.members[1]?.fullName=='DYUTISUNDAR DUTTA'){
+            }else if(verifyOtpResponse.members[1]?.fullName=='BIKASH HALDAR'){
                 memUUID = verifyOtpResponse.members[1].memuuid
             }else if(userId==''){
                 memUUID = verifyOtpResponse.members[0].memuuid
@@ -94,7 +94,7 @@ export class LoginFlow{
                         Current FamilyCode: ${TestContext.currentFamilyCode},
                         Current MemberCode: ${TestContext.currentMemberCode},
                         Current FirstName: ${TestContext.currentFirstName},
-                        Current LastName: ${TestContext.currentLastName},
+                        Current LastName: ${TestContext.currentLastName}
                     `)
             }else if (type == 'initial user'){
                 TestContext.initialAccessToken = loginResponse.accessToken
@@ -109,7 +109,7 @@ export class LoginFlow{
                         Initial FamilyCode: ${TestContext.initialFamilyCode},
                         Initial MemberCode: ${TestContext.initialMemberCode},
                         Initial FirstName: ${TestContext.initialFirstName},
-                        Initial LastName: ${TestContext.initialLastName},
+                        Initial LastName: ${TestContext.initialLastName}
                     `)
             }
         }
